@@ -3,24 +3,17 @@ package compiler;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-/*A mechanism to progress and backtrack through the file
+/*A helper class to progress and backtrack through the file
 and to check if the end of the file was reached*/
 public class Source {
 
-	private String currentLine; //the current line being worked on
 	private int currentLineNumber; //number of current line
 	private int lastOCOMMENTLine; //location of last open comment
 	private boolean comment;
-	private boolean endOfFile;
 	private BufferedReader code;
 	private StringBuilder errorStrings;
 
 	//Getters and Setters
-
-	public String getCurrentLine() {
-		return currentLine;
-	}
-
 	public int getCurrentLineNumber() {
 		return currentLineNumber;
 	}
@@ -41,17 +34,11 @@ public class Source {
 		this.comment = comment;
 	}
 
-	public boolean isEndOfFile() {
-		return endOfFile;
-	}
-
 	//Default constructor
 	public Source(BufferedReader code, StringBuilder errorStrings) {
-		
-		currentLine = null;
+
 		currentLineNumber = 1;
 		lastOCOMMENTLine = 0;
-		endOfFile = false;
 		this.code = code;
 		this.errorStrings = errorStrings;
 		
@@ -60,42 +47,34 @@ public class Source {
 	//Skip to next character
 	public char nextChar() {
 
+		int c = -1;
+
 		try {
 
 			//mark current position and set read ahead to 1 character
+			//used for backtracking
 			code.mark(1);
 
-			int c = code.read();
+			c = code.read();
 
-			if (c == '\n') {
+			//reached new line in source code
+			if (c == '\n') currentLineNumber++;
 
-				currentLineNumber++;
-
-				return ' ';
-
-			}
-
-			if (c == '\r' || c == '\t') return ' ';
-
-			if (c == -1) endOfFile = true;
-
-			return (char) c;
+			//treat all space-like characters the same way
+			if (c == '\r' || c == '\t' || c == '\n') return ' ';
 
 		}
 		catch (IOException e) {
-
 			errorStrings.append("ERROR: Could not retrieve next character from source.");
 			System.exit(0);
-			return ' '; //for compiler to stop complaining
-
 		}
 
-
+		return (char) c;
 
 	}
 	
-	//Backup to previous character.
-	public void backupChar() {
+	//Backtrack to previous character.
+	public void backtrack() {
 
 		try {
 			code.reset();

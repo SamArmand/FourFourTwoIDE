@@ -16,7 +16,7 @@ public class Token {
 		
 	}
 	
-	//returns formatted  info
+	//returns formatted Token info
 	public String toString() {
 		
 		return String.format("Token: %-15s Lexeme: %-15s Line: %-15s", token, lexeme, lineNum);

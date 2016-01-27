@@ -16,23 +16,17 @@ public class Lexer {
 	
 	//Test to check if character is a letter
 	public boolean isLetter(char c) {
-
 		return ("" + c).matches("[a-zA-Z]");
-
 	}
 	
 	//Test to check if character is a digit
 	public boolean isDigit(char c) {
-
 		return ("" + c).matches("[0-9]");
-
 	}
 	
 	//Test to check if character is alphanumeric or an underscore
 	public boolean isAlphanum(char c) {
-
 		return isLetter(c) || isDigit(c) || c == '_';
-
 	}
 	
 	//Test to see if character is a reserved word
@@ -60,7 +54,80 @@ public class Lexer {
 
 		while (c == ' ') c = source.nextChar();
 
-		if (c == '/') {
+		if (c == '*') token = new Token("ASTERISK", "*", source.getCurrentLineNumber());
+
+		else if (c == '+') token = new Token("PLUS", "+", source.getCurrentLineNumber());
+
+		else if (c == '-') token = new Token("MINUS", "-", source.getCurrentLineNumber());
+
+		else if (c == ';') token = new Token("SEMICOLON", ";", source.getCurrentLineNumber());
+
+		else if (c == ',') token = new Token("COMMA", ",", source.getCurrentLineNumber());
+
+		else if (c == '(') token = new Token("OPAREN", "(", source.getCurrentLineNumber());
+
+		else if (c == ')') token = new Token("CPAREN", ")", source.getCurrentLineNumber());
+
+		else if (c == '{') token = new Token("OBRACE", "{", source.getCurrentLineNumber());
+
+		else if (c == '}') token = new Token("CBRACE", "}", source.getCurrentLineNumber());
+
+		else if (c == '[') token = new Token("OBRACKET", "[", source.getCurrentLineNumber());
+
+		else if (c == ']') token = new Token("CBRACKET", "]", source.getCurrentLineNumber());
+
+		else if (c == '.') token = new Token("DOT", ".", source.getCurrentLineNumber());
+
+		else if ((int)c == -1) token = new Token("EOF", "$", source.getCurrentLineNumber());
+
+		else if (c == '=') {
+
+			c = source.nextChar();
+
+			if (c == '=') token = new Token("EQ", "==", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("DEF", "=", source.getCurrentLineNumber());
+				source.backtrack();
+
+			}
+
+		}
+
+		else if (c == '>') {
+
+			c = source.nextChar();
+
+			if (c == '=') token = new Token("GEQ", ">=", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("GREATER", ">", source.getCurrentLineNumber());
+				source.backtrack();
+
+			}
+
+		}
+
+		else if (c == '<') {
+
+			c = source.nextChar();
+
+			if (c == '>') token = new Token("NEQ", "<>", source.getCurrentLineNumber());
+
+			else if (c == '=') token = new Token("LEQ", "<=", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("LESS", "<", source.getCurrentLineNumber());
+				source.backtrack();
+
+			}
+
+		}
+
+		else if (c == '/') {
 
 			c = source.nextChar();
 			if (c == '/'){
@@ -79,7 +146,7 @@ public class Lexer {
 
 				source.setComment(true);
 
-				while (!source.isEndOfFile()) {
+				while (!((int)c == -1)) {
 
 					c = source.nextChar();
 
@@ -112,76 +179,7 @@ public class Lexer {
 			else {
 
 				token = new Token("FWDSLASH", "/", source.getCurrentLineNumber());
-				source.backupChar();
-
-			}
-
-		}
-
-		else if (c == '*') token = new Token("ASTERISK", "*", source.getCurrentLineNumber());
-
-		else if (c == '+') token = new Token("PLUS", "+", source.getCurrentLineNumber());
-
-		else if (c == '-') token = new Token("MINUS", "-", source.getCurrentLineNumber());
-
-		else if (c == ';') token = new Token("SEMICOLON", ";", source.getCurrentLineNumber());
-
-		else if (c == ',') token = new Token("COMMA", ",", source.getCurrentLineNumber());
-
-		else if (c == '(') token = new Token("OPAREN", "(", source.getCurrentLineNumber());
-
-		else if (c == ')') token = new Token("CPAREN", ")", source.getCurrentLineNumber());
-
-		else if (c == '{') token = new Token("OBRACE", "{", source.getCurrentLineNumber());
-
-		else if (c == '}') token = new Token("CBRACE", "}", source.getCurrentLineNumber());
-
-		else if (c == '[') token = new Token("OBRACKET", "[", source.getCurrentLineNumber());
-
-		else if (c == ']') token = new Token("CBRACKET", "]", source.getCurrentLineNumber());
-
-		else if (c == '=') {
-
-			c = source.nextChar();
-
-			if (c == '=') token = new Token("EQ", "==", source.getCurrentLineNumber());
-
-			else {
-
-				token = new Token("DEF", "=", source.getCurrentLineNumber());
-				source.backupChar();
-
-			}
-
-		}
-
-		else if (c == '<') {
-
-			c = source.nextChar();
-
-			if (c == '>') token = new Token("NEQ", "<>", source.getCurrentLineNumber());
-
-			else if (c == '=') token = new Token("LEQ", "<=", source.getCurrentLineNumber());
-
-			else {
-
-				token = new Token("LESS", "<", source.getCurrentLineNumber());
-				source.backupChar();
-
-			}
-
-		}
-
-		else if (c == '>') {
-
-			c = source.nextChar();
-
-			if (c == '=') token = new Token("GEQ", ">=", source.getCurrentLineNumber());
-
-			else {
-
-				token = new Token("GREATER", ">", source.getCurrentLineNumber());
-				source.backupChar();
+				source.backtrack();
 
 			}
 
@@ -205,7 +203,7 @@ public class Lexer {
 
 			else token = new Token("ID", tokenString, source.getCurrentLineNumber());
 
-			source.backupChar();
+			source.backtrack();
 
 		}
 
@@ -217,7 +215,7 @@ public class Lexer {
 			if (c != '.') {
 
 				token = new Token("INT", tokenString, source.getCurrentLineNumber());
-				source.backupChar();
+				source.backtrack();
 
 			}
 
@@ -242,7 +240,7 @@ public class Lexer {
 					if (tokenString.charAt(tokenString.length()-1) == '0' && !tokenString.equals("0.0")) {
 
 						errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-						source.backupChar();
+						source.backtrack();
 						token = new Token("ERROR", null, source.getCurrentLineNumber());
 
 					}
@@ -250,7 +248,7 @@ public class Lexer {
 					else {
 
 						token = new Token("NUM", tokenString, source.getCurrentLineNumber());
-						source.backupChar();
+						source.backtrack();
 
 					}
 
@@ -259,7 +257,7 @@ public class Lexer {
 				//no digit after "0."
 				else {
 					errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-					source.backupChar();
+					source.backtrack();
 					token = new Token("ERROR", null, source.getCurrentLineNumber());
 				}
 
@@ -299,7 +297,7 @@ public class Lexer {
 					if (tokenString.charAt(tokenString.length()-1) == '0' && (tokenString.charAt(tokenString.length()-2) != '.')) {
 
 						errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-						source.backupChar();
+						source.backtrack();
 						token = new Token("ERROR", null, source.getCurrentLineNumber());
 
 					}
@@ -307,7 +305,7 @@ public class Lexer {
 					else {
 
 						token = new Token("NUM", tokenString, source.getCurrentLineNumber());
-						source.backupChar();
+						source.backtrack();
 
 					}
 
@@ -317,7 +315,7 @@ public class Lexer {
 				else {
 
 					errorStrings.append("ERROR: Unknown Token ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-					source.backupChar();
+					source.backtrack();
 					token = new Token("ERROR", null, source.getCurrentLineNumber());
 
 				}
@@ -328,15 +326,11 @@ public class Lexer {
 			else {
 
 				token = new Token("INT", tokenString, source.getCurrentLineNumber());
-				source.backupChar();
+				source.backtrack();
 
 			}
 
 		}
-
-		else if (c == '.') token = new Token("DOT", ".", source.getCurrentLineNumber());
-
-		else if (source.isEndOfFile()) token = new Token("EOF", "$", source.getCurrentLineNumber());
 
 		else {
 
