@@ -1,0 +1,354 @@
+package compiler;
+
+public class Lexer {
+
+	private Source source;
+	private StringBuilder errorStrings;
+	private StringBuilder tokenStrings;
+	
+	public Lexer(Source source, StringBuilder errorStrings, StringBuilder tokenStrings) {
+		
+		this.source = source;
+		this.errorStrings = errorStrings;
+		this.tokenStrings = tokenStrings;
+		
+	}
+	
+	//Test to check if character is a letter
+	public boolean isLetter(char c) {
+
+		return ("" + c).matches("[a-zA-Z]");
+
+	}
+	
+	//Test to check if character is a digit
+	public boolean isDigit(char c) {
+
+		return ("" + c).matches("[0-9]");
+
+	}
+	
+	//Test to check if character is alphanumeric or an underscore
+	public boolean isAlphanum(char c) {
+
+		return isLetter(c) || isDigit(c) || c == '_';
+
+	}
+	
+	//Test to see if character is a reserved word
+	public boolean isReservedWord(String s) {
+
+		return s.equals("and") || s.equals("not") || s.equals("or")
+				|| s.equals("if") || s.equals("then") || s.equals("else")
+				|| s.equals("for") || s.equals("class")
+				|| s.equals("int") || s.equals("float") || s.equals("get")
+				|| s.equals("put") || s.equals("return");
+
+	}
+	
+	/*This is a handwritten method for analyzing tokens.
+	Since errors are detected within this method and written to errors.txt
+	this method could throw an IOException*/ 
+	public Token nextToken() {
+		
+		char c;
+		String tokenString = "";
+
+		Token token = null;
+		
+		c = source.nextChar();
+
+		while (c == ' ') c = source.nextChar();
+
+		if (c == '/') {
+
+			c = source.nextChar();
+			if (c == '/'){
+
+				token = new Token("COMMENT", "//", source.getCurrentLineNumber());
+
+				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
+
+				while (source.getCurrentLineNumber() == source.getLastOCOMMENTLine()) source.nextChar();
+
+			}
+
+			else if(c == '*'){
+
+				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
+
+				source.setComment(true);
+
+				while (!source.isEndOfFile()) {
+
+					c = source.nextChar();
+
+					if (c == '*') {
+
+						c = source.nextChar();
+
+						if (c == '/') {
+
+							token = new Token("BLOCKCOMMENT", "/**/", source.getLastOCOMMENTLine());
+							source.setComment(false);
+							break;
+
+						}
+
+					}
+
+				}
+
+				if (source.isComment()) {
+
+					errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
+					token = new Token("ERROR", null, source.getCurrentLineNumber());
+
+				}
+
+
+			}
+
+			else {
+
+				token = new Token("FWDSLASH", "/", source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+		}
+
+		else if (c == '*') token = new Token("ASTERISK", "*", source.getCurrentLineNumber());
+
+		else if (c == '+') token = new Token("PLUS", "+", source.getCurrentLineNumber());
+
+		else if (c == '-') token = new Token("MINUS", "-", source.getCurrentLineNumber());
+
+		else if (c == ';') token = new Token("SEMICOLON", ";", source.getCurrentLineNumber());
+
+		else if (c == ',') token = new Token("COMMA", ",", source.getCurrentLineNumber());
+
+		else if (c == '(') token = new Token("OPAREN", "(", source.getCurrentLineNumber());
+
+		else if (c == ')') token = new Token("CPAREN", ")", source.getCurrentLineNumber());
+
+		else if (c == '{') token = new Token("OBRACE", "{", source.getCurrentLineNumber());
+
+		else if (c == '}') token = new Token("CBRACE", "}", source.getCurrentLineNumber());
+
+		else if (c == '[') token = new Token("OBRACKET", "[", source.getCurrentLineNumber());
+
+		else if (c == ']') token = new Token("CBRACKET", "]", source.getCurrentLineNumber());
+
+		else if (c == '=') {
+
+			c = source.nextChar();
+
+			if (c == '=') token = new Token("EQ", "==", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("DEF", "=", source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+		}
+
+		else if (c == '<') {
+
+			c = source.nextChar();
+
+			if (c == '>') token = new Token("NEQ", "<>", source.getCurrentLineNumber());
+
+			else if (c == '=') token = new Token("LEQ", "<=", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("LESS", "<", source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+		}
+
+		else if (c == '>') {
+
+			c = source.nextChar();
+
+			if (c == '=') token = new Token("GEQ", ">=", source.getCurrentLineNumber());
+
+			else {
+
+				token = new Token("GREATER", ">", source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+		}
+
+		else if (isLetter(c)) {
+
+			tokenString += c;
+
+			c = source.nextChar();
+
+			while (isAlphanum(c)) {
+
+				tokenString = tokenString + c;
+				c = source.nextChar();
+
+			}
+
+			if (isReservedWord(tokenString))
+				token = new Token(tokenString.toUpperCase(), tokenString, source.getCurrentLineNumber());
+
+			else token = new Token("ID", tokenString, source.getCurrentLineNumber());
+
+			source.backupChar();
+
+		}
+
+		else if (c == '0') {
+
+			tokenString += c;
+			c = source.nextChar();
+
+			if (c != '.') {
+
+				token = new Token("INT", tokenString, source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+			//it is a '.'
+			else {
+
+				//tokenString is "0."
+				tokenString += c;
+				c = source.nextChar();
+
+				if (isDigit(c)) {
+
+					while (isDigit(c)) {
+
+						tokenString += c;
+						c = source.nextChar();
+
+					}
+
+					//no trailing 0s
+					//check the last character in tokenString
+					if (tokenString.charAt(tokenString.length()-1) == '0' && !tokenString.equals("0.0")) {
+
+						errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+						source.backupChar();
+						token = new Token("ERROR", null, source.getCurrentLineNumber());
+
+					}
+
+					else {
+
+						token = new Token("NUM", tokenString, source.getCurrentLineNumber());
+						source.backupChar();
+
+					}
+
+				}
+
+				//no digit after "0."
+				else {
+					errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+					source.backupChar();
+					token = new Token("ERROR", null, source.getCurrentLineNumber());
+				}
+
+			}
+
+		}
+
+		//Will only get here if it's nonzero
+		else if (isDigit(c)) {
+
+			tokenString += c;
+			c = source.nextChar();
+
+			while (isDigit(c)) {
+
+				tokenString += c;
+				c = source.nextChar();
+
+			}
+
+			//checking if fraction
+			if (c == '.') {
+
+				tokenString += c;
+				c = source.nextChar();
+
+				if (isDigit(c)) {
+
+					while (isDigit(c)) {
+
+						tokenString += c;
+						c = source.nextChar();
+
+					}
+
+					// Ex: 1.0 or 42545235.0 etc. is valid but 1.010 is not
+					if (tokenString.charAt(tokenString.length()-1) == '0' && (tokenString.charAt(tokenString.length()-2) != '.')) {
+
+						errorStrings.append("Error!!! Unknown Token: ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+						source.backupChar();
+						token = new Token("ERROR", null, source.getCurrentLineNumber());
+
+					}
+
+					else {
+
+						token = new Token("NUM", tokenString, source.getCurrentLineNumber());
+						source.backupChar();
+
+					}
+
+				}
+
+				//No number after the .
+				else {
+
+					errorStrings.append("ERROR: Unknown Token ").append(tokenString).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+					source.backupChar();
+					token = new Token("ERROR", null, source.getCurrentLineNumber());
+
+				}
+
+			}
+
+			//Valid number
+			else {
+
+				token = new Token("INT", tokenString, source.getCurrentLineNumber());
+				source.backupChar();
+
+			}
+
+		}
+
+		else if (c == '.') token = new Token("DOT", ".", source.getCurrentLineNumber());
+
+		else if (source.isEndOfFile()) token = new Token("EOF", "$", source.getCurrentLineNumber());
+
+		else {
+
+			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+			token = new Token("ERROR", null, source.getCurrentLineNumber());
+
+		}
+
+		assert token != null;
+		tokenStrings.append(token.toString()).append("\n");
+		return token;
+		
+	}
+	
+}

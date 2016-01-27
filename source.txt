@@ -1,0 +1,16 @@
+class Vehicle{
+
+	integer x; //notice the different types
+	real x;
+
+};
+
+program{
+?
+	Vehicle v;
+	integer	x;
+	integer y;	
+
+	x = v.x;
+
+};
