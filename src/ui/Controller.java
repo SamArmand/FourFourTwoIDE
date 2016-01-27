@@ -8,6 +8,7 @@ import java.io.*;
 
 import compiler.Source;
 import compiler.Lexer;
+import compiler.Token;
 
 public class Controller {
 
@@ -57,7 +58,11 @@ public class Controller {
         Source source = new Source(code, errorStrings); //Object for tracking progress and backtracking through source code. See Source.java for more info.
         Lexer lexer = new Lexer(source, errorStrings, tokenStrings);
 
-        while(!source.isEndOfFile()) lexer.nextToken();
+        Token token;
+
+        do {
+            token = lexer.nextToken();
+        } while (!token.getName().equals("EOF"));
 
         tokens.print(tokenStrings.toString());
         errors.print(errorStrings.toString());
