@@ -62,7 +62,7 @@ public class Controller {
 
         do {
             token = lexer.nextToken();
-        } while (!token.getName().equals("EOF"));
+        } while (!token.getType().equals("EOF"));
 
         tokens.print(tokenStrings.toString());
         errors.print(errorStrings.toString());

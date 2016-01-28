@@ -3,27 +3,27 @@ package compiler;
 //Data structure for storing information about a token
 public class Token {
 
-	private String name;
+	private String type;
 	private String lexeme;
 	private int lineNum;
 	
 	//Constructor
-	public Token(String name, String lexeme, int lineNum) {
+	public Token(String type, String lexeme, int lineNum) {
 		
-		this.name = name;
+		this.type = type;
 		this.lexeme = lexeme;
 		this.lineNum = lineNum;
 		
 	}
 
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
 	//returns formatted Token info
 	public String toString() {
 		
-		return String.format("Token: %-15s Lexeme: %-15s Line: %-15s", name, lexeme, lineNum);
+		return String.format("TOKEN | Type: %-8s Lexeme: %-15s Line: %-5s", type, lexeme, lineNum);
 		
 	}
 	

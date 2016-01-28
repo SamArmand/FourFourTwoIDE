@@ -1,1 +1,10 @@
-ERROR: Unknown Character: ? at line 9
+ERROR: Unknown Token: 77.00 at line 1
+ERROR: Unknown Token: 3.90 at line 11
+ERROR: Unknown Character: % at line 30
+ERROR: Unknown Character: $ at line 31
+ERROR: Unknown Character: # at line 32
+ERROR: Unknown Character: @ at line 33
+ERROR: Unknown Character: ! at line 34
+ERROR: Unknown Character: & at line 34
+ERROR: Unknown Character: ~ at line 34
+ERROR: Unclosed comment at line 52

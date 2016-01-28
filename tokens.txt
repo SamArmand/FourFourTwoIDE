@@ -1,33 +1,41 @@
-Token: CLASS           Lexeme: class           Line: 1              
-Token: ID              Lexeme: Vehicle         Line: 1              
-Token: OBRACE          Lexeme: {               Line: 1              
-Token: ID              Lexeme: integer         Line: 3              
-Token: ID              Lexeme: x               Line: 3              
-Token: SEMICOLON       Lexeme: ;               Line: 3              
-Token: COMMENT         Lexeme: //              Line: 3              
-Token: ID              Lexeme: real            Line: 4              
-Token: ID              Lexeme: x               Line: 4              
-Token: SEMICOLON       Lexeme: ;               Line: 4              
-Token: CBRACE          Lexeme: }               Line: 6              
-Token: SEMICOLON       Lexeme: ;               Line: 6              
-Token: ID              Lexeme: program         Line: 8              
-Token: OBRACE          Lexeme: {               Line: 8              
-Token: ERROR           Lexeme: null            Line: 9              
-Token: ID              Lexeme: Vehicle         Line: 10             
-Token: ID              Lexeme: v               Line: 10             
-Token: SEMICOLON       Lexeme: ;               Line: 10             
-Token: ID              Lexeme: integer         Line: 11             
-Token: ID              Lexeme: x               Line: 11             
-Token: SEMICOLON       Lexeme: ;               Line: 11             
-Token: ID              Lexeme: integer         Line: 12             
-Token: ID              Lexeme: y               Line: 12             
-Token: SEMICOLON       Lexeme: ;               Line: 12             
-Token: ID              Lexeme: x               Line: 14             
-Token: DEF             Lexeme: =               Line: 14             
-Token: ID              Lexeme: v               Line: 14             
-Token: DOT             Lexeme: .               Line: 14             
-Token: ID              Lexeme: x               Line: 14             
-Token: SEMICOLON       Lexeme: ;               Line: 14             
-Token: CBRACE          Lexeme: }               Line: 16             
-Token: SEMICOLON       Lexeme: ;               Line: 16             
-Token: EOF             Lexeme: $               Line: 16             
+TOKEN | Type: ERROR    Lexeme: 77.00           Line: 1    
+TOKEN | Type: INT      Lexeme: 0               Line: 2    
+TOKEN | Type: INT      Lexeme: 0               Line: 2    
+TOKEN | Type: INT      Lexeme: 88              Line: 3    
+TOKEN | Type: INT      Lexeme: 0               Line: 4    
+TOKEN | Type: INT      Lexeme: 8               Line: 5    
+TOKEN | Type: INT      Lexeme: 0               Line: 6    
+TOKEN | Type: NUM      Lexeme: 3.9             Line: 7    
+TOKEN | Type: INT      Lexeme: 0               Line: 8    
+TOKEN | Type: NUM      Lexeme: 3.0             Line: 9    
+TOKEN | Type: INT      Lexeme: 0               Line: 10   
+TOKEN | Type: ERROR    Lexeme: 3.90            Line: 11   
+TOKEN | Type: NUM      Lexeme: 1.1             Line: 12   
+TOKEN | Type: DOT      Lexeme: .               Line: 12   
+TOKEN | Type: INT      Lexeme: 1               Line: 13   
+TOKEN | Type: NUM      Lexeme: 99.0000000003   Line: 16   
+TOKEN | Type: NUM      Lexeme: 3.0             Line: 18   
+TOKEN | Type: NUM      Lexeme: 0.0             Line: 20   
+TOKEN | Type: INT      Lexeme: 0               Line: 22   
+TOKEN | Type: INT      Lexeme: 0               Line: 23   
+TOKEN | Type: INT      Lexeme: 0               Line: 23   
+TOKEN | Type: INT      Lexeme: 0               Line: 23   
+TOKEN | Type: INT      Lexeme: 6               Line: 24   
+TOKEN | Type: INT      Lexeme: 44              Line: 26   
+TOKEN | Type: NUM      Lexeme: 30.9            Line: 28   
+TOKEN | Type: ERROR    Lexeme:                 Line: 30   
+TOKEN | Type: ERROR    Lexeme:                 Line: 31   
+TOKEN | Type: ERROR    Lexeme:                 Line: 32   
+TOKEN | Type: ERROR    Lexeme:                 Line: 33   
+TOKEN | Type: ERROR    Lexeme:                 Line: 34   
+TOKEN | Type: ERROR    Lexeme:                 Line: 34   
+TOKEN | Type: ERROR    Lexeme:                 Line: 34   
+TOKEN | Type: COMMENT  Lexeme: //              Line: 36   
+TOKEN | Type: COMMENT  Lexeme: //              Line: 37   
+TOKEN | Type: BLOCKCOMMENT Lexeme: /**/            Line: 39   
+TOKEN | Type: BLOCKCOMMENT Lexeme: /**/            Line: 42   
+TOKEN | Type: BLOCKCOMMENT Lexeme: /**/            Line: 45   
+TOKEN | Type: ASTERISK Lexeme: *               Line: 49   
+TOKEN | Type: FWDSLASH Lexeme: /               Line: 50   
+TOKEN | Type: ERROR    Lexeme:                 Line: 53   
+TOKEN | Type: EOF      Lexeme: $               Line: 53   

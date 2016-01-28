@@ -3,17 +3,19 @@ package compiler;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-/*A helper class to progress and backtrack through the file
+/*A mechanism to progress and backtrack through the file
 and to check if the end of the file was reached*/
 public class Source {
 
 	private int currentLineNumber; //number of current line
 	private int lastOCOMMENTLine; //location of last open comment
 	private boolean comment;
+	private boolean endOfFile;
 	private BufferedReader code;
 	private StringBuilder errorStrings;
 
 	//Getters and Setters
+
 	public int getCurrentLineNumber() {
 		return currentLineNumber;
 	}
@@ -34,11 +36,16 @@ public class Source {
 		this.comment = comment;
 	}
 
+	public boolean isEndOfFile() {
+		return endOfFile;
+	}
+
 	//Default constructor
 	public Source(BufferedReader code, StringBuilder errorStrings) {
 
 		currentLineNumber = 1;
 		lastOCOMMENTLine = 0;
+		endOfFile = false;
 		this.code = code;
 		this.errorStrings = errorStrings;
 		
@@ -47,21 +54,22 @@ public class Source {
 	//Skip to next character
 	public char nextChar() {
 
-		int c = -1;
+		int i = -1;
 
 		try {
 
 			//mark current position and set read ahead to 1 character
-			//used for backtracking
 			code.mark(1);
 
-			c = code.read();
+			i = code.read();
 
-			//reached new line in source code
-			if (c == '\n') currentLineNumber++;
+			if (i == '\n') {
+				currentLineNumber++;
+			}
 
-			//treat all space-like characters the same way
-			if (c == '\r' || c == '\t' || c == '\n') return ' ';
+			if (i == '\r' || i == '\t' || i == '\n') i = ' ';
+
+			else if (i == -1) endOfFile = true;
 
 		}
 		catch (IOException e) {
@@ -69,11 +77,11 @@ public class Source {
 			System.exit(0);
 		}
 
-		return (char) c;
+		return (char) i;
 
 	}
 	
-	//Backtrack to previous character.
+	//Backup to previous character.
 	public void backtrack() {
 
 		try {
