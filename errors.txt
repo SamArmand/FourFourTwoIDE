@@ -1,10 +1,11 @@
 ERROR: Unknown Token: 77.00 at line 1
-ERROR: Unknown Token: 3.90 at line 11
-ERROR: Unknown Character: % at line 30
-ERROR: Unknown Character: $ at line 31
-ERROR: Unknown Character: # at line 32
-ERROR: Unknown Character: @ at line 33
-ERROR: Unknown Character: ! at line 34
-ERROR: Unknown Character: & at line 34
-ERROR: Unknown Character: ~ at line 34
-ERROR: Unclosed comment at line 52
+ERROR: Unknown Token: 3.90 at line 6
+ERROR: Unknown Character: % at line 17
+ERROR: Unknown Character: $ at line 18
+ERROR: Unknown Character: # at line 19
+ERROR: Unknown Character: @ at line 20
+ERROR: Unknown Character: ! at line 21
+ERROR: Unknown Character: & at line 21
+ERROR: Unknown Character: ~ at line 21
+ERROR: Unknown Character: % at line 24
+ERROR: Unclosed comment at line 38

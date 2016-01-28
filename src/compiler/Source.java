@@ -14,11 +14,13 @@ public class Source {
 	private BufferedReader code;
 	private StringBuilder errorStrings;
 
+	private boolean newLine;
+
 	//Getters and Setters
 
-	public int getCurrentLineNumber(char c) {
+	public int getCurrentLineNumber() {
 
-		if (c == '\n')
+		if (newLine)
 			return (currentLineNumber-1);
 		return currentLineNumber;
 
@@ -50,6 +52,7 @@ public class Source {
 		currentLineNumber = 1;
 		lastOCOMMENTLine = 0;
 		endOfFile = false;
+		newLine = false;
 		this.code = code;
 		this.errorStrings = errorStrings;
 		
@@ -69,7 +72,10 @@ public class Source {
 
 			if (i == '\n') {
 				currentLineNumber++;
+				newLine = true;
 			}
+			else
+				newLine = false;
 
 			if (i == '\r' || i == '\t' || i == '\n') i = ' ';
 
@@ -95,7 +101,9 @@ public class Source {
 			errorStrings.append("ERROR: Could not retrieve next character from source.");
 			System.exit(0);
 		}
-		
+
+		if (newLine)
+			currentLineNumber--;
 	}
 	
 }

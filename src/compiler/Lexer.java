@@ -59,41 +59,41 @@ public class Lexer {
 
 		while (c == ' ') c = source.nextChar();
 
-		if (source.isEndOfFile()) token = new Token("EOF", "$", source.getCurrentLineNumber(c));
+		if (source.isEndOfFile()) token = new Token("EOF", "$", source.getCurrentLineNumber());
 
-		else if (c == '*') token = new Token("ASTERISK", "*", source.getCurrentLineNumber(c));
+		else if (c == '*') token = new Token("ASTERISK", "*", source.getCurrentLineNumber());
 
-		else if (c == '+') token = new Token("PLUS", "+", source.getCurrentLineNumber(c));
+		else if (c == '+') token = new Token("PLUS", "+", source.getCurrentLineNumber());
 
-		else if (c == '-') token = new Token("MINUS", "-", source.getCurrentLineNumber(c));
+		else if (c == '-') token = new Token("MINUS", "-", source.getCurrentLineNumber());
 
-		else if (c == ';') token = new Token("SEMICOLON", ";", source.getCurrentLineNumber(c));
+		else if (c == ';') token = new Token("SEMICOLON", ";", source.getCurrentLineNumber());
 
-		else if (c == ',') token = new Token("COMMA", ",", source.getCurrentLineNumber(c));
+		else if (c == ',') token = new Token("COMMA", ",", source.getCurrentLineNumber());
 
-		else if (c == '(') token = new Token("OPAREN", "(", source.getCurrentLineNumber(c));
+		else if (c == '(') token = new Token("OPAREN", "(", source.getCurrentLineNumber());
 
-		else if (c == ')') token = new Token("CPAREN", ")", source.getCurrentLineNumber(c));
+		else if (c == ')') token = new Token("CPAREN", ")", source.getCurrentLineNumber());
 
-		else if (c == '{') token = new Token("OBRACE", "{", source.getCurrentLineNumber(c));
+		else if (c == '{') token = new Token("OBRACE", "{", source.getCurrentLineNumber());
 
-		else if (c == '}') token = new Token("CBRACE", "}", source.getCurrentLineNumber(c));
+		else if (c == '}') token = new Token("CBRACE", "}", source.getCurrentLineNumber());
 
-		else if (c == '[') token = new Token("OBRACKET", "[", source.getCurrentLineNumber(c));
+		else if (c == '[') token = new Token("OBRACKET", "[", source.getCurrentLineNumber());
 
-		else if (c == ']') token = new Token("CBRACKET", "]", source.getCurrentLineNumber(c));
+		else if (c == ']') token = new Token("CBRACKET", "]", source.getCurrentLineNumber());
 
-		else if (c == '.') token = new Token("DOT", ".", source.getCurrentLineNumber(c));
+		else if (c == '.') token = new Token("DOT", ".", source.getCurrentLineNumber());
 
 		else if (c == '=') {
 
 			c = source.nextChar();
 
-			if (c == '=') token = new Token("EQ", "==", source.getCurrentLineNumber(c));
+			if (c == '=') token = new Token("EQ", "==", source.getCurrentLineNumber());
 
 			else {
 
-				token = new Token("DEF", "=", source.getCurrentLineNumber(c));
+				token = new Token("DEF", "=", source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -104,13 +104,13 @@ public class Lexer {
 
 			c = source.nextChar();
 
-			if (c == '>') token = new Token("NEQ", "<>", source.getCurrentLineNumber(c));
+			if (c == '>') token = new Token("NEQ", "<>", source.getCurrentLineNumber());
 
-			else if (c == '=') token = new Token("LEQ", "<=", source.getCurrentLineNumber(c));
+			else if (c == '=') token = new Token("LEQ", "<=", source.getCurrentLineNumber());
 
 			else {
 
-				token = new Token("LESS", "<", source.getCurrentLineNumber(c));
+				token = new Token("LESS", "<", source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -121,11 +121,11 @@ public class Lexer {
 
 			c = source.nextChar();
 
-			if (c == '=') token = new Token("GEQ", ">=", source.getCurrentLineNumber(c));
+			if (c == '=') token = new Token("GEQ", ">=", source.getCurrentLineNumber());
 
 			else {
 
-				token = new Token("GREATER", ">", source.getCurrentLineNumber(c));
+				token = new Token("GREATER", ">", source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -146,9 +146,9 @@ public class Lexer {
 			}
 
 			if (isReservedWord(lexeme))
-				token = new Token(lexeme.toUpperCase(), lexeme, source.getCurrentLineNumber(c));
+				token = new Token(lexeme.toUpperCase(), lexeme, source.getCurrentLineNumber());
 
-			else token = new Token("ID", lexeme, source.getCurrentLineNumber(c));
+			else token = new Token("ID", lexeme, source.getCurrentLineNumber());
 
 			source.backtrack();
 
@@ -160,17 +160,17 @@ public class Lexer {
 			c = source.nextChar();
 			if (c == '/'){
 
-				token = new Token("COMMENT", "//", source.getCurrentLineNumber(c));
+				token = new Token("COMMENT", "//", source.getCurrentLineNumber());
 
-				source.setLastOCOMMENTLine(source.getCurrentLineNumber(c));
+				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
-				while (source.getCurrentLineNumber(c) == source.getLastOCOMMENTLine()) source.nextChar();
+				while (source.getCurrentLineNumber() == source.getLastOCOMMENTLine()) source.nextChar();
 
 			}
 
 			else if(c == '*'){
 
-				source.setLastOCOMMENTLine(source.getCurrentLineNumber(c));
+				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
 				source.setComment(true);
 
@@ -197,7 +197,7 @@ public class Lexer {
 				if (source.isComment()) {
 
 					errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
-					token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 				}
 
@@ -206,7 +206,7 @@ public class Lexer {
 
 			else {
 
-				token = new Token("FWDSLASH", "/", source.getCurrentLineNumber(c));
+				token = new Token("FWDSLASH", "/", source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -220,7 +220,7 @@ public class Lexer {
 
 			if (c != '.') {
 
-				token = new Token("INT", lexeme, source.getCurrentLineNumber(c));
+				token = new Token("INT", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -245,15 +245,15 @@ public class Lexer {
 					//check the last character in tokenString
 					if (lexeme.charAt(lexeme.length()-1) == '0' && !lexeme.equals("0.0")) {
 
-						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber(c)).append("\n");
+						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 						source.backtrack();
-						token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 					}
 
 					else {
 
-						token = new Token("NUM", lexeme, source.getCurrentLineNumber(c));
+						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -262,9 +262,9 @@ public class Lexer {
 
 				//no digit after "0."
 				else {
-					errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber(c)).append("\n");
+					errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 					source.backtrack();
-					token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 				}
 
 			}
@@ -302,15 +302,15 @@ public class Lexer {
 					// Ex: 1.0 or 42545235.0 etc. is valid but 1.010 is not
 					if (lexeme.charAt(lexeme.length()-1) == '0' && (lexeme.charAt(lexeme.length()-2) != '.')) {
 
-						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber(c)).append("\n");
+						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 						source.backtrack();
-						token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 					}
 
 					else {
 
-						token = new Token("NUM", lexeme, source.getCurrentLineNumber(c));
+						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -320,9 +320,9 @@ public class Lexer {
 				//No number after the .
 				else {
 
-					errorStrings.append("ERROR: Unknown Token ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber(c)).append("\n");
+					errorStrings.append("ERROR: Unknown Token ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 					source.backtrack();
-					token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 				}
 
@@ -331,7 +331,7 @@ public class Lexer {
 			//Valid number
 			else {
 
-				token = new Token("INT", lexeme, source.getCurrentLineNumber(c));
+				token = new Token("INT", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -340,8 +340,8 @@ public class Lexer {
 
 		else {
 
-			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber(c)).append("\n");
-			token = new Token("ERROR", lexeme, source.getCurrentLineNumber(c));
+			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+			token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 		}
 
