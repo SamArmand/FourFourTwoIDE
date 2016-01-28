@@ -16,8 +16,12 @@ public class Source {
 
 	//Getters and Setters
 
-	public int getCurrentLineNumber() {
+	public int getCurrentLineNumber(char c) {
+
+		if (c == '\n')
+			return (currentLineNumber-1);
 		return currentLineNumber;
+
 	}
 
 	public int getLastOCOMMENTLine() {
