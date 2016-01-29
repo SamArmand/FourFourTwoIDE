@@ -1,24 +1,5 @@
-// 
-// testing is words are ignored after comment 
-// more slashes // // /////   after comment 
-////////////// slashes all together 
-// unknown chars !@#%^&*$ 
-// numbers 12443892 23 042390 
-
-///*with two */ types of comments  
-
-/**/
 /*
-*/
-/*testing is words are ignored after comment */
-/* testing a paragraph 
-	with more 
-	than 1 line*/
-/*unknown chars 
-	!@#%^&*$ */
-/*numbers 123414
-	21342
-	46.0000
-	400.0000
-	000.000 
-*/
+
+
+
+hello

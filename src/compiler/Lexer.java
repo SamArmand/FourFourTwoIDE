@@ -197,7 +197,7 @@ public class Lexer {
 				if (source.isComment()) {
 
 					errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
-					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+					token = new Token("ERROR", "/*", source.getCurrentLineNumber());
 
 				}
 
