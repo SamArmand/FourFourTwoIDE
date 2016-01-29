@@ -341,7 +341,7 @@ public class Lexer {
 		else {
 
 			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-			token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+			token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
 
 		}
 
