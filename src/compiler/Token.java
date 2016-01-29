@@ -23,7 +23,7 @@ public class Token {
 	//returns formatted Token info
 	public String toString() {
 		
-		return String.format("TOKEN | Type: %-8s Lexeme: %-15s Line: %-5s", type, lexeme, lineNum);
+		return String.format("TOKEN | Type: %-15s Lexeme: %-15s Line: %-5s", type, lexeme, lineNum);
 		
 	}
 	
