@@ -164,7 +164,7 @@ public class Lexer {
 
 				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
-				while (source.getCurrentLineNumber() == source.getLastOCOMMENTLine()) source.nextChar();
+				while (!source.isNewLine()) source.nextChar();
 
 			}
 
@@ -341,7 +341,7 @@ public class Lexer {
 		else {
 
 			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-			token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
+			token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 		}
 

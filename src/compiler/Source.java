@@ -46,6 +46,10 @@ public class Source {
 		return endOfFile;
 	}
 
+	public boolean isNewLine() {
+		return newLine;
+	}
+
 	//Default constructor
 	public Source(BufferedReader code, StringBuilder errorStrings) {
 
