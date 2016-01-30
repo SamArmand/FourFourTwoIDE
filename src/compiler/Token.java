@@ -5,14 +5,14 @@ public class Token {
 
 	private String type;
 	private String lexeme;
-	private int lineNum;
+	private int line;
 	
 	//Constructor
-	public Token(String type, String lexeme, int lineNum) {
+	public Token(String type, String lexeme, int line) {
 		
 		this.type = type;
 		this.lexeme = lexeme;
-		this.lineNum = lineNum;
+		this.line = line;
 		
 	}
 
@@ -22,8 +22,8 @@ public class Token {
 
 	//returns formatted Token info
 	public String toString() {
-		
-		return String.format("TOKEN | Type: %-15s Lexeme: %-15s Line: %-5s", type, lexeme, lineNum);
+
+		return String.format("TOKEN | Type: %-15s Lexeme: %-15s Line: %-5s", type, lexeme, line);
 		
 	}
 	
