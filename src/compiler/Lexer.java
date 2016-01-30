@@ -253,7 +253,7 @@ public class Lexer {
 
 					else {
 
-						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
+						token = new Token("FLOAT", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -310,7 +310,7 @@ public class Lexer {
 
 					else {
 
-						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
+						token = new Token("FLOAT", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
