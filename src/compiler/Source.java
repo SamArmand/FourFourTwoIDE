@@ -3,14 +3,15 @@ package compiler;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-/*A mechanism to progress and backtrack through the file
-and to check if the end of the file was reached*/
+/*A helper class to progress and backtrack through source the file,
+to check if the end of the file was reached,
+and to check if we are in a comment mode.*/
 public class Source {
 
 	private int currentLineNumber; //number of current line
 	private int lastOCOMMENTLine; //location of last open comment
-	private boolean comment;
-	private boolean endOfFile;
+	private boolean comment; //whether or not we are in a comment mode
+	private boolean endOfFile; //whether or not the end of the file was reached
 	private BufferedReader code;
 	private StringBuilder errorStrings;
 
