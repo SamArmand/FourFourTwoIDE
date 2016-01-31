@@ -102,7 +102,7 @@ public class Source {
 			code.reset();
 		}
 		catch (IOException e) {
-			errorStrings.append("ERROR: Could not retrieve next character from source.");
+			errorStrings.append("ERROR: Could not backtrack to previous character in source.");
 			System.exit(0);
 		}
 

@@ -1,2 +1,2 @@
-TOKEN | Type: ERROR           Lexeme:                 Line: 5    
+TOKEN | Type: ID              Lexeme: qq              Line: 5    
 TOKEN | Type: EOF             Lexeme: $               Line: 5    
