@@ -1,8 +1,20 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="FourFourTwoIDE">
+  <artifact type="javafx" name="FourFourTwoIDE">
     <output-path>$PROJECT_DIR$/out/artifacts/FourFourTwoIDE</output-path>
-    <root id="archive" name="FourFourTwoIDE.jar">
-      <element id="module-output" name="FourFourTwoIDE" />
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="ui.Main" />
+        <option name="description" value="" />
+        <option name="htmlParamFile" value="" />
+        <option name="paramFile" value="" />
+        <option name="title" value="FourFourTwoIDE" />
+        <option name="vendor" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="FourFourTwoIDE.jar">
+        <element id="module-output" name="FourFourTwoIDE" />
+      </element>
     </root>
   </artifact>
 </component>
