@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FourFourTwoIDE">
+    <output-path>$PROJECT_DIR$/out/artifacts/FourFourTwoIDE</output-path>
+    <root id="archive" name="FourFourTwoIDE.jar">
+      <element id="module-output" name="FourFourTwoIDE" />
+    </root>
+  </artifact>
+</component>
