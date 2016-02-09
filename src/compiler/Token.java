@@ -1,5 +1,7 @@
 package compiler;
 
+import java.util.Arrays;
+
 //Data structure for storing information about a token
 public class Token {
 
@@ -20,11 +22,26 @@ public class Token {
 		return type;
 	}
 
+	public String getLexeme() {
+		return lexeme;
+	}
+
+	public int getLine() {
+		return line;
+	}
+
 	//returns formatted Token info
 	public String toString() {
 
 		return String.format("TOKEN | Type: %-15s Lexeme: %-15s Line: %-5s", type, lexeme, line);
 		
+	}
+
+	//checks if token belongs to set
+	public boolean belongsTo(String[] set) {
+
+		return Arrays.asList(set).contains(type);
+
 	}
 	
 }

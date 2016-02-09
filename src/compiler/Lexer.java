@@ -42,7 +42,7 @@ public class Lexer {
 				|| s.equals("if") || s.equals("then") || s.equals("else")
 				|| s.equals("for") || s.equals("class")
 				|| s.equals("int") || s.equals("float") || s.equals("get")
-				|| s.equals("put") || s.equals("return");
+				|| s.equals("put") || s.equals("return") || s.equals("program");
 
 	}
 	
@@ -218,7 +218,7 @@ public class Lexer {
 
 			if (c != '.') {
 
-				token = new Token("INT", lexeme, source.getCurrentLineNumber());
+				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -251,7 +251,7 @@ public class Lexer {
 
 					else {
 
-						token = new Token("FLOAT", lexeme, source.getCurrentLineNumber());
+						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -309,7 +309,7 @@ public class Lexer {
 					//valid float
 					else {
 
-						token = new Token("FLOAT", lexeme, source.getCurrentLineNumber());
+						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -330,7 +330,7 @@ public class Lexer {
 			//Valid integer
 			else {
 
-				token = new Token("INT", lexeme, source.getCurrentLineNumber());
+				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
