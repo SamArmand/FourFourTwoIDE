@@ -17,8 +17,8 @@
     <TabPane layoutX="31.0" layoutY="396.0" prefHeight="191.0" prefWidth="538.0" tabClosingPolicy="UNAVAILABLE">
         <Tab text="Errors">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TextArea fx:id="errorsOutput" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="157.0"
-                          prefWidth="538.0">
+                <TextArea fx:id="errorsOutput" editable="false" layoutX="1.0" layoutY="1.0"
+                          prefHeight="157.0" prefWidth="538.0">
                     <font>
                         <Font name="Courier New" size="13.0"/>
                     </font>
@@ -28,6 +28,15 @@
         <Tab text="Tokens">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                 <TextArea fx:id="tokensOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
+                    <font>
+                        <Font name="Courier New" size="13.0"/>
+                    </font>
+                </TextArea>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Derivation">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <TextArea fx:id="derivationOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
                     <font>
                         <Font name="Courier New" size="13.0"/>
                     </font>

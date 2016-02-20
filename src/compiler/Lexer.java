@@ -15,28 +15,28 @@ public class Lexer {
 	}
 	
 	//Check if the character is a letter
-	public boolean isLetter(char c) {
+	private boolean isLetter(char c) {
 
 		return ("" + c).matches("[a-zA-Z]");
 
 	}
 	
 	//Check if the character is a digit
-	public boolean isDigit(char c) {
+	private boolean isDigit(char c) {
 
 		return ("" + c).matches("[0-9]");
 
 	}
 	
 	//Check if the character is alphanumeric
-	public boolean isAlphanumeric(char c) {
+	private boolean isAlphanumeric(char c) {
 
 		return isLetter(c) || isDigit(c) || c == '_';
 
 	}
 	
 	//Check if the token is a reserver word
-	public boolean isReservedWord(String s) {
+	private boolean isReservedWord(String s) {
 
 		return s.equals("and") || s.equals("not") || s.equals("or")
 				|| s.equals("if") || s.equals("then") || s.equals("else")

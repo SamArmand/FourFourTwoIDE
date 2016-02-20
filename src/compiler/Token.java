@@ -22,10 +22,6 @@ public class Token {
 		return type;
 	}
 
-	public String getLexeme() {
-		return lexeme;
-	}
-
 	public int getLine() {
 		return line;
 	}
