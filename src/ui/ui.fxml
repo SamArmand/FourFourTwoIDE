@@ -1,47 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="ui.Controller">
-    <TextArea fx:id="editor" layoutX="31.0" layoutY="22.0" prefHeight="327.0" prefWidth="538.0">
-        <font>
-            <Font name="Courier New" size="13.0"/>
-        </font>
-    </TextArea>
-    <Button fx:id="compileButton" layoutX="31.0" layoutY="360.0" mnemonicParsing="false" onAction="#compile"
-            prefHeight="27.0" prefWidth="94.0" text="Compile"/>
-    <TabPane layoutX="31.0" layoutY="396.0" prefHeight="191.0" prefWidth="538.0" tabClosingPolicy="UNAVAILABLE">
-        <Tab text="Errors">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TextArea fx:id="errorsOutput" editable="false" layoutX="1.0" layoutY="1.0"
-                          prefHeight="157.0" prefWidth="538.0">
-                    <font>
-                        <Font name="Courier New" size="13.0"/>
-                    </font>
-                </TextArea>
-            </AnchorPane>
-        </Tab>
-        <Tab text="Tokens">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TextArea fx:id="tokensOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
-                    <font>
-                        <Font name="Courier New" size="13.0"/>
-                    </font>
-                </TextArea>
-            </AnchorPane>
-        </Tab>
-        <Tab text="Derivation">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TextArea fx:id="derivationOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
-                    <font>
-                        <Font name="Courier New" size="13.0"/>
-                    </font>
-                </TextArea>
-            </AnchorPane>
-        </Tab>
-    </TabPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.Controller">
+   <children>
+       <TextArea fx:id="editor" layoutX="31.0" layoutY="22.0" prefHeight="327.0" prefWidth="538.0">
+           <font>
+               <Font name="Courier New" size="13.0" />
+           </font>
+       </TextArea>
+       <Button fx:id="compileButton" layoutX="31.0" layoutY="360.0" mnemonicParsing="false" onAction="#compile" prefHeight="27.0" prefWidth="94.0" text="Compile" />
+       <TabPane layoutX="31.0" layoutY="396.0" prefHeight="191.0" prefWidth="538.0" tabClosingPolicy="UNAVAILABLE">
+          <tabs>
+              <Tab text="Errors">
+                 <content>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TextArea fx:id="errorsOutput" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="157.0" prefWidth="538.0">
+                                <font>
+                                    <Font name="Courier New" size="13.0" />
+                                </font>
+                            </TextArea>
+                        </children>
+                     </AnchorPane>
+                 </content>
+              </Tab>
+              <Tab text="Tokens">
+                 <content>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                         <children>
+                             <TextArea fx:id="tokensOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
+                                 <font>
+                                     <Font name="Courier New" size="13.0" />
+                                 </font>
+                             </TextArea>
+                         </children>
+                     </AnchorPane>
+                 </content>
+              </Tab>
+              <Tab text="Derivation">
+                  <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <children>
+                              <TextArea fx:id="derivationOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
+                                  <font>
+                                      <Font name="Courier New" size="13.0" />
+                                  </font>
+                              </TextArea>
+                          </children>
+                      </AnchorPane>
+                  </content>
+              </Tab>
+          </tabs>
+       </TabPane>
+   </children>
 </AnchorPane>
