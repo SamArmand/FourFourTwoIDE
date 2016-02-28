@@ -1,0 +1,17 @@
+<classDeclList> -> EPSILON
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<funcMemberList> -> EPSILON
+<funcMemberList> -> <funcMember> ; <funcMemberList>
+<funcDefList> -> EPSILON
+<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>

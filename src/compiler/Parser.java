@@ -979,7 +979,7 @@ public class Parser {
 
 		}
 
-		if (lookahead.belongsTo(FIRST_factor_RHS4)) {
+		else if (lookahead.belongsTo(FIRST_factor_RHS4)) {
 
 			if (match("NOT")
 					& factor())
