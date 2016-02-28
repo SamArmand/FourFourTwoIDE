@@ -1,4 +1,12 @@
 <classMemberDeclList> -> EPSILON
 <classDeclList> -> EPSILON
+<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<arithExprPRIME> -> EPSILON
+<exprPRIME> -> EPSILON
 <funcMemberList> -> EPSILON
 <funcDefList> -> EPSILON

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="minor refactoring">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Parser.class" afterPath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Parser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Token.class" afterPath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Token.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/derivation.txt" afterPath="$PROJECT_DIR$/derivation.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/errors.txt" afterPath="$PROJECT_DIR$/errors.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source.txt" afterPath="$PROJECT_DIR$/source.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/compiler/Parser.java" afterPath="$PROJECT_DIR$/src/compiler/Parser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tokens.txt" afterPath="$PROJECT_DIR$/tokens.txt" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -95,8 +91,8 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/compiler/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48872182">
-              <caret line="205" column="164" selection-start-line="205" selection-start-column="164" selection-end-line="205" selection-end-column="164" />
+            <state vertical-scroll-proportion="0.6766917">
+              <caret line="415" column="27" selection-start-line="415" selection-start-column="27" selection-end-line="415" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -241,7 +237,7 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="63" />
+    <option name="x" value="73" />
     <option name="y" value="109" />
     <option name="width" value="1280" />
     <option name="height" value="725" />
@@ -845,15 +841,15 @@
       <workItem from="1453516892679" duration="3712000" />
       <workItem from="1453524254773" duration="21803000" />
       <workItem from="1453909385534" duration="3240000" />
-      <workItem from="1456678536050" duration="4218000" />
+      <workItem from="1456678536050" duration="5083000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34275000" />
+    <option name="totallyTimeSpent" value="35140000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="63" y="109" width="1280" height="725" extended-state="0" />
+    <frame x="73" y="109" width="1280" height="725" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1314,8 +1310,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/compiler/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48872182">
-          <caret line="205" column="164" selection-start-line="205" selection-start-column="164" selection-end-line="205" selection-end-column="164" />
+        <state vertical-scroll-proportion="0.6766917">
+          <caret line="415" column="27" selection-start-line="415" selection-start-column="27" selection-end-line="415" selection-end-column="27" />
           <folding />
         </state>
       </provider>

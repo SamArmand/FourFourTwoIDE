@@ -1,2 +1,1 @@
-Syntax error at line 3. Expected: ;
-Syntax error at line 5. Expected: ;
+Syntax error at line 1Invalid statement
