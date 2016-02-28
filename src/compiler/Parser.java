@@ -182,7 +182,7 @@ public class Parser {
 
 	}
 
-	//a local version of nextToken which skips comments
+	//a local version of nextToken that skips comments
 	private void nextToken() {
 
 		do
@@ -203,7 +203,7 @@ public class Parser {
 		
 		else {
 
-			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(". Expected: ").append(expectedToken).append("\n");
+			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(". Expected: ").append(Token.toDescription(expectedToken)).append("\n");
 			nextToken();
 			return false;
 
@@ -219,7 +219,7 @@ public class Parser {
 		
 		else {
 			
-			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Misplaced token: ").append(lookahead.getType()).append("\n");
+			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Misplaced token: ").append(lookahead.getLexeme()).append("\n");
 
 			while (!Arrays.asList(firstUfollow).contains(lookahead.getType()) && !lookahead.getType().equals("EOF"))
 				nextToken();
@@ -559,6 +559,8 @@ public class Parser {
 
 		boolean valid = skipErrors(union(FIRST_statement, FOLLOW_statement));
 
+		int line = lookahead.getLine();
+
 		if (lookahead.belongsTo(FIRST_statement_RHS1)) {
 
 			if (assignStat())
@@ -581,6 +583,9 @@ public class Parser {
 
 		else
 			valid = false;
+
+		if (!valid)
+			errorStrings.append("Syntax error at line ").append(line).append("Invalid statement").append("\n");
 
 		return valid;
 
@@ -766,6 +771,8 @@ public class Parser {
 
 		boolean valid = skipErrors(union(FIRST_expr, FOLLOW_expr));
 
+		int line = lookahead.getLine();
+
 		if (lookahead.belongsTo(FIRST_expr)) {
 
 			if (arithExpr()
@@ -779,6 +786,9 @@ public class Parser {
 
 		else
 			valid = false;
+
+		if (!valid)
+			errorStrings.append("Syntax error at line ").append(line).append("Invalid statement").append("\n");
 
 		return valid;
 

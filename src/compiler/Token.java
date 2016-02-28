@@ -22,6 +22,10 @@ public class Token {
 		return type;
 	}
 
+	public String getLexeme() {
+		return lexeme;
+	}
+
 	public int getLine() {
 		return line;
 	}
@@ -37,6 +41,63 @@ public class Token {
 	public boolean belongsTo(String[] set) {
 
 		return Arrays.asList(set).contains(type);
+
+	}
+
+	public static String toDescription(String expectedToken) {
+
+		switch (expectedToken) {
+
+			case "SEMICOLON":
+				return ";";
+			case "COMMA":
+				return ",";
+			case "DOT":
+				return ".";
+			case "PLUS":
+				return "+";
+			case "MINUS":
+				return "-";
+			case "OPAREN":
+				return "(";
+			case "CPAREN":
+				return ")";
+			case "OBRACE":
+				return "{";
+			case "CBRACE":
+				return "}";
+			case "OBRACKET":
+				return "[";
+			case "CBRACKET":
+				return "]";
+			case "ASTERISK":
+				return "*";
+			case "EOF":
+				return "end of file";
+			case "FWDSLASH":
+				return "/";
+			case "BLOCKCOMMENT":
+				return "block comment";
+			case "DEF":
+				return "=";
+			case "EQ":
+				return "==";
+			case "LESS":
+				return "<";
+			case "LEQ":
+				return "<=";
+			case "NEQ":
+				return "<>";
+			case "GREATER":
+				return ">";
+			case "GEQ":
+				return ">=";
+			default:
+				return expectedToken.toLowerCase();
+
+
+
+		}
 
 	}
 	
