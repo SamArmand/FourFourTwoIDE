@@ -1,15 +1,3 @@
-TOKEN | Type: CLASS           Lexeme: class           Line: 1    
-TOKEN | Type: ID              Lexeme: v               Line: 1    
-TOKEN | Type: OBRACE          Lexeme: {               Line: 1    
-TOKEN | Type: CBRACE          Lexeme: }               Line: 1    
-TOKEN | Type: SEMICOLON       Lexeme: ;               Line: 1    
-TOKEN | Type: PROGRAM         Lexeme: program         Line: 1    
-TOKEN | Type: OBRACE          Lexeme: {               Line: 1    
-TOKEN | Type: ID              Lexeme: x               Line: 1    
-TOKEN | Type: DEF             Lexeme: =               Line: 1    
-TOKEN | Type: INTEGER         Lexeme: 1               Line: 1    
-TOKEN | Type: SEMICOLON       Lexeme: ;               Line: 1    
-TOKEN | Type: CBRACE          Lexeme: }               Line: 1    
-TOKEN | Type: SEMICOLON       Lexeme: ;               Line: 1    
+TOKEN | Type: COMMENT         Lexeme: //              Line: 1    
 TOKEN | Type: EOF             Lexeme: $               Line: 1    
 TOKEN | Type: EOF             Lexeme: $               Line: 1    

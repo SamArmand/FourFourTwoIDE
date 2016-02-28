@@ -187,7 +187,7 @@ public class Parser {
 
 		do
 			lookahead = lexer.nextToken();
-		while (lookahead.getType().equals("BLOCKCOMMENT") || lookahead.getType().equals("COMMENT"));
+		while ((lookahead.getType().equals("BLOCKCOMMENT") || lookahead.getType().equals("COMMENT")));
 			
 	}
 

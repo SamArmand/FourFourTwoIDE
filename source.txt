@@ -1,1 +1,1 @@
-class v {}; program{x = 1;};
+// missing

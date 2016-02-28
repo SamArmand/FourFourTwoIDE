@@ -162,7 +162,7 @@ public class Lexer {
 
 				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
-				while (!source.isNewLine()) source.nextChar();
+				while (!source.isNewLine() && !source.isEndOfFile()) source.nextChar();
 
 			}
 
