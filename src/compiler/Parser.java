@@ -204,7 +204,6 @@ public class Parser {
 		else {
 
 			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(". Expected: ").append(Token.toDescription(expectedToken)).append("\n");
-			nextToken();
 			return false;
 
 		}

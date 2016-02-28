@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="minor refactoring">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Parser.class" afterPath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Parser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Token.class" afterPath="$PROJECT_DIR$/out/production/FourFourTwoIDE/compiler/Token.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/derivation.txt" afterPath="$PROJECT_DIR$/derivation.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/errors.txt" afterPath="$PROJECT_DIR$/errors.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source.txt" afterPath="$PROJECT_DIR$/source.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/compiler/Parser.java" afterPath="$PROJECT_DIR$/src/compiler/Parser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/compiler/Token.java" afterPath="$PROJECT_DIR$/src/compiler/Token.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tokens.txt" afterPath="$PROJECT_DIR$/tokens.txt" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,11 +75,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#533#534#0" expanded="true" />
-                <element signature="e#561#562#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,8 +95,8 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/compiler/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="7.706767">
-              <caret line="205" column="149" selection-start-line="205" selection-start-column="149" selection-end-line="205" selection-end-column="149" />
+            <state vertical-scroll-proportion="0.48872182">
+              <caret line="205" column="164" selection-start-line="205" selection-start-column="164" selection-end-line="205" selection-end-column="164" />
               <folding />
             </state>
           </provider>
@@ -143,7 +144,18 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#796#797#0" expanded="false" />
+                <element signature="e#826#827#0" expanded="false" />
+                <element signature="e#884#885#0" expanded="false" />
+                <element signature="e#931#932#0" expanded="false" />
+                <element signature="e#962#963#0" expanded="false" />
+                <element signature="e#983#984#0" expanded="false" />
+                <element signature="e#1027#1028#0" expanded="false" />
+                <element signature="e#1056#1057#0" expanded="false" />
+                <element signature="e#1089#1090#0" expanded="false" />
+                <element signature="e#1112#1113#0" expanded="false" />
+                <element signature="e#1143#1144#0" expanded="false" />
+                <element signature="e#1164#1165#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -217,8 +229,8 @@
         <option value="$PROJECT_DIR$/src/ui/Controller.java" />
         <option value="$PROJECT_DIR$/src/compiler/Lexer.java" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
-        <option value="$PROJECT_DIR$/src/compiler/Parser.java" />
         <option value="$PROJECT_DIR$/src/compiler/Token.java" />
+        <option value="$PROJECT_DIR$/src/compiler/Parser.java" />
       </list>
     </option>
   </component>
@@ -229,7 +241,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="63" />
+    <option name="y" value="109" />
     <option name="width" value="1280" />
     <option name="height" value="725" />
   </component>
@@ -293,80 +306,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="compiler" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="documentation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FourFourTwoIDE" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value=".idea" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -383,7 +322,7 @@
     <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="/Applications/JavaFX Scene Builder 2.0.app" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Compiler" />
     <property name="settings.editor.selected.configurable" value="vcs.CVS" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
@@ -906,15 +845,15 @@
       <workItem from="1453516892679" duration="3712000" />
       <workItem from="1453524254773" duration="21803000" />
       <workItem from="1453909385534" duration="3240000" />
-      <workItem from="1456678536050" duration="2730000" />
+      <workItem from="1456678536050" duration="4218000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32787000" />
+    <option name="totallyTimeSpent" value="34275000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="725" extended-state="6" />
+    <frame x="63" y="109" width="1280" height="725" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -933,7 +872,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39968404" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3984252" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -964,7 +903,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -977,11 +916,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1030,7 +965,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#796#797#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#884#885#0" expanded="false" />
+            <element signature="e#931#932#0" expanded="false" />
+            <element signature="e#962#963#0" expanded="false" />
+            <element signature="e#983#984#0" expanded="false" />
+            <element signature="e#1027#1028#0" expanded="false" />
+            <element signature="e#1056#1057#0" expanded="false" />
+            <element signature="e#1089#1090#0" expanded="false" />
+            <element signature="e#1112#1113#0" expanded="false" />
+            <element signature="e#1143#1144#0" expanded="false" />
+            <element signature="e#1164#1165#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1074,11 +1020,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1127,7 +1069,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="75" column="31" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#796#797#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#884#885#0" expanded="false" />
+            <element signature="e#931#932#0" expanded="false" />
+            <element signature="e#962#963#0" expanded="false" />
+            <element signature="e#983#984#0" expanded="false" />
+            <element signature="e#1027#1028#0" expanded="false" />
+            <element signature="e#1056#1057#0" expanded="false" />
+            <element signature="e#1089#1090#0" expanded="false" />
+            <element signature="e#1112#1113#0" expanded="false" />
+            <element signature="e#1143#1144#0" expanded="false" />
+            <element signature="e#1164#1165#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1171,11 +1124,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1219,11 +1168,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1294,11 +1239,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#533#534#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1307,7 +1248,18 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="54" column="17" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#796#797#0" expanded="false" />
+            <element signature="e#826#827#0" expanded="false" />
+            <element signature="e#884#885#0" expanded="false" />
+            <element signature="e#931#932#0" expanded="false" />
+            <element signature="e#962#963#0" expanded="false" />
+            <element signature="e#983#984#0" expanded="false" />
+            <element signature="e#1027#1028#0" expanded="false" />
+            <element signature="e#1056#1057#0" expanded="false" />
+            <element signature="e#1089#1090#0" expanded="false" />
+            <element signature="e#1112#1113#0" expanded="false" />
+            <element signature="e#1143#1144#0" expanded="false" />
+            <element signature="e#1164#1165#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1362,8 +1314,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/compiler/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="7.706767">
-          <caret line="205" column="149" selection-start-line="205" selection-start-column="149" selection-end-line="205" selection-end-column="149" />
+        <state vertical-scroll-proportion="0.48872182">
+          <caret line="205" column="164" selection-start-line="205" selection-start-column="164" selection-end-line="205" selection-end-column="164" />
           <folding />
         </state>
       </provider>

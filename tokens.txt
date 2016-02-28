@@ -1,3 +1,9 @@
-TOKEN | Type: ID              Lexeme: dsfasdfaf       Line: 1    
-TOKEN | Type: EOF             Lexeme: $               Line: 1    
-TOKEN | Type: EOF             Lexeme: $               Line: 1    
+TOKEN | Type: CLASS           Lexeme: class           Line: 1    
+TOKEN | Type: ID              Lexeme: v               Line: 1    
+TOKEN | Type: OBRACE          Lexeme: {               Line: 1    
+TOKEN | Type: CBRACE          Lexeme: }               Line: 2    
+TOKEN | Type: PROGRAM         Lexeme: program         Line: 3    
+TOKEN | Type: OBRACE          Lexeme: {               Line: 4    
+TOKEN | Type: CBRACE          Lexeme: }               Line: 5    
+TOKEN | Type: EOF             Lexeme: $               Line: 5    
+TOKEN | Type: EOF             Lexeme: $               Line: 5    
