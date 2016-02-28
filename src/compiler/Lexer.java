@@ -14,46 +14,49 @@ public class Lexer {
 		
 	}
 	
-	//Check if the character is a letter
-	private boolean isLetter(char c) {
+	//Test to check if character is a letter
+	public boolean isLetter(char c) {
 
 		return ("" + c).matches("[a-zA-Z]");
 
 	}
 	
-	//Check if the character is a digit
-	private boolean isDigit(char c) {
+	//Test to check if character is a digit
+	public boolean isDigit(char c) {
 
 		return ("" + c).matches("[0-9]");
 
 	}
 	
-	//Check if the character is alphanumeric
-	private boolean isAlphanumeric(char c) {
+	//Test to check if character is alphanumeric or an underscore
+	public boolean isAlphanum(char c) {
 
 		return isLetter(c) || isDigit(c) || c == '_';
 
 	}
 	
-	//Check if the token is a reserver word
-	private boolean isReservedWord(String s) {
+	//Test to see if character is a reserved word
+	public boolean isReservedWord(String s) {
 
 		return s.equals("and") || s.equals("not") || s.equals("or")
 				|| s.equals("if") || s.equals("then") || s.equals("else")
 				|| s.equals("for") || s.equals("class")
 				|| s.equals("int") || s.equals("float") || s.equals("get")
-				|| s.equals("put") || s.equals("return") || s.equals("program");
+				|| s.equals("put") || s.equals("return");
 
 	}
 	
-	//This is a handwritten method for analyzing tokens.
+	/*This is a handwritten method for analyzing tokens.
+	Since errors are detected within this method and written to errors.txt
+	this method could throw an IOException*/ 
 	public Token nextToken() {
 
+		char c;
 		String lexeme = "";
 
 		Token token = null;
 		
-		char c = source.nextChar();
+		c = source.nextChar();
 
 		while (c == ' ') c = source.nextChar();
 
@@ -136,7 +139,7 @@ public class Lexer {
 
 			c = source.nextChar();
 
-			while (isAlphanumeric(c)) {
+			while (isAlphanum(c)) {
 
 				lexeme = lexeme + c;
 				c = source.nextChar();
@@ -162,7 +165,7 @@ public class Lexer {
 
 				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
-				while (!source.isNewLine()) source.nextChar();
+				while (source.getCurrentLineNumber() == source.getLastOCOMMENTLine()) source.nextChar();
 
 			}
 
@@ -195,7 +198,7 @@ public class Lexer {
 				if (source.isComment()) {
 
 					errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
-					token = new Token("ERROR", "/*", source.getCurrentLineNumber());
+					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 				}
 
@@ -218,7 +221,7 @@ public class Lexer {
 
 			if (c != '.') {
 
-				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
+				token = new Token("INT", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -251,7 +254,7 @@ public class Lexer {
 
 					else {
 
-						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
+						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -262,7 +265,7 @@ public class Lexer {
 				else {
 					errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 					source.backtrack();
-					token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
+					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 				}
 
 			}
@@ -297,7 +300,7 @@ public class Lexer {
 
 					}
 
-					//Check if trailing zero in fraction is not immediately after the decimal point
+					// Ex: 1.0 or 42545235.0 etc. is valid but 1.010 is not
 					if (lexeme.charAt(lexeme.length()-1) == '0' && (lexeme.charAt(lexeme.length()-2) != '.')) {
 
 						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
@@ -306,17 +309,16 @@ public class Lexer {
 
 					}
 
-					//valid float
 					else {
 
-						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
+						token = new Token("NUM", lexeme, source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
 
 				}
 
-				//No digit after the dot
+				//No number after the .
 				else {
 
 					errorStrings.append("ERROR: Unknown Token ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
@@ -327,10 +329,10 @@ public class Lexer {
 
 			}
 
-			//Valid integer
+			//Valid number
 			else {
 
-				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
+				token = new Token("INT", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -340,7 +342,7 @@ public class Lexer {
 		else {
 
 			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
-			token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
+			token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
 		}
 

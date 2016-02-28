@@ -1,20 +1,18 @@
 package compiler;
 
-import java.util.Arrays;
-
 //Data structure for storing information about a token
 public class Token {
 
 	private String type;
 	private String lexeme;
-	private int line;
+	private int lineNum;
 	
 	//Constructor
-	public Token(String type, String lexeme, int line) {
+	public Token(String type, String lexeme, int lineNum) {
 		
 		this.type = type;
 		this.lexeme = lexeme;
-		this.line = line;
+		this.lineNum = lineNum;
 		
 	}
 
@@ -22,22 +20,11 @@ public class Token {
 		return type;
 	}
 
-	public int getLine() {
-		return line;
-	}
-
 	//returns formatted Token info
 	public String toString() {
-
-		return String.format("TOKEN | Type: %-15s Lexeme: %-15s Line: %-5s", type, lexeme, line);
 		
-	}
-
-	//checks if token belongs to set
-	public boolean belongsTo(String[] set) {
-
-		return Arrays.asList(set).contains(type);
-
+		return String.format("TOKEN | Type: %-8s Lexeme: %-15s Line: %-5s", type, lexeme, lineNum);
+		
 	}
 	
 }

@@ -1,2 +1,0 @@
-TOKEN | Type: ID              Lexeme: test            Line: 1    
-TOKEN | Type: EOF             Lexeme: $               Line: 1    

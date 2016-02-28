@@ -8,7 +8,7 @@ import java.io.*;
 
 import compiler.Source;
 import compiler.Lexer;
-import compiler.Parser;
+import compiler.Token;
 
 public class Controller {
 
@@ -20,8 +20,6 @@ public class Controller {
     TextArea errorsOutput;
     @FXML
     TextArea tokensOutput;
-    @FXML
-    TextArea derivationOutput;
 
     //handler for compileButton click action
     public void compile() {
@@ -35,12 +33,10 @@ public class Controller {
         //define output streams
         PrintWriter tokens;
         PrintWriter errors;
-        PrintWriter derivation;
 
         //create StringBuilders for output
         StringBuilder errorStrings = new StringBuilder();
         StringBuilder tokenStrings = new StringBuilder();
-        StringBuilder derivationStrings = new StringBuilder();
 
         //Set up streams
         try
@@ -48,7 +44,6 @@ public class Controller {
             code = new BufferedReader(new FileReader("source.txt"));
             tokens = new PrintWriter(new FileOutputStream("tokens.txt"));
             errors = new PrintWriter(new FileOutputStream("errors.txt"));
-            derivation = new PrintWriter(new FileOutputStream("derivation.txt"));
         }
 
         catch(FileNotFoundException e)
@@ -62,17 +57,18 @@ public class Controller {
 
         Source source = new Source(code, errorStrings); //Object for tracking progress and backtracking through source code. See Source.java for more info.
         Lexer lexer = new Lexer(source, errorStrings, tokenStrings);
-        Parser parser = new Parser(lexer, errorStrings, derivationStrings);
 
-        parser.parse();
+        Token token;
+
+        do {
+            token = lexer.nextToken();
+        } while (!token.getType().equals("EOF"));
 
         tokens.print(tokenStrings.toString());
         errors.print(errorStrings.toString());
-        derivation.print(derivationStrings.toString());
 
         tokens.close();
         errors.close();
-        derivation.close();
 
         try {
             code.close();
@@ -82,7 +78,6 @@ public class Controller {
 
         errorsOutput.setText(errorStrings.toString());
         tokensOutput.setText(tokenStrings.toString());
-        derivationOutput.setText(derivationStrings.toString());
 
     }
 
