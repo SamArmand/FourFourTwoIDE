@@ -1,9 +1,174 @@
+<classMemberDeclList> -> EPSILON
 <classDeclList> -> EPSILON
+<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<indiceList> -> EPSILON
+<indiceList> -> [ <arithExpr> ] <indiceList>
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<relOp> -> >
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> <relOp> <arithExpr>
+<expr> -> <arithExpr> <exprPRIME>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<assignStat> -> <variable> = <expr>
+<statement> -> <assignStat>
+<statementList> -> EPSILON
+<statementList> -> <statement> ; <statementList>
+<statBlock> -> { <statementList> }
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<statementPRIME> -> return ( <expr> )
+<statement> -> <statementPRIME>
+<statementList> -> EPSILON
+<statementList> -> <statement> ; <statementList>
+<statBlock> -> { <statementList> }
+<statementPRIME> -> if ( <expr> ) then <statBlock> else <statBlock>
+<funcMember> -> <statementPRIME>
+<type> -> id
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<aParamsTailList> -> EPSILON
+<aParams> -> <expr> <aParamsTailList>
+<factorPRIME> -> ( <aParams> )
+<termPRIME> -> EPSILON
+<addOp> -> +
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<arithExprPRIME> -> <addOp> <arithExpr>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<termPRIME> -> EPSILON
+<arithExprPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<number> -> integer
+<factor> -> <number>
+<multOp> -> *
+<number> -> integer
+<factor> -> <number>
+<multOp> -> /
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<termPRIME> -> <multOp> <term>
+<term> -> <factor> <termPRIME>
+<termPRIME> -> <multOp> <term>
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<assignStat> -> <variable> = <expr>
+<statBlock> -> EPSILON
+<funcMemberList> -> EPSILON
+<simpleType> -> int
+<type> -> <simpleType>
+<type> -> id
+<arraySizeList> -> EPSILON
+<fParamsTailList> -> EPSILON
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
 <indiceList> -> EPSILON
 <funcMemberPRIMEPRIME> -> EPSILON
 <number> -> integer
 <factor> -> <number>
+<multOp> -> *
+<number> -> integer
+<factor> -> <number>
+<multOp> -> /
+<number> -> integer
+<factor> -> <number>
 <termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<termPRIME> -> <multOp> <term>
+<term> -> <factor> <termPRIME>
+<termPRIME> -> <multOp> <term>
 <term> -> <factor> <termPRIME>
 <arithExprPRIME> -> EPSILON
 <arithExpr> -> <term> <arithExprPRIME>
@@ -13,5 +178,5 @@
 <funcMember> -> id <funcMemberPRIME>
 <funcMemberList> -> EPSILON
 <funcMemberList> -> <funcMember> ; <funcMemberList>
+<funcMemberList> -> <funcMember> ; <funcMemberList>
 <funcDefList> -> EPSILON
-<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>

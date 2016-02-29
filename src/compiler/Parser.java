@@ -178,7 +178,14 @@ public class Parser {
 
 		nextToken();
 
-		return prog() & match("EOF");
+		boolean success = prog() & match("EOF");
+
+		if (success)
+			errorStrings.append("Compiled successfully");
+		else
+			errorStrings.append("Compilation unsuccessful");
+
+		return success;
 
 	}
 
@@ -203,7 +210,7 @@ public class Parser {
 		
 		else {
 
-			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(". Expected: ").append(Token.toDescription(expectedToken)).append("\n");
+			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Expected: ").append(Token.toDescription(expectedToken)).append("\n");
 			return false;
 
 		}
@@ -584,7 +591,7 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			errorStrings.append("Syntax error at line ").append(line).append("Invalid statement").append("\n");
+			errorStrings.append("Syntax error at line ").append(line).append(" Invalid statement").append("\n");
 
 		return valid;
 
@@ -787,7 +794,7 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			errorStrings.append("Syntax error at line ").append(line).append("Invalid statement").append("\n");
+			errorStrings.append("Syntax error at line ").append(line).append(" Invalid expression").append("\n");
 
 		return valid;
 
