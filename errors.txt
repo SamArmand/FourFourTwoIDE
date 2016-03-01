@@ -1,19 +1,1 @@
-Syntax error at line 12 Misplaced token: ;
-Syntax error at line 12 Expected: id
-Syntax error at line 12 Expected: =
-Syntax error at line 12 Misplaced token: <=
-Syntax error at line 12 Invalid expression
-Syntax error at line 12 Misplaced token: =
-Syntax error at line 12 Misplaced token: )
-Syntax error at line 13 Misplaced token: =
-Syntax error at line 14 Expected: )
-Syntax error at line 17 Misplaced token: for
-Syntax error at line 17 Expected: (
-Syntax error at line 17 Misplaced token: =
-Syntax error at line 17 Expected: id
-Syntax error at line 17 Misplaced token: <=
-Syntax error at line 17 Misplaced token: ;
-Syntax error at line 17 Expected: {
-Syntax error at line 17 Misplaced token: +
-Syntax error at line 26 Misplaced token: }
 Compilation unsuccessful
