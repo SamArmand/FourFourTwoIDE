@@ -1,0 +1,170 @@
+<<<<<<< Updated upstream
+=======
+<classDeclList> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<funcMemberPRIMEPRIME> -> . <variable>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<funcMemberPRIMEPRIME> -> . <variable>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<factor> -> ( <arithExpr> )
+<termPRIME> -> EPSILON
+<arithExprPRIME> -> EPSILON
+<exprPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<variableNest> -> . variable
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<variableNest> -> . variable
+<variable> -> id <indiceList> <variableNest>
+<aParams> -> EPSILON
+<factorPRIME> -> ( <aParams> )
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<variableNest> -> . variable
+<variable> -> id <indiceList> <variableNest>
+<number> -> integer
+<factor> -> <number>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<aParamsTailList> -> EPSILON
+<aParams> -> <expr> <aParamsTailList>
+<factorPRIME> -> ( <aParams> )
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<indiceList> -> EPSILON
+<funcMemberPRIMEPRIME> -> EPSILON
+<indiceList> -> EPSILON
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<variableNest> -> . variable
+<variable> -> id <indiceList> <variableNest>
+<indiceList> -> EPSILON
+<variableNest> -> EPSILON
+<variable> -> id <indiceList> <variableNest>
+<factorPRIME> -> EPSILON
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<aParamsTailList> -> EPSILON
+<aParams> -> <expr> <aParamsTailList>
+<factorPRIME> -> ( <aParams> )
+<factor> -> <variable> <factorPRIME>
+<termPRIME> -> EPSILON
+<term> -> <factor> <termPRIME>
+<arithExprPRIME> -> EPSILON
+<arithExpr> -> <term> <arithExprPRIME>
+<exprPRIME> -> EPSILON
+<expr> -> <arithExpr> <exprPRIME>
+<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>
+<funcMember> -> id <funcMemberPRIME>
+<arraySizeList> -> EPSILON
+<arraySizeList> -> EPSILON
+<funcMemberList> -> EPSILON
+<funcDefList> -> EPSILON
+>>>>>>> Stashed changes

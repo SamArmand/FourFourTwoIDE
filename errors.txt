@@ -1,1 +1,20 @@
+<<<<<<< Updated upstream
+=======
+Syntax error at line 4 Misplaced token: hello
+Syntax error at line 4 Expected: =
+Syntax error at line 4 Invalid expression
+Syntax error at line 5 Expected: =
+Syntax error at line 5 Misplaced token: =
+Syntax error at line 5 Invalid expression
+Syntax error at line 6 Misplaced token: class
+Syntax error at line 7 Misplaced token: int
+Syntax error at line 14 Misplaced token: <
+Syntax error at line 14 Misplaced token: .
+Syntax error at line 14 Expected: ;
+Syntax error at line 14 Misplaced token: )
+Syntax error at line 15 Misplaced token: >=
+Syntax error at line 15 Misplaced token: .
+Syntax error at line 15 Expected: ;
+Syntax error at line 15 Misplaced token: )
+>>>>>>> Stashed changes
 Compilation unsuccessful
