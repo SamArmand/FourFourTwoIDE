@@ -6,15 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="minor refactoring">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/derivation.txt" afterPath="$PROJECT_DIR$/derivation.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/errors.txt" afterPath="$PROJECT_DIR$/errors.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/FourFourTwoIDE/source.txt" afterPath="$PROJECT_DIR$/out/artifacts/FourFourTwoIDE/source.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/FourFourTwoIDE/tokens.txt" afterPath="$PROJECT_DIR$/out/artifacts/FourFourTwoIDE/tokens.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source.txt" afterPath="$PROJECT_DIR$/source.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tokens.txt" afterPath="$PROJECT_DIR$/tokens.txt" />
-    </list>
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="minor refactoring" />
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -964,12 +956,12 @@
       <workItem from="1456678536050" duration="6985000" />
       <workItem from="1456715414307" duration="1410000" />
       <workItem from="1456881920021" duration="44110000" />
-      <workItem from="1457065312671" duration="15000" />
+      <workItem from="1457065312671" duration="78000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82577000" />
+    <option name="totallyTimeSpent" value="82640000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="740" y="54" width="955" height="916" extended-state="0" />
