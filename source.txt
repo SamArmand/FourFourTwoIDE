@@ -1,0 +1,20 @@
+<<<<<<< Updated upstream
+=======
+program {
+	something.something = hello;
+	// errors
+	something.something  hello;
+	something.something(a)=  hello;
+	class.something = hello;
+	something.int = hello;
+
+	max = hi.hello;
+	mac = hi.hello();
+	mac = hi.hello(23);
+	mac = hi.hello(abc);
+	// errors
+	mac < hi.hello();
+	mac >= hi.hello();
+	
+};
+>>>>>>> Stashed changes
