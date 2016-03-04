@@ -54,6 +54,19 @@
                       </AnchorPane>
                   </content>
               </Tab>
+            <Tab text="Symbol Tables">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea fx:id="symbolTablesOutput" editable="false" prefHeight="157.0" prefWidth="538.0">
+                           <font>
+                              <Font name="Courier New" size="13.0" />
+                           </font>
+                        </TextArea>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
           </tabs>
        </TabPane>
    </children>

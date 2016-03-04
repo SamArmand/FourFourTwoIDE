@@ -3,14 +3,10 @@ package compiler;
 public class Lexer {
 
 	private Source source;
-	private StringBuilder errorStrings;
-	private StringBuilder tokenStrings;
 	
-	public Lexer(Source source, StringBuilder errorStrings, StringBuilder tokenStrings) {
+	public Lexer(Source source) {
 		
 		this.source = source;
-		this.errorStrings = errorStrings;
-		this.tokenStrings = tokenStrings;
 		
 	}
 	
@@ -194,7 +190,7 @@ public class Lexer {
 
 				if (source.isComment()) {
 
-					errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
+					Outputter.errorStrings.append("ERROR: Unclosed comment at line ").append(source.getLastOCOMMENTLine()).append("\n");
 					token = new Token("ERROR", "/*", source.getCurrentLineNumber());
 
 				}
@@ -243,7 +239,7 @@ public class Lexer {
 					//check the last character in tokenString
 					if (lexeme.charAt(lexeme.length()-1) == '0' && !lexeme.equals("0.0")) {
 
-						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+						Outputter.errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 						source.backtrack();
 						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
@@ -260,7 +256,7 @@ public class Lexer {
 
 				//no digit after "0."
 				else {
-					errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+					Outputter.errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 					source.backtrack();
 					token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
 				}
@@ -300,7 +296,7 @@ public class Lexer {
 					//Check if trailing zero in fraction is not immediately after the decimal point
 					if (lexeme.charAt(lexeme.length()-1) == '0' && (lexeme.charAt(lexeme.length()-2) != '.')) {
 
-						errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+						Outputter.errorStrings.append("ERROR: Unknown Token: ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 						source.backtrack();
 						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
@@ -319,7 +315,7 @@ public class Lexer {
 				//No digit after the dot
 				else {
 
-					errorStrings.append("ERROR: Unknown Token ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+					Outputter.errorStrings.append("ERROR: Unknown Token ").append(lexeme).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 					source.backtrack();
 					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
 
@@ -339,13 +335,13 @@ public class Lexer {
 
 		else {
 
-			errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
+			Outputter.errorStrings.append("ERROR: Unknown Character: ").append(c).append(" at line ").append(source.getCurrentLineNumber()).append("\n");
 			token = new Token("ERROR", "" + c, source.getCurrentLineNumber());
 
 		}
 
 		assert token != null;
-		tokenStrings.append(token.toString()).append("\n");
+		Outputter.tokenStrings.append(token.toString()).append("\n");
 		return token;
 		
 	}

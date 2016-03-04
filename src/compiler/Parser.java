@@ -160,32 +160,29 @@ public class Parser {
 			FOLLOW_number = {"ASTERISK", "FWDSLASH", "AND", "OR", "PLUS", "MINUS", "CBRACKET", "CPAREN", "EQ", "NEQ", "LESS", "GREATER", "LEQ", "GEQ", "SEMICOLON", "COMMA"};
 
 	private Lexer lexer;
-	private StringBuilder derivationStrings;
-	private StringBuilder errorStrings;
 
 	private Token lookahead;
-	
-	public Parser(Lexer lexer, StringBuilder errorStrings, StringBuilder derivationStrings) {
+
+	private String lastLexeme;
+
+	public Parser(Lexer lexer) {
 
 		this.lexer = lexer;
-		this.derivationStrings = derivationStrings;
-		this.errorStrings = errorStrings;
 
 	}
 
 	//main parse function and head of recursive descent
-	public boolean parse() {
+	public void parse() {
 
 		nextToken();
 
 		boolean success = prog() & match("EOF");
 
-		if (success)
-			errorStrings.append("Compiled successfully");
+		if (success && (Outputter.errorStrings.length() == 0))
+			Outputter.errorStrings.append("Compiled successfully");
 		else
-			errorStrings.append("Compilation unsuccessful");
+			Outputter.errorStrings.append("Compilation unsuccessful");
 
-		return success;
 
 	}
 
@@ -202,7 +199,9 @@ public class Parser {
 	private boolean match(String expectedToken) {
 
 		if (lookahead.getType().equals(expectedToken)) {
-			
+
+			lastLexeme = lookahead.getLexeme();
+
 			nextToken();
 			return true;
 
@@ -210,7 +209,7 @@ public class Parser {
 		
 		else {
 
-			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Expected: ").append(Token.toDescription(expectedToken)).append("\n");
+			Outputter.errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Expected: ").append(Token.toDescription(expectedToken)).append("\n");
 			return false;
 
 		}
@@ -225,7 +224,7 @@ public class Parser {
 		
 		else {
 			
-			errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Misplaced token: ").append(lookahead.getLexeme()).append("\n");
+			Outputter.errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Misplaced token: ").append(lookahead.getLexeme()).append("\n");
 
 			while (!Arrays.asList(firstUfollow).contains(lookahead.getType()) && !lookahead.getType().equals("EOF"))
 				nextToken();
@@ -263,7 +262,7 @@ public class Parser {
 					& match("CBRACE")
 					& match("SEMICOLON")
 					& funcDefList())
-				derivationStrings.append("<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>").append("\n");
+				Outputter.derivationStrings.append("<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>").append("\n");
 
 			else
 				valid = false;
@@ -278,19 +277,24 @@ public class Parser {
 	}
 
 	private boolean classDeclList() { // <classDeclList> -> class id { <classMemberDeclList> } ; <classDeclList> | EPSILON
-		
+
 		boolean valid = skipErrors(union(FIRST_classDeclList, FOLLOW_classDeclList));
 
 		if (lookahead.belongsTo(FIRST_classDeclList)) {
-			
-			if (match("CLASS")
-					& match("ID")
-					& match("OBRACE")
-					& classMemberDeclList()
+
+			boolean c1 = match("CLASS");
+
+			boolean c2 = match("ID");
+
+			boolean c3 = match("OBRACE");
+
+			boolean c4 = classMemberDeclList();
+
+			if ((c1 && c2 && c3 && c4)
 					& match("CBRACE")
 					& match("SEMICOLON")
 					& classDeclList())
-				derivationStrings.append("<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>").append("\n");
+				Outputter.derivationStrings.append("<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>").append("\n");
 			
 			else
 				valid = false;
@@ -298,7 +302,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_classDeclList))
-			derivationStrings.append("<classDeclList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<classDeclList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -312,9 +316,9 @@ public class Parser {
 		boolean valid = skipErrors(union(FIRST_classMemberDeclPRIME, FOLLOW_classMemberDeclPRIME));
 
 		if (lookahead.belongsTo(FIRST_classMemberDeclPRIME_RHS1)) {
-			
+
 			if (arraySizeList())
-				derivationStrings.append("<classMemberDeclPRIME> -> <arraySizeList>").append("\n");
+				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> <arraySizeList>").append("\n");
 
 			else
 				valid = false;
@@ -329,7 +333,7 @@ public class Parser {
 					& match("OBRACE")
 					& funcMemberList()
 					& match("CBRACE"))
-				derivationStrings.append("<classMemberDeclPRIME> -> ( <fParams> ) { <funcMemberList> }").append("\n");
+				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> ( <fParams> ) { <funcMemberList> }").append("\n");
 
 			else
 				valid = false;
@@ -348,13 +352,17 @@ public class Parser {
 		boolean valid = skipErrors(union(FIRST_classMemberDeclList, FOLLOW_classMemberDeclList));
 
 		if (lookahead.belongsTo(FIRST_classMemberDeclList)) {
-			
-			if (type()
-					& match("ID")
-					& classMemberDeclPRIME()
+
+			boolean c1 = type();
+
+			boolean c2 = match("ID");
+
+			boolean c3 = classMemberDeclPRIME();
+
+			if ((c1 && c2 && c3)
 					& match("SEMICOLON")
 					& classMemberDeclList())
-				derivationStrings.append("<classMemberDeclList> -> <type> id <classMemberDeclPRIME> ; <classMemberDeclList>").append("\n");
+				Outputter.derivationStrings.append("<classMemberDeclList> -> <type> id <classMemberDeclPRIME> ; <classMemberDeclList>").append("\n");
 
 			else
 				valid = false;
@@ -362,7 +370,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_classMemberDeclList))
-			derivationStrings.append("<classMemberDeclList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<classMemberDeclList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -376,9 +384,12 @@ public class Parser {
 		boolean valid = skipErrors(union(FIRST_funcDefList, FOLLOW_funcDefList));
 
 		if (lookahead.belongsTo(FIRST_funcDefList)) {
-			
-			if (type()
-					& match("ID")
+
+			boolean c1 = type();
+
+			boolean c2 = match("ID");
+
+			if ((c1 && c2)
 					& match("OPAREN")
 					& fParams()
 					& match("CPAREN")
@@ -387,7 +398,7 @@ public class Parser {
 					& match("CBRACE")
 					& match("SEMICOLON")
 					& funcDefList())
-				derivationStrings.append("<funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList>").append("\n");
+				Outputter.derivationStrings.append("<funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList>").append("\n");
 
 			else
 				valid = false;
@@ -395,7 +406,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_funcDefList))
-			derivationStrings.append("<funcDefList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<funcDefList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -411,7 +422,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_funcMember_RHS1)) {
 
 			if (statementPRIME())
-				derivationStrings.append("<funcMember> -> <statementPRIME>").append("\n");
+				Outputter.derivationStrings.append("<funcMember> -> <statementPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -422,7 +433,7 @@ public class Parser {
 			
 			if (match("ID")
 					& funcMemberPRIME())
-				derivationStrings.append("<funcMember> -> id <funcMemberPRIME>").append("\n");
+				Outputter.derivationStrings.append("<funcMember> -> id <funcMemberPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -434,7 +445,7 @@ public class Parser {
 			if (simpleType()
 					& match("ID")
 					& arraySizeList())
-				derivationStrings.append("<funcMember> -> <simpleType> id <arraySizeList>").append("\n");
+				Outputter.derivationStrings.append("<funcMember> -> <simpleType> id <arraySizeList>").append("\n");
 
 			else
 				valid = false;
@@ -456,7 +467,7 @@ public class Parser {
 
 			if (match("ID")
 					& arraySizeList())
-				derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
+				Outputter.derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
 
 			else
 				valid = false;
@@ -469,7 +480,7 @@ public class Parser {
 					& funcMemberPRIMEPRIME()
 					& match("DEF")
 					& expr())
-				derivationStrings.append("<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>").append("\n");
+				Outputter.derivationStrings.append("<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>").append("\n");
 
 			else
 				valid = false;
@@ -491,7 +502,7 @@ public class Parser {
 
 			if (match("DOT")
 					& variable())
-				derivationStrings.append("<funcMemberPRIMEPRIME> -> . <variable>").append("\n");
+				Outputter.derivationStrings.append("<funcMemberPRIMEPRIME> -> . <variable>").append("\n");
 
 			else
 				valid = false;
@@ -499,7 +510,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_funcMemberPRIMEPRIME))
-			derivationStrings.append("<funcMemberPRIMEPRIME> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<funcMemberPRIMEPRIME> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -517,7 +528,7 @@ public class Parser {
 			if (funcMember()
 					& match("SEMICOLON")
 					& funcMemberList())
-				derivationStrings.append("<funcMemberList> -> <funcMember> ; <funcMemberList>").append("\n");
+				Outputter.derivationStrings.append("<funcMemberList> -> <funcMember> ; <funcMemberList>").append("\n");
 
 			else
 				valid = false;
@@ -525,7 +536,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_funcMemberList))
-			derivationStrings.append("<funcMemberList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<funcMemberList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -540,11 +551,13 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_arraySizeList)) {
 
-			if (match("OBRACKET")
-					& match("INTEGER")
+			boolean c1 = match("OBRACKET");
+			boolean c2 = match("INTEGER");
+
+			if ((c1 && c2)
 					& match("CBRACKET")
 					& arraySizeList())
-				derivationStrings.append("<arraySizeList> -> [ integer ] <arraySizeList>").append("\n");
+				Outputter.derivationStrings.append("<arraySizeList> -> [ integer ] <arraySizeList>").append("\n");
 
 			else
 				valid = false;
@@ -552,7 +565,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_arraySizeList))
-			derivationStrings.append("<arraySizeList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<arraySizeList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -570,7 +583,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_statement_RHS1)) {
 
 			if (assignStat())
-				derivationStrings.append("<statement> -> <assignStat>").append("\n");
+				Outputter.derivationStrings.append("<statement> -> <assignStat>").append("\n");
 
 			else
 				valid = false;
@@ -580,7 +593,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_statement_RHS2)) {
 
 			if (statementPRIME())
-				derivationStrings.append("<statement> -> <statementPRIME>").append("\n");
+				Outputter.derivationStrings.append("<statement> -> <statementPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -591,7 +604,7 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			errorStrings.append("Syntax error at line ").append(line).append(" Invalid statement").append("\n");
+			Outputter.errorStrings.append("Syntax error at line ").append(line).append(" Invalid statement").append("\n");
 
 		return valid;
 
@@ -607,7 +620,7 @@ public class Parser {
 					& match("OPAREN")
 					& expr()
 					& match("CPAREN"))
-				derivationStrings.append("<statementPRIME> -> return ( <expr> )").append("\n");
+				Outputter.derivationStrings.append("<statementPRIME> -> return ( <expr> )").append("\n");
 
 			else
 				valid = false;
@@ -620,7 +633,7 @@ public class Parser {
 					& match("OPAREN")
 					& variable()
 					& match("CPAREN"))
-				derivationStrings.append("<statementPRIME> -> put ( <variable> )").append("\n");
+				Outputter.derivationStrings.append("<statementPRIME> -> put ( <variable> )").append("\n");
 
 			else
 				valid = false;
@@ -633,7 +646,7 @@ public class Parser {
 					& match("OPAREN")
 					& variable()
 					& match("CPAREN"))
-				derivationStrings.append("<statementPRIME> -> get ( <variable> )").append("\n");
+				Outputter.derivationStrings.append("<statementPRIME> -> get ( <variable> )").append("\n");
 
 			else
 				valid = false;
@@ -650,7 +663,7 @@ public class Parser {
 					& statBlock()
 					& match("ELSE")
 					& statBlock())
-				derivationStrings.append("<statementPRIME> -> if ( <expr> ) then <statBlock> else <statBlock>").append("\n");
+				Outputter.derivationStrings.append("<statementPRIME> -> if ( <expr> ) then <statBlock> else <statBlock>").append("\n");
 
 			else
 				valid = false;
@@ -673,7 +686,7 @@ public class Parser {
 					& assignStat()
 					& match("CPAREN")
 					& statBlock())
-				derivationStrings.append("<statementPRIME> -> for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> ").append("\n");
+				Outputter.derivationStrings.append("<statementPRIME> -> for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> ").append("\n");
 
 			else
 				valid = false;
@@ -695,7 +708,7 @@ public class Parser {
 
 			if (statement()
 					& match("SEMICOLON"))
-				derivationStrings.append("<statBlock> -> <statement> ;").append("\n");
+				Outputter.derivationStrings.append("<statBlock> -> <statement> ;").append("\n");
 
 			else
 				valid = false;
@@ -707,7 +720,7 @@ public class Parser {
 			if (match("OBRACE")
 					& statementList()
 					& match("CBRACE"))
-				derivationStrings.append("<statBlock> -> { <statementList> }").append("\n");
+				Outputter.derivationStrings.append("<statBlock> -> { <statementList> }").append("\n");
 
 			else
 				valid = false;
@@ -715,7 +728,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_statBlock))
-			derivationStrings.append("<statBlock> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<statBlock> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -733,7 +746,7 @@ public class Parser {
 			if (variable()
 					& match("DEF")
 					& expr())
-				derivationStrings.append("<assignStat> -> <variable> = <expr>").append("\n");
+				Outputter.derivationStrings.append("<assignStat> -> <variable> = <expr>").append("\n");
 
 			else
 				valid = false;
@@ -756,7 +769,7 @@ public class Parser {
 			if (statement()
 					& match("SEMICOLON")
 					& statementList())
-				derivationStrings.append("<statementList> -> <statement> ; <statementList>").append("\n");
+				Outputter.derivationStrings.append("<statementList> -> <statement> ; <statementList>").append("\n");
 
 			else
 				valid = false;
@@ -764,7 +777,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_statementList))
-			derivationStrings.append("<statementList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<statementList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -783,7 +796,7 @@ public class Parser {
 
 			if (arithExpr()
 					& exprPRIME())
-				derivationStrings.append("<expr> -> <arithExpr> <exprPRIME>").append("\n");
+				Outputter.derivationStrings.append("<expr> -> <arithExpr> <exprPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -794,7 +807,7 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			errorStrings.append("Syntax error at line ").append(line).append(" Invalid expression").append("\n");
+			Outputter.errorStrings.append("Syntax error at line ").append(line).append(" Invalid expression").append("\n");
 
 		return valid;
 
@@ -808,7 +821,7 @@ public class Parser {
 
 			if (relOp()
 					& arithExpr())
-				derivationStrings.append("<exprPRIME> -> <relOp> <arithExpr>").append("\n");
+				Outputter.derivationStrings.append("<exprPRIME> -> <relOp> <arithExpr>").append("\n");
 
 			else
 				valid = false;
@@ -816,7 +829,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_exprPRIME))
-			derivationStrings.append("<exprPRIME> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<exprPRIME> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -833,7 +846,7 @@ public class Parser {
 
 			if (term()
 					& arithExprPRIME())
-				derivationStrings.append("<arithExpr> -> <term> <arithExprPRIME>").append("\n");
+				Outputter.derivationStrings.append("<arithExpr> -> <term> <arithExprPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -855,7 +868,7 @@ public class Parser {
 
 			if (addOp()
 					& arithExpr())
-				derivationStrings.append("<arithExprPRIME> -> <addOp> <arithExpr>").append("\n");
+				Outputter.derivationStrings.append("<arithExprPRIME> -> <addOp> <arithExpr>").append("\n");
 
 			else
 				valid = false;
@@ -863,7 +876,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_arithExprPRIME))
-			derivationStrings.append("<arithExprPRIME> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<arithExprPRIME> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -879,7 +892,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_sign_RHS1)) {
 
 			if (match("MINUS"))
-				derivationStrings.append("<sign> -> -").append("\n");
+				Outputter.derivationStrings.append("<sign> -> -").append("\n");
 
 			else
 				valid = false;
@@ -889,7 +902,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_sign_RHS2)) {
 
 			if (match("PLUS"))
-				derivationStrings.append("<sign> -> +").append("\n");
+				Outputter.derivationStrings.append("<sign> -> +").append("\n");
 
 			else
 				valid = false;
@@ -911,7 +924,7 @@ public class Parser {
 
 			if (factor()
 					& termPRIME())
-				derivationStrings.append("<term> -> <factor> <termPRIME>").append("\n");
+				Outputter.derivationStrings.append("<term> -> <factor> <termPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -933,7 +946,7 @@ public class Parser {
 
 			if (multOp()
 					& term())
-				derivationStrings.append("<termPRIME> -> <multOp> <term>").append("\n");
+				Outputter.derivationStrings.append("<termPRIME> -> <multOp> <term>").append("\n");
 
 			else
 				valid = false;
@@ -941,7 +954,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_termPRIME))
-			derivationStrings.append("<termPRIME> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<termPRIME> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -958,7 +971,7 @@ public class Parser {
 
 			if (sign()
 					& factor())
-				derivationStrings.append("<factor> -> <sign> <factor>").append("\n");
+				Outputter.derivationStrings.append("<factor> -> <sign> <factor>").append("\n");
 
 			else
 				valid = false;
@@ -968,7 +981,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_factor_RHS2)) {
 
 			if (number())
-				derivationStrings.append("<factor> -> <number>").append("\n");
+				Outputter.derivationStrings.append("<factor> -> <number>").append("\n");
 
 			else
 				valid = false;
@@ -979,7 +992,7 @@ public class Parser {
 
 			if (variable()
 					& factorPRIME())
-				derivationStrings.append("<factor> -> <variable> <factorPRIME>").append("\n");
+				Outputter.derivationStrings.append("<factor> -> <variable> <factorPRIME>").append("\n");
 
 			else
 				valid = false;
@@ -990,7 +1003,7 @@ public class Parser {
 
 			if (match("NOT")
 					& factor())
-				derivationStrings.append("<factor> -> not <factor>").append("\n");
+				Outputter.derivationStrings.append("<factor> -> not <factor>").append("\n");
 
 			else
 				valid = false;
@@ -1002,7 +1015,7 @@ public class Parser {
 			if (match("OPAREN")
 					& arithExpr()
 					& match("CPAREN"))
-				derivationStrings.append("<factor> -> ( <arithExpr> )").append("\n");
+				Outputter.derivationStrings.append("<factor> -> ( <arithExpr> )").append("\n");
 
 			else
 				valid = false;
@@ -1025,7 +1038,7 @@ public class Parser {
 			if (match("OPAREN")
 					& aParams()
 					& match("CPAREN"))
-				derivationStrings.append("<factorPRIME> -> ( <aParams> )").append("\n");
+				Outputter.derivationStrings.append("<factorPRIME> -> ( <aParams> )").append("\n");
 
 			else
 				valid = false;
@@ -1033,7 +1046,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_factorPRIME))
-			derivationStrings.append("<factorPRIME> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<factorPRIME> -> EPSILON").append("\n");
 
 
 		else
@@ -1051,7 +1064,7 @@ public class Parser {
 
 			if (match("DOT")
 					& variable())
-				derivationStrings.append("<variableNest> -> . variable").append("\n");
+				Outputter.derivationStrings.append("<variableNest> -> . variable").append("\n");
 
 			else
 				valid = false;
@@ -1059,7 +1072,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_variableNest))
-			derivationStrings.append("<variableNest> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<variableNest> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1077,7 +1090,7 @@ public class Parser {
 			if (match("ID")
 					& indiceList()
 					& variableNest())
-				derivationStrings.append("<variable> -> id <indiceList> <variableNest>").append("\n");
+				Outputter.derivationStrings.append("<variable> -> id <indiceList> <variableNest>").append("\n");
 
 			else
 				valid = false;
@@ -1101,7 +1114,7 @@ public class Parser {
 					& arithExpr()
 					& match("CBRACKET")
 					& indiceList())
-				derivationStrings.append("<indiceList> -> [ <arithExpr> ] <indiceList>").append("\n");
+				Outputter.derivationStrings.append("<indiceList> -> [ <arithExpr> ] <indiceList>").append("\n");
 
 			else
 				valid = false;
@@ -1109,7 +1122,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_indiceList))
-			derivationStrings.append("<indiceList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<indiceList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1124,11 +1137,15 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_fParams)) {
 
-			if (type()
+			boolean c1 = type();
+
+			boolean c2 = match("ID");
+
+			if ((c1 && c2)
 					& match("ID")
 					& arraySizeList()
 					& fParamsTailList())
-				derivationStrings.append("<fParams> -> <type> id <arraySizeList> <fParamsTailList>").append("\n");
+				Outputter.derivationStrings.append("<fParams> -> <type> id <arraySizeList> <fParamsTailList>").append("\n");
 
 			else
 				valid = false;
@@ -1136,7 +1153,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_fParams))
-			derivationStrings.append("<fParams> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<fParams> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1156,7 +1173,7 @@ public class Parser {
 					& match("ID")
 					& arraySizeList()
 					& fParamsTailList())
-				derivationStrings.append("<fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList>").append("\n");
+				Outputter.derivationStrings.append("<fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList>").append("\n");
 
 			else
 				valid = false;
@@ -1164,7 +1181,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_fParamsTailList))
-			derivationStrings.append("<fParamsTailList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<fParamsTailList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1181,7 +1198,7 @@ public class Parser {
 
 			if (expr()
 					& aParamsTailList())
-				derivationStrings.append("<aParams> -> <expr> <aParamsTailList>").append("\n");
+				Outputter.derivationStrings.append("<aParams> -> <expr> <aParamsTailList>").append("\n");
 
 			else
 				valid = false;
@@ -1189,7 +1206,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_aParams))
-			derivationStrings.append("<aParams> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<aParams> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1207,7 +1224,7 @@ public class Parser {
 			if (match("COMMA")
 					& expr()
 					& aParamsTailList())
-				derivationStrings.append("<aParamsTailList> -> , <expr> <aParamsTailList>").append("\n");
+				Outputter.derivationStrings.append("<aParamsTailList> -> , <expr> <aParamsTailList>").append("\n");
 
 			else
 				valid = false;
@@ -1215,7 +1232,7 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FOLLOW_aParamsTailList))
-			derivationStrings.append("<aParamsTailList> -> EPSILON").append("\n");
+			Outputter.derivationStrings.append("<aParamsTailList> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -1231,7 +1248,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_type_RHS1)) {
 
 			if (simpleType())
-				derivationStrings.append("<type> -> <simpleType>").append("\n");
+				Outputter.derivationStrings.append("<type> -> <simpleType>").append("\n");
 			
 			else
 				valid = false;
@@ -1241,7 +1258,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_type_RHS2)) {
 			
 			if (match("ID"))
-				derivationStrings.append("<type> -> id").append("\n");
+				Outputter.derivationStrings.append("<type> -> id").append("\n");
 
 			else
 				valid = false;
@@ -1262,7 +1279,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_simpleType_RHS1)) {
 
 			if (match("INT"))
-				derivationStrings.append("<simpleType> -> int").append("\n");
+				Outputter.derivationStrings.append("<simpleType> -> int").append("\n");
 
 			else
 				valid = false;
@@ -1272,7 +1289,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_simpleType_RHS2)) {
 
 			if (match("FLOAT"))
-				derivationStrings.append("<simpleType> -> float").append("\n");
+				Outputter.derivationStrings.append("<simpleType> -> float").append("\n");
 
 			else
 				valid = false;
@@ -1295,7 +1312,7 @@ public class Parser {
 			boolean c1 = match("GEQ");
 			
 			if (c1)
-				derivationStrings.append("<relOp> -> >=").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> >=").append("\n");
 
 			else
 				valid = false;
@@ -1305,7 +1322,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_relOp_RHS2)) {
 			
 			if (match("GREATER"))
-				derivationStrings.append("<relOp> -> >").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> >").append("\n");
 
 			else
 				valid = false;
@@ -1315,7 +1332,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_relOp_RHS3)) {
 			
 			if (match("EQ"))
-				derivationStrings.append("<relOp> -> ==").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> ==").append("\n");
 
 			else
 				valid = false;
@@ -1325,7 +1342,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_relOp_RHS4)) {
 			
 			if (match("NEQ"))
-				derivationStrings.append("<relOp> -> <>").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> <>").append("\n");
 
 			else
 				valid = false;
@@ -1335,7 +1352,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_relOp_RHS5)) {
 			
 			if (match("LEQ"))
-				derivationStrings.append("<relOp> -> <=").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> <=").append("\n");
 
 			else
 				valid = false;
@@ -1345,7 +1362,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_relOp_RHS6)) {
 			
 			if (match("LESS"))
-				derivationStrings.append("<relOp> -> <").append("\n");
+				Outputter.derivationStrings.append("<relOp> -> <").append("\n");
 
 			else
 				valid = false;
@@ -1366,7 +1383,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_addOp_RHS1)) {
 
 			if (match("OR"))
-				derivationStrings.append("<addOp> -> or").append("\n");
+				Outputter.derivationStrings.append("<addOp> -> or").append("\n");
 
 			else
 				valid = false;
@@ -1376,7 +1393,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_addOp_RHS2)) {
 
 			if (match("MINUS"))
-				derivationStrings.append("<addOp> -> -").append("\n");
+				Outputter.derivationStrings.append("<addOp> -> -").append("\n");
 
 			else
 				valid = false;
@@ -1386,7 +1403,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_addOp_RHS3)) {
 			
 			if (match("PLUS"))
-				derivationStrings.append("<addOp> -> +").append("\n");
+				Outputter.derivationStrings.append("<addOp> -> +").append("\n");
 
 			else
 				valid = false;
@@ -1407,7 +1424,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_multOp_RHS1)) {
 			
 			if (match("AND"))
-				derivationStrings.append("<multOp> -> and").append("\n");
+				Outputter.derivationStrings.append("<multOp> -> and").append("\n");
 
 			else
 				valid = false;
@@ -1417,7 +1434,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_multOp_RHS2)) {
 			
 			if (match("FWDSLASH"))
-				derivationStrings.append("<multOp> -> /").append("\n");
+				Outputter.derivationStrings.append("<multOp> -> /").append("\n");
 
 			else
 				valid = false;
@@ -1427,7 +1444,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_multOp_RHS3)) {
 			
 			if (match("ASTERISK"))
-				derivationStrings.append("<multOp> -> *").append("\n");
+				Outputter.derivationStrings.append("<multOp> -> *").append("\n");
 
 			else
 				valid = false;
@@ -1448,7 +1465,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_number_RHS1)) {
 
 			if (match("INTEGER"))
-				derivationStrings.append("<number> -> integer").append("\n");
+				Outputter.derivationStrings.append("<number> -> integer").append("\n");
 
 			else
 				valid = false;
@@ -1458,7 +1475,7 @@ public class Parser {
 		else if (lookahead.belongsTo(FIRST_number_RHS2)) {
 
 			if (match("FRACTION"))
-				derivationStrings.append("<number> -> fraction").append("\n");
+				Outputter.derivationStrings.append("<number> -> fraction").append("\n");
 
 			else
 				valid = false;

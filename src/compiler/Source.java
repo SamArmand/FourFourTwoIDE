@@ -13,7 +13,6 @@ public class Source {
 	private boolean comment; //whether or not we are in a comment mode
 	private boolean endOfFile; //whether or not the end of the file was reached
 	private BufferedReader code;
-	private StringBuilder errorStrings;
 
 	private boolean newLine;
 
@@ -52,14 +51,13 @@ public class Source {
 	}
 
 	//Default constructor
-	public Source(BufferedReader code, StringBuilder errorStrings) {
+	public Source(BufferedReader code) {
 
 		currentLineNumber = 1;
 		lastOCOMMENTLine = 0;
 		endOfFile = false;
 		newLine = false;
 		this.code = code;
-		this.errorStrings = errorStrings;
 		
 	}
 	
@@ -88,7 +86,7 @@ public class Source {
 
 		}
 		catch (IOException e) {
-			errorStrings.append("ERROR: Could not retrieve next character from source.");
+			Outputter.errorStrings.append("ERROR: Could not retrieve next character from source.");
 			System.exit(0);
 		}
 
@@ -103,7 +101,7 @@ public class Source {
 			code.reset();
 		}
 		catch (IOException e) {
-			errorStrings.append("ERROR: Could not backtrack to previous character in source.");
+			Outputter.errorStrings.append("ERROR: Could not backtrack to previous character in source.");
 			System.exit(0);
 		}
 

@@ -1,5 +1,6 @@
 package ui;
 
+import compiler.Outputter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -22,6 +23,8 @@ public class Controller {
     TextArea tokensOutput;
     @FXML
     TextArea derivationOutput;
+    @FXML
+    TextArea symbolTablesOutput;
 
     //handler for compileButton click action
     public void compile() {
@@ -36,11 +39,13 @@ public class Controller {
         PrintWriter tokens;
         PrintWriter errors;
         PrintWriter derivation;
+        PrintWriter symbolTables;
 
         //create StringBuilders for output
-        StringBuilder errorStrings = new StringBuilder();
-        StringBuilder tokenStrings = new StringBuilder();
-        StringBuilder derivationStrings = new StringBuilder();
+        Outputter.errorStrings = new StringBuilder();
+        Outputter.tokenStrings = new StringBuilder();
+        Outputter.derivationStrings = new StringBuilder();
+        Outputter.tableStrings = new StringBuilder();
 
         //Set up streams
         try
@@ -49,26 +54,28 @@ public class Controller {
             tokens = new PrintWriter(new FileOutputStream("tokens.txt"));
             errors = new PrintWriter(new FileOutputStream("errors.txt"));
             derivation = new PrintWriter(new FileOutputStream("derivation.txt"));
+            symbolTables = new PrintWriter(new FileOutputStream("symbol_tables.txt"));
+
         }
 
         catch(FileNotFoundException e)
         {
             errorsOutput.appendText("Error opening files. Compilation aborted.\r\n");
-            System.err.println("Error opening files. Compilation aborted.");
+            Outputter.errorStrings.append("Error opening files. Compilation aborted.\r\n");
             return;
         }
 
         //Streams are set up at this point
 
-        Source source = new Source(code, errorStrings); //Object for tracking progress and backtracking through source code. See Source.java for more info.
-        Lexer lexer = new Lexer(source, errorStrings, tokenStrings);
-        Parser parser = new Parser(lexer, errorStrings, derivationStrings);
+        Source source = new Source(code); //Object for tracking progress and backtracking through source code. See Source.java for more info.
+        Lexer lexer = new Lexer(source);
+        Parser parser = new Parser(lexer);
 
         parser.parse();
 
-        tokens.print(tokenStrings.toString());
-        errors.print(errorStrings.toString());
-        derivation.print(derivationStrings.toString());
+        tokens.print(Outputter.tokenStrings.toString());
+        errors.print(Outputter.errorStrings.toString());
+        derivation.print(Outputter.derivationStrings.toString());
 
         tokens.close();
         errors.close();
@@ -80,9 +87,10 @@ public class Controller {
             e.printStackTrace();
         }
 
-        errorsOutput.setText(errorStrings.toString());
-        tokensOutput.setText(tokenStrings.toString());
-        derivationOutput.setText(derivationStrings.toString());
+        errorsOutput.setText(Outputter.errorStrings.toString());
+        tokensOutput.setText(Outputter.tokenStrings.toString());
+        derivationOutput.setText(Outputter.derivationStrings.toString());
+        symbolTablesOutput.setText(Outputter.tableStrings.toString());
 
     }
 
