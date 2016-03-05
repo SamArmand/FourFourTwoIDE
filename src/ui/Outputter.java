@@ -1,10 +1,10 @@
-package compiler;
+package ui;
 
 public class Outputter {
 
     public static StringBuilder tokenStrings;
     public static StringBuilder errorStrings;
     public static StringBuilder derivationStrings;
-    public static StringBuilder tableStrings;
+    public static StringBuilder symbolTablesStrings;
 
 }

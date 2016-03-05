@@ -1,6 +1,6 @@
 package compiler.structures;
 
-import compiler.Outputter;
+import ui.Outputter;
 
 import java.util.ArrayList;
 
@@ -24,8 +24,8 @@ public class Function {
     public void insertParameter(Variable parameter) {
 
         if (getVariable(parameter) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of parameter ").append(parameter.getName())
-                    .append(" at line ").append(parameter.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", parameter.getLine()))
+                    .append("Duplicate declaration of parameter ").append(parameter.getName()).append("\n");
             return;
         }
 
@@ -37,8 +37,8 @@ public class Function {
     public void insertVariable(Variable variable) {
 
         if (getVariable(variable) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of variable ").append(variable.getName())
-                    .append(" at line ").append(variable.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
+                    .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
             return;
         }
 
@@ -51,8 +51,15 @@ public class Function {
                 & parameters.size() == function.getParameters().size());
     }
 
-    public void setType(String typeString) {
-        type = Global.getClassDefinition(typeString);
+    public void setType(String typeName) {
+
+        type = Global.getClassDefinition(typeName);
+
+        if (type == null)
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
+                .append("Invalid type ").append(typeName).append("\n");
+
+
     }
 
     public Class getType() {
@@ -108,5 +115,26 @@ public class Function {
         return parent.getFunctionCall(function);
 
     }
+
+    public String print(String tabs) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String newTabs = tabs + '\t';
+
+        stringBuilder.append(tabs).append("FUNCTION: ").append(name == null ? "program" : name)
+                .append(" RETURNS: ").append(type == null ? "void" : type.getName()).append("\n");
+        for (Variable parameter : parameters)
+            stringBuilder.append(tabs).append(parameter.print("PARAMETER", newTabs));
+        for (Variable variable : variables)
+            stringBuilder.append(variable.print("VARIABLE", newTabs));
+
+
+        return stringBuilder.toString();
+
+
+    }
+
+
 
 }

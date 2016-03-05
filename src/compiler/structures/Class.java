@@ -1,6 +1,6 @@
 package compiler.structures;
 
-import compiler.Outputter;
+import ui.Outputter;
 
 import java.util.ArrayList;
 
@@ -20,8 +20,8 @@ public class Class {
     public void insert(Variable variable) {
 
         if (getVariable(variable) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of variable ").append(variable.getName())
-                    .append(" at line ").append(variable.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
+                    .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
             return;
         }
 
@@ -32,9 +32,10 @@ public class Class {
     public void insert(Function function) {
 
         if (getFunction(function) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of function ").append(function.getName())
-                    .append(" with ").append(function.getParameters().size()).append(" parameters at line ")
-                    .append(function.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
+                    .append("Duplicate declaration of function ").append(function.getName())
+                    .append(" with ").append(function.getParameters().size())
+                    .append((function.getParameters().size() == 1) ? " parameter\n" : " parameters\n");
             return;
         }
 
@@ -83,6 +84,22 @@ public class Class {
 
     public int getLine() {
         return line;
+    }
+
+    public String print() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("CLASS: ").append(name).append("\n");
+
+        for (Variable variable : variables)
+            stringBuilder.append(variable.print("Variable", "\t"));
+        for (Function function : functions)
+            stringBuilder.append(function.print("\t"));
+
+        return stringBuilder.toString();
+
+
     }
 
 }

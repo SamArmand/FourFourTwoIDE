@@ -1,6 +1,6 @@
 package compiler.structures;
 
-import compiler.Outputter;
+import ui.Outputter;
 
 import java.util.ArrayList;
 
@@ -13,8 +13,8 @@ public class Global {
     public static void insert(Class newClass) {
 
         if (getClassDefinition(newClass.getName()) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of class ").append(newClass.getName())
-                    .append("  at line ").append(newClass.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", newClass.getLine()))
+                    .append("Duplicate declaration of class ").append(newClass.getName()).append("\n");
             return;
         }
 
@@ -25,8 +25,8 @@ public class Global {
     public static void insert(Function function) {
 
         if (getFunction(function) != null) {
-            Outputter.errorStrings.append("Duplicate declaration of function ").append(function.getName())
-                    .append("  at line ").append(function.getLine()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
+                    .append("Duplicate declaration of function ").append(function.getName()).append("\n");
             return;
         }
 
@@ -54,6 +54,27 @@ public class Global {
                 return f;
 
         return null;
+
+    }
+
+    public static void clear() {
+        classes = new ArrayList<>();
+        program = null;
+        functions = new ArrayList<>();
+    }
+
+    public static void print() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Class c : classes)
+            stringBuilder.append(c.print());
+        if (program != null)
+            stringBuilder.append(program.print(""));
+        for (Function function : functions)
+            stringBuilder.append(function.print(""));
+
+        Outputter.symbolTablesStrings.append(stringBuilder.toString());
 
     }
 

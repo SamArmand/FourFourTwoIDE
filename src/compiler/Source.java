@@ -1,5 +1,7 @@
 package compiler;
 
+import ui.Outputter;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 

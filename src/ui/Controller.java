@@ -1,6 +1,5 @@
 package ui;
 
-import compiler.Outputter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -45,7 +44,7 @@ public class Controller {
         Outputter.errorStrings = new StringBuilder();
         Outputter.tokenStrings = new StringBuilder();
         Outputter.derivationStrings = new StringBuilder();
-        Outputter.tableStrings = new StringBuilder();
+        Outputter.symbolTablesStrings = new StringBuilder();
 
         //Set up streams
         try
@@ -76,6 +75,7 @@ public class Controller {
         tokens.print(Outputter.tokenStrings.toString());
         errors.print(Outputter.errorStrings.toString());
         derivation.print(Outputter.derivationStrings.toString());
+        symbolTables.print(Outputter.derivationStrings.toString());
 
         tokens.close();
         errors.close();
@@ -90,7 +90,7 @@ public class Controller {
         errorsOutput.setText(Outputter.errorStrings.toString());
         tokensOutput.setText(Outputter.tokenStrings.toString());
         derivationOutput.setText(Outputter.derivationStrings.toString());
-        symbolTablesOutput.setText(Outputter.tableStrings.toString());
+        symbolTablesOutput.setText(Outputter.symbolTablesStrings.toString());
 
     }
 

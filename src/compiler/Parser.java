@@ -1,5 +1,11 @@
 package compiler;
 
+import compiler.structures.Class;
+import compiler.structures.Function;
+import compiler.structures.Global;
+import compiler.structures.Variable;
+import ui.Outputter;
+
 import java.util.Arrays;
 
 public class Parser {
@@ -13,10 +19,10 @@ public class Parser {
 			FIRST_classDeclList = {"CLASS"},
 			FOLLOW_classDeclList = {"PROGRAM"},
 
-			FIRST_classMemberDeclPRIME = {"OBRACKET", "OPAREN"},
-				FIRST_classMemberDeclPRIME_RHS1 = {"OBRACKET"},
+			FIRST_classMemberDeclPRIME = {"OBRACKET", "OPAREN", "SEMICOLON"},
+				FIRST_classMemberDeclPRIME_RHS1 = {"OBRACKET", "SEMICOLON"},
 				FIRST_classMemberDeclPRIME_RHS2 = {"OPAREN"},
-			FOLLOW_classMemberDeclPRIME = {"SEMICOLON"},
+			FOLLOW_classMemberDeclPRIME = {"ID", "INT", "FLOAT", "CBRACE"},
 
 			FIRST_classMemberDeclList = {"ID", "INT", "FLOAT"},
 			FOLLOW_classMemberDeclList = {"CBRACE"},
@@ -174,9 +180,13 @@ public class Parser {
 	//main parse function and head of recursive descent
 	public void parse() {
 
+		Global.clear();
+
 		nextToken();
 
 		boolean success = prog() & match("EOF");
+
+		Global.print();
 
 		if (success && (Outputter.errorStrings.length() == 0))
 			Outputter.errorStrings.append("Compiled successfully");
@@ -209,7 +219,9 @@ public class Parser {
 		
 		else {
 
-			Outputter.errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Expected: ").append(Token.toDescription(expectedToken)).append("\n");
+			Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", lookahead.getLine()))
+					.append("Unexpected token: ").append(lookahead.getLexeme())
+					.append(" | Expected: ").append(Token.toDescription(expectedToken)).append("\n");
 			return false;
 
 		}
@@ -224,7 +236,8 @@ public class Parser {
 		
 		else {
 			
-			Outputter.errorStrings.append("Syntax error at line ").append(lookahead.getLine()).append(" Misplaced token: ").append(lookahead.getLexeme()).append("\n");
+			Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", lookahead.getLine()))
+					.append("Unexpected token: ").append(lookahead.getLexeme()).append("\n");
 
 			while (!Arrays.asList(firstUfollow).contains(lookahead.getType()) && !lookahead.getType().equals("EOF"))
 				nextToken();
@@ -251,17 +264,33 @@ public class Parser {
 	//Grammar Rules
 	private boolean prog() { // <prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>
 
+		// Define built-in types
+		Class intClass = new Class(0);
+		intClass.setName("int");
+		Class floatClass = new Class(0);
+		floatClass.setName("float");
+
+		Global.insert(intClass);
+		Global.insert(floatClass);
+
 		boolean valid = skipErrors(union(FIRST_prog, FOLLOW_prog));
 
 		if (lookahead.belongsTo(FIRST_prog)) {
 
-			if (classDeclList()
-					& match("PROGRAM")
-					& match("OBRACE")
-					& funcMemberList()
-					& match("CBRACE")
-					& match("SEMICOLON")
-					& funcDefList())
+			boolean c1 = classDeclList();
+			boolean c2 = match("PROGRAM");
+			Function program = new Function(lookahead.getLine());
+			boolean c3 = match("OBRACE");
+			boolean c4 = funcMemberList(program);
+			boolean c5 = match("CBRACE");
+			boolean c6 = match("SEMICOLON");
+
+			boolean c16 = c1 && c2 && c3 && c4 && c5 && c6;
+
+			if (c16)
+				Global.setProgram(program);
+
+			if (c16 & funcDefList(null))
 				Outputter.derivationStrings.append("<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>").append("\n");
 
 			else
@@ -282,20 +311,25 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_classDeclList)) {
 
+			// Create a new class
+			Class newClass = new Class(lookahead.getLine());
+
 			boolean c1 = match("CLASS");
-
 			boolean c2 = match("ID");
-
+			newClass.setName(lastLexeme);
 			boolean c3 = match("OBRACE");
+			boolean c4 = classMemberDeclList(newClass);
+			boolean c5 = match("CBRACE");
 
-			boolean c4 = classMemberDeclList();
+			boolean c15 = c1 && c2 && c3 && c4 && c5;
 
-			if ((c1 && c2 && c3 && c4)
-					& match("CBRACE")
-					& match("SEMICOLON")
+			if (c15)
+				Global.insert(newClass);
+
+			if (c15 & match("SEMICOLON")
 					& classDeclList())
 				Outputter.derivationStrings.append("<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>").append("\n");
-			
+
 			else
 				valid = false;
 
@@ -311,14 +345,23 @@ public class Parser {
 
 	}
 
-	private boolean classMemberDeclPRIME() { // <classMemberDeclPRIME> -> <arraySizeList> | ( <fParams> ) { <funcMemberList> }
+	private boolean classMemberDeclPRIME(Class newClass, int line, String type, String name) { // <classMemberDeclPRIME> -> <arraySizeList> | ( <fParams> ) { <funcMemberList> }
 
 		boolean valid = skipErrors(union(FIRST_classMemberDeclPRIME, FOLLOW_classMemberDeclPRIME));
 
 		if (lookahead.belongsTo(FIRST_classMemberDeclPRIME_RHS1)) {
 
-			if (arraySizeList())
-				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> <arraySizeList>").append("\n");
+			// The record is a variable
+			Variable variable = new Variable(line);
+			variable.setType(type);
+			variable.setName(name);
+
+			boolean c1 = arraySizeList(variable);
+			if (c1)
+				newClass.insert(variable);
+
+			if (c1 && match("SEMICOLON"))
+				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> <arraySizeList> ;").append("\n");
 
 			else
 				valid = false;
@@ -327,14 +370,23 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_classMemberDeclPRIME_RHS2)) {
 
-			if (match("OPAREN")
-					& fParams()
+			// The record is a function
+			Function function = new Function(line);
+			function.setType(type);
+			function.setName(lastLexeme);
+
+			boolean c1 = match("OPAREN")
+					& fParams(function)
 					& match("CPAREN")
 					& match("OBRACE")
-					& funcMemberList()
-					& match("CBRACE"))
-				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> ( <fParams> ) { <funcMemberList> }").append("\n");
+					& funcMemberList(function)
+					& match("CBRACE");
+			if (c1)
+				newClass.insert(function);
 
+
+			if (c1 & match("SEMICOLON"))
+				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> ( <fParams> ) { <funcMemberList> }").append("\n");
 			else
 				valid = false;
 
@@ -347,22 +399,28 @@ public class Parser {
 
 	}
 
-	private boolean classMemberDeclList() { // <classMemberDeclList> -> <type> id <classMemberDeclPRIME> ; <classMemberDeclList> | EPSILON
+	private boolean classMemberDeclList(Class newClass) { // <classMemberDeclList> -> <type> id <classMemberDeclPRIME> ; <classMemberDeclList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_classMemberDeclList, FOLLOW_classMemberDeclList));
 
 		if (lookahead.belongsTo(FIRST_classMemberDeclList)) {
 
+			//Saving the line because we don't know what kind of record we have yet
+			int line = lookahead.getLine();
+
 			boolean c1 = type();
 
+			// We must save it this way because we don't know what kind of member it is yet.
+			String type = lastLexeme;
 			boolean c2 = match("ID");
+			// We must save it this way because we don't know what kind of member it is yet.
+			String name = lastLexeme;
 
-			boolean c3 = classMemberDeclPRIME();
+			boolean c3 = classMemberDeclPRIME(newClass, line, type, name);
 
 			if ((c1 && c2 && c3)
-					& match("SEMICOLON")
-					& classMemberDeclList())
-				Outputter.derivationStrings.append("<classMemberDeclList> -> <type> id <classMemberDeclPRIME> ; <classMemberDeclList>").append("\n");
+					& classMemberDeclList(newClass))
+				Outputter.derivationStrings.append("<classMemberDeclList> -> <type> id <classMemberDeclPRIME> <classMemberDeclList>").append("\n");
 
 			else
 				valid = false;
@@ -379,25 +437,37 @@ public class Parser {
 
 	}
 
-	private boolean funcDefList() { // <funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList> | EPSILON
+	private boolean funcDefList(Class newClass) { // <funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_funcDefList, FOLLOW_funcDefList));
 
 		if (lookahead.belongsTo(FIRST_funcDefList)) {
 
+			Function function = new Function(lookahead.getLine());
 			boolean c1 = type();
-
+			function.setType(lastLexeme);
 			boolean c2 = match("ID");
+			function.setName(lastLexeme);
+			boolean c3 = match("OPAREN");
+			boolean c4 = fParams(function);
+			boolean c5 = match("CPAREN");
+			boolean c6 = match("OBRACE");
+			boolean c7 = funcMemberList(function);
+			boolean c8 = match("CBRACE");
 
-			if ((c1 && c2)
-					& match("OPAREN")
-					& fParams()
-					& match("CPAREN")
-					& match("OBRACE")
-					& funcMemberList()
-					& match("CBRACE")
-					& match("SEMICOLON")
-					& funcDefList())
+			boolean c17 = c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8;
+
+			// If newClass is null then this is a Global function
+			// Otherwise it is a member function
+			if (c17) {
+				if (newClass == null)
+					Global.insert(function);
+				else
+					newClass.insert(function);
+			}
+
+			if (c17 & match("SEMICOLON")
+					& funcDefList(newClass))
 				Outputter.derivationStrings.append("<funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList>").append("\n");
 
 			else
@@ -415,11 +485,15 @@ public class Parser {
 
 	}
 
-	private boolean funcMember() { // <funcMember> -> statementPRIME | id <funcMemberPRIME> | <simpleType> id <arraySizeList>
+	private boolean funcMember(Function function) { // <funcMember> -> statementPRIME | id <funcMemberPRIME> | <simpleType> id <arraySizeList>
+
+		//TODO: verify statements and calls
 
 		boolean valid = skipErrors(union(FIRST_funcMember, FOLLOW_funcMember));
 
 		if (lookahead.belongsTo(FIRST_funcMember_RHS1)) {
+
+			// TODO: Statement
 
 			if (statementPRIME())
 				Outputter.derivationStrings.append("<funcMember> -> <statementPRIME>").append("\n");
@@ -430,9 +504,16 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FIRST_funcMember_RHS2)) {
-			
-			if (match("ID")
-					& funcMemberPRIME())
+
+			// Can be a variable declaration or a statement
+
+			int line = lookahead.getLine();
+
+			boolean c1 = match("ID");
+
+			String id = lastLexeme;
+
+			if (c1 & funcMemberPRIME(function, line, id))
 				Outputter.derivationStrings.append("<funcMember> -> id <funcMemberPRIME>").append("\n");
 
 			else
@@ -442,11 +523,18 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_funcMember_RHS3)) {
 
-			if (simpleType()
-					& match("ID")
-					& arraySizeList())
-				Outputter.derivationStrings.append("<funcMember> -> <simpleType> id <arraySizeList>").append("\n");
+			// It's a variable
 
+			Variable variable = new Variable(lookahead.getLine());
+			boolean c1 = simpleType();
+			variable.setType(lastLexeme);
+			boolean c2 = match("ID");
+			variable.setName(lastLexeme);
+
+			if ((c1 && c2) & arraySizeList(variable)) {
+				Outputter.derivationStrings.append("<funcMember> -> <simpleType> id <arraySizeList>").append("\n");
+				function.insertVariable(variable);
+			}
 			else
 				valid = false;
 
@@ -459,16 +547,24 @@ public class Parser {
 
 	}
 
-	private boolean funcMemberPRIME() { // <funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr> | id <arraySizeList>
+	private boolean funcMemberPRIME(Function function, int line, String id) { // <funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr> | id <arraySizeList>
 
 		boolean valid = skipErrors(union(FIRST_funcMemberPRIME, FOLLOW_funcMemberPRIME));
 
 		if (lookahead.belongsTo(FIRST_funcMemberPRIME_RHS1)) {
 
-			if (match("ID")
-					& arraySizeList())
-				Outputter.derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
+			// It is a variable declaration
 
+			Variable variable = new Variable(line);
+			variable.setType(id);
+
+			boolean c1 = match("ID");
+			variable.setName(lastLexeme);
+
+			if (c1 && arraySizeList(variable)) {
+				Outputter.derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
+				function.insertVariable(variable);
+			}
 			else
 				valid = false;
 
@@ -519,15 +615,15 @@ public class Parser {
 
 	}
 
-	private boolean funcMemberList() { // <funcMemberList> -> <funcMember> ; <funcMemberList> | EPSILON
+	private boolean funcMemberList(Function function) { // <funcMemberList> -> <funcMember> ; <funcMemberList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_funcMemberList, FOLLOW_funcMemberList));
 		
 		if (lookahead.belongsTo(FIRST_funcMemberList)) {
 
-			if (funcMember()
+			if (funcMember(function)
 					& match("SEMICOLON")
-					& funcMemberList())
+					& funcMemberList(function))
 				Outputter.derivationStrings.append("<funcMemberList> -> <funcMember> ; <funcMemberList>").append("\n");
 
 			else
@@ -545,7 +641,7 @@ public class Parser {
 
 	}
 
-	private boolean arraySizeList() { // <arraySizeList> -> [ integer ] <arraySizeList> | EPSILON
+	private boolean arraySizeList(Variable variable) { // <arraySizeList> -> [ integer ] <arraySizeList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_arraySizeList, FOLLOW_arraySizeList));
 
@@ -554,9 +650,11 @@ public class Parser {
 			boolean c1 = match("OBRACKET");
 			boolean c2 = match("INTEGER");
 
+			variable.getDimensions().add(Integer.parseInt(lastLexeme));
+
 			if ((c1 && c2)
 					& match("CBRACKET")
-					& arraySizeList())
+					& arraySizeList(variable))
 				Outputter.derivationStrings.append("<arraySizeList> -> [ integer ] <arraySizeList>").append("\n");
 
 			else
@@ -604,7 +702,8 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			Outputter.errorStrings.append("Syntax error at line ").append(line).append(" Invalid statement").append("\n");
+			Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
+					.append("Invalid statement syntax").append("\n");
 
 		return valid;
 
@@ -807,7 +906,8 @@ public class Parser {
 			valid = false;
 
 		if (!valid)
-			Outputter.errorStrings.append("Syntax error at line ").append(line).append(" Invalid expression").append("\n");
+			Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
+					.append("Invalid expression syntax").append("\n");
 
 		return valid;
 
@@ -1131,22 +1231,27 @@ public class Parser {
 
 	}
 
-	private boolean fParams() { // <fParams> -> <type> id <arraySizeList> <fParamsTailList> | EPSILON
+	private boolean fParams(Function function) { // <fParams> -> <type> id <arraySizeList> <fParamsTailList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_fParams, FOLLOW_fParams));
 
 		if (lookahead.belongsTo(FIRST_fParams)) {
 
+			Variable parameter = new Variable(lookahead.getLine());
+
 			boolean c1 = type();
+			parameter.setType(lastLexeme);
 
 			boolean c2 = match("ID");
+			parameter.setName(lastLexeme);
 
 			if ((c1 && c2)
-					& match("ID")
-					& arraySizeList()
-					& fParamsTailList())
+					& arraySizeList(parameter)
+					& fParamsTailList(function)) {
 				Outputter.derivationStrings.append("<fParams> -> <type> id <arraySizeList> <fParamsTailList>").append("\n");
 
+				function.insertParameter(parameter);
+			}
 			else
 				valid = false;
 
@@ -1162,18 +1267,31 @@ public class Parser {
 
 	}
 
-	private boolean fParamsTailList() { // <fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList> | EPSILON
+	private boolean fParamsTailList(Function function) { // <fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_fParamsTailList, FOLLOW_fParamsTailList));
 
 		if (lookahead.belongsTo(FIRST_fParamsTailList)) {
 
-			if (match("COMMA")
-					& type()
-					& match("ID")
-					& arraySizeList()
-					& fParamsTailList())
+			boolean c1 = match("COMMA");
+
+			Variable parameter = new Variable(lookahead.getLine());
+
+			boolean c2 = type();
+			parameter.setType(lastLexeme);
+
+			boolean c3 = match("ID");
+			parameter.setName(lastLexeme);
+
+			if ((c1 && c2 && c3)
+					& arraySizeList(parameter)
+					& fParamsTailList(function)) {
+
 				Outputter.derivationStrings.append("<fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList>").append("\n");
+
+				function.insertParameter(parameter);
+
+			}
 
 			else
 				valid = false;
