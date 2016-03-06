@@ -1,2 +1,0 @@
-Error | Line: 3     | Duplicate declaration of variable a
-Compilation unsuccessful

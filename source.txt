@@ -1,8 +1,5 @@
-class Vehicle {
-	int a[4][5];
-	int a[5];
+class Dog {
+	H v;
 };
 
-program
-{
-};
+program {};

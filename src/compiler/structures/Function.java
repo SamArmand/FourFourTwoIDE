@@ -29,8 +29,10 @@ public class Function {
             return;
         }
 
-        parameters.add(parameter);
+        if (parameter.getType() == null)
+            return;
 
+        parameters.add(parameter);
 
     }
 
@@ -41,6 +43,9 @@ public class Function {
                     .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
             return;
         }
+
+        if (variable.getType() == null)
+            return;
 
         variables.add(variable);
 

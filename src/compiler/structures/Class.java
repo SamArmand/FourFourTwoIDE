@@ -25,6 +25,9 @@ public class Class {
             return;
         }
 
+        if (variable.getType() == null)
+            return;
+
         variables.add(variable);
 
     }
@@ -37,6 +40,9 @@ public class Class {
                     .append(" with same parameters\n");
             return;
         }
+
+        if (function.getType() == null)
+            return;
 
         function.setParent(this);
         functions.add(function);

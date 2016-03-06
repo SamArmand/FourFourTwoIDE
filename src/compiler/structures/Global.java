@@ -30,6 +30,9 @@ public class Global {
             return;
         }
 
+        if (function.getType() == null)
+            return;
+
         functions.add(function);
     }
 
