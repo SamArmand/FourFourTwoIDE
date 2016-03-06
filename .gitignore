@@ -26,6 +26,9 @@
 ## File-based project format:
 *.iws
 
+## Text output files
+*.txt
+
 ## Plugin-specific files:
 
 # IntelliJ
