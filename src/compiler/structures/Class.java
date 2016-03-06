@@ -19,7 +19,7 @@ public class Class {
 
     public void insert(Variable variable) {
 
-        if (getVariable(variable) != null) {
+        if (exists(variable)) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
                     .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
             return;
@@ -31,11 +31,10 @@ public class Class {
 
     public void insert(Function function) {
 
-        if (getFunction(function) != null) {
+        if (exists(function)) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
                     .append("Duplicate declaration of function ").append(function.getName())
-                    .append(" with ").append(function.getParameters().size())
-                    .append((function.getParameters().size() == 1) ? " parameter\n" : " parameters\n");
+                    .append(" with same parameters\n");
             return;
         }
 
@@ -85,6 +84,31 @@ public class Class {
     public int getLine() {
         return line;
     }
+
+    public boolean exists(Variable variable) {
+
+        for (Variable v : variables)
+            if (v.getName().equals(variable.getName()))
+                return true;
+
+        return false;
+
+    }
+
+    public boolean exists(Function function) {
+
+        for (Function f : functions)
+            if (f.equals(function))
+                return true;
+
+        return false;
+
+    }
+
+    public boolean equals(Class aClass) {
+        return name.equals(aClass.name);
+    }
+
 
     public String print() {
 

@@ -10,6 +10,7 @@ public class Variable {
     private String name;
     private int line;
     private ArrayList<Integer> dimensions;
+    private long address;
 
     public Variable(int line) {
         dimensions = new ArrayList<>();
@@ -26,7 +27,21 @@ public class Variable {
     }
 
     public Class getType() {
-        return type;
+
+        if (dimensions.size() == 0)
+            return type;
+
+        String dimensionString = "";
+
+        for (int i = 0; i < dimensions.size(); ++i)
+            dimensionString += "[]";
+
+        Class variableType = new Class(0);
+
+        variableType.setName(type.getName()+dimensionString);
+
+        return variableType;
+
     }
 
     public void setName(String name) {
@@ -50,19 +65,15 @@ public class Variable {
                 && (dimensions.size() <= variable.dimensions.size()));
     }
 
+    public long getAddress() {
+        return address;
+    }
+
     public String print(String varType, String tabs) {
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(tabs).append(varType).append(": ")
-                .append(name).append(" TYPE: ").append(type.getName());
-
-        for (Integer dimension : dimensions)
-            stringBuilder.append("[").append(dimension.intValue()).append("]");
-
-        stringBuilder.append("\n");
-
-        return stringBuilder.toString();
+        return tabs + varType + ": " +
+                name + " TYPE: " + getType().getName() +
+                "\n";
 
     }
 }

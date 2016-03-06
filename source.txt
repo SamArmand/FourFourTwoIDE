@@ -1,1 +1,8 @@
-float fun(int x, int y) {};
+class Vehicle {
+	int a[4][5];
+	int a[5];
+};
+
+program
+{
+};

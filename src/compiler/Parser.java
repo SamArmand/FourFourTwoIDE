@@ -262,6 +262,7 @@ public class Parser {
 	}
 
 	//Grammar Rules
+
 	private boolean prog() { // <prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>
 
 		// Define built-in types
@@ -353,8 +354,8 @@ public class Parser {
 
 			// The record is a variable
 			Variable variable = new Variable(line);
-			variable.setType(type);
 			variable.setName(name);
+			variable.setType(type);
 
 			boolean c1 = arraySizeList(variable);
 			if (c1)
@@ -372,8 +373,8 @@ public class Parser {
 
 			// The record is a function
 			Function function = new Function(line);
+			function.setName(name);
 			function.setType(type);
-			function.setName(lastLexeme);
 
 			boolean c1 = match("OPAREN")
 					& fParams(function)
@@ -445,9 +446,10 @@ public class Parser {
 
 			Function function = new Function(lookahead.getLine());
 			boolean c1 = type();
-			function.setType(lastLexeme);
+			String type = lastLexeme;
 			boolean c2 = match("ID");
 			function.setName(lastLexeme);
+			function.setType(type);
 			boolean c3 = match("OPAREN");
 			boolean c4 = fParams(function);
 			boolean c5 = match("CPAREN");
@@ -527,9 +529,10 @@ public class Parser {
 
 			Variable variable = new Variable(lookahead.getLine());
 			boolean c1 = simpleType();
-			variable.setType(lastLexeme);
+			String type = lastLexeme;
 			boolean c2 = match("ID");
 			variable.setName(lastLexeme);
+			variable.setType(type);
 
 			if ((c1 && c2) & arraySizeList(variable)) {
 				Outputter.derivationStrings.append("<funcMember> -> <simpleType> id <arraySizeList>").append("\n");
@@ -556,10 +559,10 @@ public class Parser {
 			// It is a variable declaration
 
 			Variable variable = new Variable(line);
-			variable.setType(id);
 
 			boolean c1 = match("ID");
 			variable.setName(lastLexeme);
+			variable.setType(id);
 
 			if (c1 && arraySizeList(variable)) {
 				Outputter.derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
@@ -571,6 +574,8 @@ public class Parser {
 		}
 
 		else if (lookahead.belongsTo(FIRST_funcMemberPRIME_RHS2)) {
+
+			// TODO: Statement
 
 			if (indiceList()
 					& funcMemberPRIMEPRIME()
@@ -1240,10 +1245,10 @@ public class Parser {
 			Variable parameter = new Variable(lookahead.getLine());
 
 			boolean c1 = type();
-			parameter.setType(lastLexeme);
-
+			String type = lastLexeme;
 			boolean c2 = match("ID");
 			parameter.setName(lastLexeme);
+			parameter.setType(type);
 
 			if ((c1 && c2)
 					& arraySizeList(parameter)
@@ -1278,10 +1283,10 @@ public class Parser {
 			Variable parameter = new Variable(lookahead.getLine());
 
 			boolean c2 = type();
-			parameter.setType(lastLexeme);
-
+			String type = lastLexeme;
 			boolean c3 = match("ID");
 			parameter.setName(lastLexeme);
+			parameter.setType(type);
 
 			if ((c1 && c2 && c3)
 					& arraySizeList(parameter)

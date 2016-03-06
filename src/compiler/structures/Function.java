@@ -23,7 +23,7 @@ public class Function {
 
     public void insertParameter(Variable parameter) {
 
-        if (getVariable(parameter) != null) {
+        if (exists(parameter)) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", parameter.getLine()))
                     .append("Duplicate declaration of parameter ").append(parameter.getName()).append("\n");
             return;
@@ -36,7 +36,7 @@ public class Function {
 
     public void insertVariable(Variable variable) {
 
-        if (getVariable(variable) != null) {
+        if (exists(variable)) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
                     .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
             return;
@@ -47,8 +47,24 @@ public class Function {
     }
 
     public boolean equals(Function function) {
-        return (name.equals(function.getName())
-                & parameters.size() == function.getParameters().size());
+
+        if (name.equals(function.getName())
+                && parameters.size() == function.getParameters().size()) {
+
+            for (int i = 0; i < parameters.size(); ++i) {
+
+                if (!parameters.get(i).getType().equals(function.parameters.get(i).getType()))
+                    return false;
+
+            }
+
+            return true;
+
+
+        }
+
+        return false;
+
     }
 
     public void setType(String typeName) {
@@ -113,6 +129,19 @@ public class Function {
     public Function getFunctionCall(Function function) {
 
         return parent.getFunctionCall(function);
+
+    }
+
+    public boolean exists(Variable variable) {
+
+        for (Variable v : variables)
+            if (v.getName().equals(variable.getName()))
+                return true;
+        for (Variable parameter : parameters)
+            if (parameter.getName().equals(variable.getName()))
+                return true;
+
+        return false;
 
     }
 

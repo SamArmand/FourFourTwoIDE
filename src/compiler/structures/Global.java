@@ -12,7 +12,7 @@ public class Global {
 
     public static void insert(Class newClass) {
 
-        if (getClassDefinition(newClass.getName()) != null) {
+        if (exists(newClass.getName())) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", newClass.getLine()))
                     .append("Duplicate declaration of class ").append(newClass.getName()).append("\n");
             return;
@@ -24,7 +24,7 @@ public class Global {
 
     public static void insert(Function function) {
 
-        if (getFunction(function) != null) {
+        if (exists(function)) {
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
                     .append("Duplicate declaration of function ").append(function.getName()).append("\n");
             return;
@@ -44,6 +44,26 @@ public class Global {
                 return c;
 
         return null;
+
+    }
+
+    public static boolean exists(String typeName) {
+
+        for (Class c : classes)
+            if (c.getName().equals(typeName))
+                return true;
+
+        return false;
+
+    }
+
+    public static boolean exists(Function function) {
+
+        for (Function f : functions)
+            if (f.equals(function))
+                return true;
+
+        return false;
 
     }
 
