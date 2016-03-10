@@ -75,11 +75,12 @@ public class Controller {
         tokens.print(Outputter.tokenStrings.toString());
         errors.print(Outputter.errorStrings.toString());
         derivation.print(Outputter.derivationStrings.toString());
-        symbolTables.print(Outputter.derivationStrings.toString());
+        symbolTables.print(Outputter.symbolTablesStrings.toString());
 
         tokens.close();
         errors.close();
         derivation.close();
+        symbolTables.close();
 
         try {
             code.close();
