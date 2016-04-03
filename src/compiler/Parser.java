@@ -1,11 +1,12 @@
 package compiler;
 
+import compiler.structures.*;
 import compiler.structures.Class;
-import compiler.structures.Function;
-import compiler.structures.Global;
-import compiler.structures.Variable;
+import compiler.structures.expressions.*;
+import compiler.structures.statements.*;
 import ui.Outputter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Parser {
@@ -40,9 +41,6 @@ public class Parser {
 				FIRST_funcMemberPRIME_RHS1 = {"ID"},
 				FIRST_funcMemberPRIME_RHS2 = {"OBRACKET", "DOT", "DEF"},
 			FOLLOW_funcMemberPRIME = {"SEMICOLON"},
-
-			FIRST_funcMemberPRIMEPRIME = {"DOT"},
-			FOLLOW_funcMemberPRIMEPRIME = {"DEF"},
 
 			FIRST_funcMemberList = {"INT", "FLOAT", "ID", "IF", "FOR", "GET", "PUT", "RETURN"},
 			FOLLOW_funcMemberList = {"CBRACE"},
@@ -171,6 +169,10 @@ public class Parser {
 
 	private String lastLexeme;
 
+    private Function currentFunction;
+
+    private Variable suspendedVariable;
+
 	public Parser(Lexer lexer) {
 
 		this.lexer = lexer;
@@ -187,6 +189,10 @@ public class Parser {
 		boolean success = prog() & match("EOF");
 
 		Global.print();
+        Global.bindForwardFunctionCalls();
+
+        if (success)
+            Global.checkTypes();
 
 		if (success && (Outputter.errorStrings.length() == 0))
 			Outputter.errorStrings.append("Compiled successfully");
@@ -278,20 +284,21 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_prog)) {
 
-			boolean c1 = classDeclList();
-			boolean c2 = match("PROGRAM");
-			Function program = new Function(lookahead.getLine());
-			boolean c3 = match("OBRACE");
-			boolean c4 = funcMemberList(program);
-			boolean c5 = match("CBRACE");
-			boolean c6 = match("SEMICOLON");
+			boolean c1 = classDeclList() & match("PROGRAM");
 
-			boolean c16 = c1 && c2 && c3 && c4 && c5 && c6;
+            Function program = new Function(lookahead.getLine());
 
-			if (c16)
+            currentFunction = program;
+
+			boolean c2 = c1 & match("OBRACE")
+                    & funcMemberList(program)
+                    & match("CBRACE")
+                    & match("SEMICOLON");
+
+			if (c2)
 				Global.setProgram(program);
 
-			if (c16 & funcDefList(null))
+			if (c2 & funcDefList(null))
 				Outputter.derivationStrings.append("<prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>").append("\n");
 
 			else
@@ -315,19 +322,16 @@ public class Parser {
 			// Create a new class
 			Class newClass = new Class(lookahead.getLine());
 
-			boolean c1 = match("CLASS");
-			boolean c2 = match("ID");
+			boolean c1 = match("CLASS") & match("ID");
 			newClass.setName(lastLexeme);
-			boolean c3 = match("OBRACE");
-			boolean c4 = classMemberDeclList(newClass);
-			boolean c5 = match("CBRACE");
+			boolean c2 = c1 & match("OBRACE")
+                    & classMemberDeclList(newClass)
+                    & match("CBRACE");
 
-			boolean c15 = c1 && c2 && c3 && c4 && c5;
-
-			if (c15)
+			if (c2)
 				Global.insert(newClass);
 
-			if (c15 & match("SEMICOLON")
+			if (c2 & match("SEMICOLON")
 					& classDeclList())
 				Outputter.derivationStrings.append("<classDeclList> ->  class id { <classMemberDeclList> } ; <classDeclList>").append("\n");
 
@@ -361,7 +365,7 @@ public class Parser {
 			if (c1)
 				newClass.insert(variable);
 
-			if (c1 && match("SEMICOLON"))
+			if (c1 & match("SEMICOLON"))
 				Outputter.derivationStrings.append("<classMemberDeclPRIME> -> <arraySizeList> ;").append("\n");
 
 			else
@@ -376,12 +380,15 @@ public class Parser {
 			function.setName(name);
 			function.setType(type);
 
+            currentFunction = function;
+
 			boolean c1 = match("OPAREN")
 					& fParams(function)
 					& match("CPAREN")
 					& match("OBRACE")
 					& funcMemberList(function)
 					& match("CBRACE");
+
 			if (c1)
 				newClass.insert(function);
 
@@ -414,12 +421,11 @@ public class Parser {
 			// We must save it this way because we don't know what kind of member it is yet.
 			String type = lastLexeme;
 			boolean c2 = match("ID");
+
 			// We must save it this way because we don't know what kind of member it is yet.
 			String name = lastLexeme;
 
-			boolean c3 = classMemberDeclPRIME(newClass, line, type, name);
-
-			if ((c1 && c2 && c3)
+			if ((c1 && c2) & classMemberDeclPRIME(newClass, line, type, name)
 					& classMemberDeclList(newClass))
 				Outputter.derivationStrings.append("<classMemberDeclList> -> <type> id <classMemberDeclPRIME> <classMemberDeclList>").append("\n");
 
@@ -450,25 +456,28 @@ public class Parser {
 			boolean c2 = match("ID");
 			function.setName(lastLexeme);
 			function.setType(type);
-			boolean c3 = match("OPAREN");
-			boolean c4 = fParams(function);
-			boolean c5 = match("CPAREN");
-			boolean c6 = match("OBRACE");
-			boolean c7 = funcMemberList(function);
-			boolean c8 = match("CBRACE");
 
-			boolean c17 = c1 && c2 && c3 && c4 && c5 && c6 && c7 && c8;
+            currentFunction = function;
+
+			boolean c3 = match("OPAREN")
+			    & fParams(function)
+			    & match("CPAREN")
+			    & match("OBRACE")
+			    & funcMemberList(function)
+			    & match("CBRACE");
+
+			boolean c13 = c1 && c2 && c3;
 
 			// If newClass is null then this is a Global function
 			// Otherwise it is a member function
-			if (c17) {
+			if (c13) {
 				if (newClass == null)
 					Global.insert(function);
 				else
 					newClass.insert(function);
 			}
 
-			if (c17 & match("SEMICOLON")
+			if (c13 & match("SEMICOLON")
 					& funcDefList(newClass))
 				Outputter.derivationStrings.append("<funcDefList> -> <type> id ( <fParams> ) { <funcMemberList> } ; <funcDefList>").append("\n");
 
@@ -489,15 +498,15 @@ public class Parser {
 
 	private boolean funcMember(Function function) { // <funcMember> -> statementPRIME | id <funcMemberPRIME> | <simpleType> id <arraySizeList>
 
-		//TODO: verify statements and calls
-
 		boolean valid = skipErrors(union(FIRST_funcMember, FOLLOW_funcMember));
 
 		if (lookahead.belongsTo(FIRST_funcMember_RHS1)) {
 
-			// TODO: Statement
+			// Statement
 
-			if (statementPRIME())
+            currentFunction = function;
+
+			if (statementPRIME(function.getStatements()))
 				Outputter.derivationStrings.append("<funcMember> -> <statementPRIME>").append("\n");
 
 			else
@@ -564,7 +573,7 @@ public class Parser {
 			variable.setName(lastLexeme);
 			variable.setType(id);
 
-			if (c1 && arraySizeList(variable)) {
+			if (c1 & arraySizeList(variable)) {
 				Outputter.derivationStrings.append("<funcMemberPRIME> -> id <arraySizeList>").append("\n");
 				function.insertVariable(variable);
 			}
@@ -575,43 +584,35 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_funcMemberPRIME_RHS2)) {
 
-			// TODO: Statement
+            AssignmentStatement assignmentStatement = new AssignmentStatement(line);
 
-			if (indiceList()
-					& funcMemberPRIMEPRIME()
+            VariableCall variableCall = new VariableCall(currentFunction);
+            variableCall.setLine(lookahead.getLine());
+
+            Variable variable = new Variable(0);
+            variable.setName(id);
+
+            ArrayList<ArithmeticExpression> indiceList = new ArrayList<>();
+
+            boolean c1 = indiceList(indiceList);
+
+            if (c1)
+                variableCall.getIndiceLists().add(indiceList);
+
+            Expression expression = new Expression();
+
+			if (c1 & variableNest(variableCall, variable, false)
 					& match("DEF")
-					& expr())
-				Outputter.derivationStrings.append("<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>").append("\n");
-
+					& expr(expression)) {
+                Outputter.derivationStrings.append("<funcMemberPRIME> -> <indiceList> <funcMemberPRIMEPRIME> = <expr>").append("\n");
+                assignmentStatement.setVariableCall(variableCall);
+                assignmentStatement.setExpression(expression);
+                function.getStatements().add(assignmentStatement);
+            }
 			else
 				valid = false;
 
 		}
-
-		else
-			valid = false;
-
-		return valid;
-
-	}
-
-	private boolean funcMemberPRIMEPRIME() { // <funcMemberPRIMEPRIME> -> . <variable> | EPSILON
-
-		boolean valid = skipErrors(union(FIRST_funcMemberPRIMEPRIME, FOLLOW_funcMemberPRIMEPRIME));
-
-		if (lookahead.belongsTo(FIRST_funcMemberPRIMEPRIME)) {
-
-			if (match("DOT")
-					& variable())
-				Outputter.derivationStrings.append("<funcMemberPRIMEPRIME> -> . <variable>").append("\n");
-
-			else
-				valid = false;
-
-		}
-
-		else if (lookahead.belongsTo(FOLLOW_funcMemberPRIMEPRIME))
-			Outputter.derivationStrings.append("<funcMemberPRIMEPRIME> -> EPSILON").append("\n");
 
 		else
 			valid = false;
@@ -652,13 +653,11 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_arraySizeList)) {
 
-			boolean c1 = match("OBRACKET");
-			boolean c2 = match("INTEGER");
+			boolean c1 = match("OBRACKET") & match("INTEGER");
 
 			variable.getDimensions().add(Integer.parseInt(lastLexeme));
 
-			if ((c1 && c2)
-					& match("CBRACKET")
+			if (c1 & match("CBRACKET")
 					& arraySizeList(variable))
 				Outputter.derivationStrings.append("<arraySizeList> -> [ integer ] <arraySizeList>").append("\n");
 
@@ -677,7 +676,7 @@ public class Parser {
 
 	}
 
-	private boolean statement() { // <statement> -> <assignStat> | <statementPRIME>
+	private boolean statement(ArrayList<Statement> statements) { // <statement> -> <assignStat> | <statementPRIME>
 
 		boolean valid = skipErrors(union(FIRST_statement, FOLLOW_statement));
 
@@ -685,7 +684,7 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_statement_RHS1)) {
 
-			if (assignStat())
+			if (assignStat(statements))
 				Outputter.derivationStrings.append("<statement> -> <assignStat>").append("\n");
 
 			else
@@ -695,7 +694,7 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_statement_RHS2)) {
 
-			if (statementPRIME())
+			if (statementPRIME(statements))
 				Outputter.derivationStrings.append("<statement> -> <statementPRIME>").append("\n");
 
 			else
@@ -714,18 +713,26 @@ public class Parser {
 
 	}
 
-	private boolean statementPRIME() { // <statementPRIME> ->  if ( <expr> ) then <statBlock> else <statBlock> | for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> | get ( <variable> ) | put ( <variable> ) | return ( <expr> )
+	private boolean statementPRIME(ArrayList<Statement> statements) { // <statementPRIME> ->  if ( <expr> ) then <statBlock> else <statBlock> | for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> | get ( <variable> ) | put ( <variable> ) | return ( <expr> )
 
 		boolean valid = skipErrors(union(FIRST_statementPRIME, FOLLOW_statementPRIME));
 
+        int line = lookahead.getLine();
+
 		if (lookahead.belongsTo(FIRST_statementPRIME_RHS1)) {
 
-			if (match("RETURN")
-					& match("OPAREN")
-					& expr()
-					& match("CPAREN"))
-				Outputter.derivationStrings.append("<statementPRIME> -> return ( <expr> )").append("\n");
+			ReturnStatement returnStatement = new ReturnStatement(line);
 
+            Expression expression = new Expression();
+
+			if (match("RETURN")
+                    & match("OPAREN")
+                    & expr(expression)
+                    & match("CPAREN")) {
+				Outputter.derivationStrings.append("<statementPRIME> -> return ( <expr> )").append("\n");
+                returnStatement.setExpression(expression);
+                statements.add(returnStatement);
+			}
 			else
 				valid = false;
 
@@ -733,12 +740,18 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_statementPRIME_RHS2)) {
 
-			if (match("PUT")
-					& match("OPAREN")
-					& variable()
-					& match("CPAREN"))
-				Outputter.derivationStrings.append("<statementPRIME> -> put ( <variable> )").append("\n");
+			PutStatement putStatement = new PutStatement(line);
 
+            VariableCall variableCall = new VariableCall(currentFunction);
+
+			if (match("PUT")
+                    & match("OPAREN")
+                    & variable(variableCall, false)
+                    & match("CPAREN")) {
+				Outputter.derivationStrings.append("<statementPRIME> -> put ( <variable> )").append("\n");
+                putStatement.setVariableCall(variableCall);
+                statements.add(putStatement);
+			}
 			else
 				valid = false;
 
@@ -746,11 +759,18 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_statementPRIME_RHS3)) {
 
+            GetStatement getStatement = new GetStatement(line);
+
+            VariableCall variableCall = new VariableCall(currentFunction);
+
 			if (match("GET")
-					& match("OPAREN")
-					& variable()
-					& match("CPAREN"))
-				Outputter.derivationStrings.append("<statementPRIME> -> get ( <variable> )").append("\n");
+                    & match("OPAREN")
+                    & variable(variableCall, false)
+                    & match("CPAREN")) {
+                Outputter.derivationStrings.append("<statementPRIME> -> get ( <variable> )").append("\n");
+                getStatement.setVariableCall(variableCall);
+                statements.add(getStatement);
+            }
 
 			else
 				valid = false;
@@ -759,16 +779,22 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_statementPRIME_RHS4)) {
 
-			if (match("IF")
-					& match("OPAREN")
-					& expr()
-					& match("CPAREN")
-					& match("THEN")
-					& statBlock()
-					& match("ELSE")
-					& statBlock())
-				Outputter.derivationStrings.append("<statementPRIME> -> if ( <expr> ) then <statBlock> else <statBlock>").append("\n");
+            IfStatement ifStatement = new IfStatement(line);
 
+            Expression expression = new Expression();
+
+			if (match("IF")
+                    & match("OPAREN")
+                    & expr(expression)
+                    & match("CPAREN")
+					& match("THEN")
+					& statBlock(ifStatement.getThenStatementBlock())
+					& match("ELSE")
+					& statBlock(ifStatement.getElseStatementBlock())) {
+                Outputter.derivationStrings.append("<statementPRIME> -> if ( <expr> ) then <statBlock> else <statBlock>").append("\n");
+                ifStatement.setExpression(expression);
+                statements.add(ifStatement);
+            }
 			else
 				valid = false;
 
@@ -776,22 +802,71 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_statementPRIME_RHS5)) {
 
-			if (match("FOR")
-					& match("OPAREN")
-					& type()
-					& match("ID")
-					& match("DEF")
-					& expr()
-					& match("SEMICOLON")
-					& arithExpr()
-					& relOp()
-					& arithExpr()
-					& match("SEMICOLON")
-					& assignStat()
-					& match("CPAREN")
-					& statBlock())
-				Outputter.derivationStrings.append("<statementPRIME> -> for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> ").append("\n");
+            ForStatement forStatement = new ForStatement(line);
 
+            boolean c1 = match("FOR")
+                    & match("OPAREN");
+
+            int line2 = lookahead.getLine();
+
+            boolean c2 = type();
+
+            Variable variable = new Variable(lookahead.getLine());
+            variable.setType(lastLexeme);
+
+            boolean c3 = match("ID");
+            variable.setName(lastLexeme);
+
+            currentFunction.insertVariable(variable);
+            forStatement.setVariable(variable);
+
+            Expression expression = new Expression();
+
+            boolean c4 = match("DEF") & expr(expression);
+
+            AssignmentStatement assignmentStatement = new AssignmentStatement(line2);
+
+            VariableCall variableCall = new VariableCall(currentFunction);
+            variableCall.setLine(lookahead.getLine());
+            variableCall.addVariable(variable);
+
+            assignmentStatement.setVariableCall(variableCall);
+
+            forStatement.setInitialAssignmentStatement(assignmentStatement);
+
+            ArithmeticExpression lhs = new ArithmeticExpression();
+
+            boolean c5 = match("SEMICOLON") & arithExpr(lhs);
+
+            Expression condition = new Expression();
+            condition.setLine(lookahead.getLine());
+
+            boolean c6 = relOp();
+
+            if (c6)
+                condition.setOperator(lastLexeme);
+
+            ArithmeticExpression rhs = new ArithmeticExpression();
+
+            boolean c7 = arithExpr(rhs);
+
+            ArrayList<Statement> temp = new ArrayList<>();
+
+			if ((c1 && c2 && c3 && c4 && c5 && c6 && c7)
+                    & match("SEMICOLON")
+                    & assignStat(temp)
+                    & match("CPAREN")
+					& statBlock(forStatement.getLoopStatements()))
+            {
+                Outputter.derivationStrings.append("<statementPRIME> -> for ( <type> id = <expr> ; <arithExpr> <relOp> <arithExpr> ; <assignStat> ) <statBlock> ").append("\n");
+                assignmentStatement.setExpression(expression);
+                condition.setLeftOperand(lhs);
+                condition.setRightOperand(rhs);
+                forStatement.setExpression(condition);
+                forStatement.setLoopAssignmentStatement((AssignmentStatement) temp.get(0));
+                currentFunction.getVariables().remove(currentFunction.getVariables().size() - 1);
+                statements.add(forStatement);
+            }
 			else
 				valid = false;
 
@@ -804,13 +879,13 @@ public class Parser {
 
 	}
 
-	private boolean statBlock() { // <statBlock> -> { <statementList> } | <statement> ; | EPSILON
+	private boolean statBlock(ArrayList<Statement> statements) { // <statBlock> -> { <statementList> } | <statement> ; | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_statBlock, FOLLOW_statBlock));
 
 		if (lookahead.belongsTo(FIRST_statBlock_RHS1)) {
 
-			if (statement()
+			if (statement(statements)
 					& match("SEMICOLON"))
 				Outputter.derivationStrings.append("<statBlock> -> <statement> ;").append("\n");
 
@@ -822,7 +897,7 @@ public class Parser {
 		if (lookahead.belongsTo(FIRST_statBlock_RHS2)) {
 
 			if (match("OBRACE")
-					& statementList()
+					& statementList(statements)
 					& match("CBRACE"))
 				Outputter.derivationStrings.append("<statBlock> -> { <statementList> }").append("\n");
 
@@ -841,16 +916,31 @@ public class Parser {
 
 	}
 
-	private boolean assignStat() { // <assignStat> -> <variable> = <expr>
+	private boolean assignStat(ArrayList<Statement> statements) { // <assignStat> -> <variable> = <expr>
 
 		boolean valid = skipErrors(union(FIRST_assignStat, FOLLOW_assignStat));
 
 		if (lookahead.belongsTo(FIRST_assignStat)) {
 
-			if (variable()
-					& match("DEF")
-					& expr())
-				Outputter.derivationStrings.append("<assignStat> -> <variable> = <expr>").append("\n");
+            AssignmentStatement assignmentStatement = new AssignmentStatement(lookahead.getLine());
+
+            VariableCall variableCall = new VariableCall(currentFunction);
+
+			boolean c1 = variable(variableCall, false);
+
+            if (c1)
+                assignmentStatement.setVariableCall(variableCall);
+
+            Expression expression = new Expression();
+
+            if (c1 & match("DEF")
+                    & expr(expression)) {
+
+                Outputter.derivationStrings.append("<assignStat> -> <variable> = <expr>").append("\n");
+                assignmentStatement.setExpression(expression);
+                statements.add(assignmentStatement);
+
+            }
 
 			else
 				valid = false;
@@ -864,15 +954,15 @@ public class Parser {
 
 	}
 
-	private boolean statementList() { // <statementList> -> <statement> ; <statementList> | EPSILON
+	private boolean statementList(ArrayList<Statement> statements) { // <statementList> -> <statement> ; <statementList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_statementList, FOLLOW_statementList));
 
 		if (lookahead.belongsTo(FIRST_statementList)) {
 
-			if (statement()
+			if (statement(statements)
 					& match("SEMICOLON")
-					& statementList())
+					& statementList(statements))
 				Outputter.derivationStrings.append("<statementList> -> <statement> ; <statementList>").append("\n");
 
 			else
@@ -890,7 +980,7 @@ public class Parser {
 
 	}
 
-	private boolean expr() { // <expr> -> <arithExpr> <exprPRIME>
+	private boolean expr(Expression expression) { // <expr> -> <arithExpr> <exprPRIME>
 
 		boolean valid = skipErrors(union(FIRST_expr, FOLLOW_expr));
 
@@ -898,10 +988,17 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_expr)) {
 
-			if (arithExpr()
-					& exprPRIME())
-				Outputter.derivationStrings.append("<expr> -> <arithExpr> <exprPRIME>").append("\n");
+            expression.setLine(line);
 
+            ArithmeticExpression leftOperand = new ArithmeticExpression();
+
+            boolean c1 = arithExpr(leftOperand);
+
+            if (c1)
+                expression.setLeftOperand(leftOperand);
+
+			if (c1 & exprPRIME(expression))
+                Outputter.derivationStrings.append("<expr> -> <arithExpr> <exprPRIME>").append("\n");
 			else
 				valid = false;
 
@@ -918,16 +1015,23 @@ public class Parser {
 
 	}
 
-	private boolean exprPRIME() { // <exprPRIME> -> <relOp> <arithExpr> | EPSILON
+	private boolean exprPRIME(Expression expression) { // <exprPRIME> -> <relOp> <arithExpr> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_exprPRIME, FOLLOW_exprPRIME));
 
 		if (lookahead.belongsTo(FIRST_exprPRIME)) {
 
-			if (relOp()
-					& arithExpr())
-				Outputter.derivationStrings.append("<exprPRIME> -> <relOp> <arithExpr>").append("\n");
+            boolean c1 = relOp();
 
+            if (c1)
+                expression.setOperator(lastLexeme);
+
+            ArithmeticExpression rightOperand = new ArithmeticExpression();
+
+			if (c1 & arithExpr(rightOperand)) {
+                Outputter.derivationStrings.append("<exprPRIME> -> <relOp> <arithExpr>").append("\n");
+                expression.setRightOperand(rightOperand);
+            }
 			else
 				valid = false;
 
@@ -943,16 +1047,23 @@ public class Parser {
 
 	}
 
-	private boolean arithExpr() { // <arithExpr> -> <term> <arithExprPRIME>
+	private boolean arithExpr(ArithmeticExpression arithmeticExpression) { // <arithExpr> -> <term> <arithExprPRIME>
 
 		boolean valid = skipErrors(union(FIRST_arithExpr, FOLLOW_arithExpr));
 
 		if (lookahead.belongsTo(FIRST_arithExpr)) {
 
-			if (term()
-					& arithExprPRIME())
-				Outputter.derivationStrings.append("<arithExpr> -> <term> <arithExprPRIME>").append("\n");
+            arithmeticExpression.setLine(lookahead.getLine());
 
+            Term term = new Term();
+
+            boolean c1 = term(term);
+
+            if (c1)
+                arithmeticExpression.setTerm(term);
+
+			if (c1 & arithExprPRIME(arithmeticExpression))
+                Outputter.derivationStrings.append("<arithExpr> -> <term> <arithExprPRIME>").append("\n");
 			else
 				valid = false;
 
@@ -965,16 +1076,23 @@ public class Parser {
 
 	}
 
-	private boolean arithExprPRIME() { // <arithExprPRIME> -> <addOp> <arithExpr> | EPSILON
+	private boolean arithExprPRIME(ArithmeticExpression arithmeticExpression) { // <arithExprPRIME> -> <addOp> <arithExpr> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_arithExprPRIME, FOLLOW_arithExprPRIME));
 
 		if (lookahead.belongsTo(FIRST_arithExprPRIME)) {
 
-			if (addOp()
-					& arithExpr())
-				Outputter.derivationStrings.append("<arithExprPRIME> -> <addOp> <arithExpr>").append("\n");
+            boolean c1 = addOp();
 
+            if (c1)
+                arithmeticExpression.setOperator(lastLexeme);
+
+            ArithmeticExpression arithmeticExpression1 = new ArithmeticExpression();
+
+			if (c1 & arithExpr(arithmeticExpression1)) {
+                Outputter.derivationStrings.append("<arithExprPRIME> -> <addOp> <arithExpr>").append("\n");
+                arithmeticExpression.setArithmeticExpression(arithmeticExpression1);
+            }
 			else
 				valid = false;
 
@@ -1021,16 +1139,23 @@ public class Parser {
 
 	}
 
-	private boolean term() { // <term> -> <factor> <termPRIME>
+	private boolean term(Term term) { // <term> -> <factor> <termPRIME>
 
 		boolean valid = skipErrors(union(FIRST_term, FOLLOW_term));
 
 		if (lookahead.belongsTo(FIRST_term)) {
 
-			if (factor()
-					& termPRIME())
-				Outputter.derivationStrings.append("<term> -> <factor> <termPRIME>").append("\n");
+            term.setLine(lookahead.getLine());
 
+            Factor factor = new Factor();
+
+            boolean c1 = factor(factor);
+
+            if (c1)
+                term.setLeftOperand(factor);
+
+			if (c1 & termPRIME(term))
+                Outputter.derivationStrings.append("<term> -> <factor> <termPRIME>").append("\n");
 			else
 				valid = false;
 
@@ -1043,16 +1168,23 @@ public class Parser {
 
 	}
 
-	private boolean termPRIME() { // <termPRIME> -> <multOp> <term> | EPSILON
+	private boolean termPRIME(Term term) { // <termPRIME> -> <multOp> <term> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_termPRIME, FOLLOW_termPRIME));
 
 		if (lookahead.belongsTo(FIRST_termPRIME)) {
 
-			if (multOp()
-					& term())
-				Outputter.derivationStrings.append("<termPRIME> -> <multOp> <term>").append("\n");
+            boolean c1 = multOp();
 
+            if (c1)
+                term.setOperator(lastLexeme);
+
+            Term term1 = new Term();
+
+			if (c1 & term(term1)) {
+                Outputter.derivationStrings.append("<termPRIME> -> <multOp> <term>").append("\n");
+                term.setRightOperand(term1);
+            }
 			else
 				valid = false;
 
@@ -1068,15 +1200,25 @@ public class Parser {
 
 	}
 
-	private boolean factor() { // <factor> -> <sign> <factor> | not <factor> | <number> | <variable> <factorPrime> | ( <arithExpr> )
+	private boolean factor(Factor factor) { // <factor> -> <sign> <factor> | not <factor> | <number> | <variable> <factorPrime> | ( <arithExpr> )
 
 		boolean valid = skipErrors(union(FIRST_factor, FOLLOW_factor));
 
+        factor.setLine(lookahead.getLine());
+
 		if (lookahead.belongsTo(FIRST_factor_RHS1)) {
 
-			if (sign()
-					& factor())
-				Outputter.derivationStrings.append("<factor> -> <sign> <factor>").append("\n");
+            boolean c1 = sign();
+
+            if (c1)
+                factor.setUnary(lastLexeme);
+
+            Factor factor1 = new Factor();
+
+			if (c1 & factor(factor1)) {
+                Outputter.derivationStrings.append("<factor> -> <sign> <factor>").append("\n");
+                factor.setFactor(factor1);
+            }
 
 			else
 				valid = false;
@@ -1085,9 +1227,10 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_factor_RHS2)) {
 
-			if (number())
-				Outputter.derivationStrings.append("<factor> -> <number>").append("\n");
-
+			if (number()) {
+                Outputter.derivationStrings.append("<factor> -> <number>").append("\n");
+                factor.setNumber(lastLexeme);
+            }
 			else
 				valid = false;
 
@@ -1095,9 +1238,13 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_factor_RHS3)) {
 
-			if (variable()
-					& factorPRIME())
-				Outputter.derivationStrings.append("<factor> -> <variable> <factorPRIME>").append("\n");
+            VariableCall variableCall = new VariableCall(currentFunction);
+
+			if (variable(variableCall, true)
+                    & factorPRIME(factor, variableCall)) {
+                Outputter.derivationStrings.append("<factor> -> <variable> <factorPRIME>").append("\n");
+
+            }
 
 			else
 				valid = false;
@@ -1106,10 +1253,14 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_factor_RHS4)) {
 
-			if (match("NOT")
-					& factor())
-				Outputter.derivationStrings.append("<factor> -> not <factor>").append("\n");
+            Factor factor1 = new Factor();
 
+			if (match("NOT")
+					& factor(factor1)) {
+                Outputter.derivationStrings.append("<factor> -> not <factor>").append("\n");
+                factor.setUnary("not");
+                factor.setFactor(factor1);
+            }
 			else
 				valid = false;
 
@@ -1117,11 +1268,14 @@ public class Parser {
 
 		else if (lookahead.belongsTo(FIRST_factor_RHS5)) {
 
-			if (match("OPAREN")
-					& arithExpr()
-					& match("CPAREN"))
-				Outputter.derivationStrings.append("<factor> -> ( <arithExpr> )").append("\n");
+            ArithmeticExpression arithmeticExpression = new ArithmeticExpression();
 
+			if (match("OPAREN")
+					& arithExpr(arithmeticExpression)
+					& match("CPAREN")) {
+                Outputter.derivationStrings.append("<factor> -> ( <arithExpr> )").append("\n");
+                factor.setArithmeticExpression(arithmeticExpression);
+            }
 			else
 				valid = false;
 
@@ -1134,25 +1288,33 @@ public class Parser {
 
 	}
 
-	private boolean factorPRIME() { // <factorPRIME> -> ( <aParams> ) | EPSILON
+	private boolean factorPRIME(Factor factor, VariableCall variableCall) { // <factorPRIME> -> ( <aParams> ) | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_factorPRIME, FOLLOW_factorPRIME));
 
 		if (lookahead.belongsTo(FIRST_factorPRIME)) {
 
-			if (match("OPAREN")
-					& aParams()
-					& match("CPAREN"))
-				Outputter.derivationStrings.append("<factorPRIME> -> ( <aParams> )").append("\n");
+            FunctionCall functionCall = new FunctionCall(currentFunction);
+            functionCall.setVariableNest(variableCall.getVariableNest());
 
+            functionCall.setFunctionName(suspendedVariable.getName());
+
+			if (match("OPAREN")
+					& aParams(functionCall)
+					& match("CPAREN")) {
+                Outputter.derivationStrings.append("<factorPRIME> -> ( <aParams> )").append("\n");
+                factor.setFunctionCall(functionCall);
+            }
 			else
 				valid = false;
 
 		}
 
-		else if (lookahead.belongsTo(FOLLOW_factorPRIME))
-			Outputter.derivationStrings.append("<factorPRIME> -> EPSILON").append("\n");
-
+		else if (lookahead.belongsTo(FOLLOW_factorPRIME)) {
+            Outputter.derivationStrings.append("<factorPRIME> -> EPSILON").append("\n");
+            variableCall.addVariable(suspendedVariable);
+            factor.setVariableCall(variableCall);
+        }
 
 		else
 			valid = false;
@@ -1161,14 +1323,19 @@ public class Parser {
 
 	}
 
-	private boolean variableNest() { // <idnestList> -> . <variable> | EPSILON
+	private boolean variableNest(VariableCall variableCall, Variable variable, boolean fromFactor) { // <idnestList> -> . <variable> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_variableNest, FOLLOW_variableNest));
 
 		if (lookahead.belongsTo(FIRST_variableNest)) {
 
-			if (match("DOT")
-					& variable())
+            boolean c1 = match("DOT");
+
+            if (c1)
+                variableCall.addVariable(variable);
+
+			if (c1
+					& variable(variableCall, fromFactor))
 				Outputter.derivationStrings.append("<variableNest> -> . variable").append("\n");
 
 			else
@@ -1176,9 +1343,18 @@ public class Parser {
 
 		}
 
-		else if (lookahead.belongsTo(FOLLOW_variableNest))
-			Outputter.derivationStrings.append("<variableNest> -> EPSILON").append("\n");
+		else if (lookahead.belongsTo(FOLLOW_variableNest)) {
+            Outputter.derivationStrings.append("<variableNest> -> EPSILON").append("\n");
 
+            //could be a function call or a variable
+            //don't add it yet
+            if (fromFactor)
+                suspendedVariable = variable;
+
+            else
+                variableCall.addVariable(variable);
+
+        }
 		else
 			valid = false;
 
@@ -1186,15 +1362,34 @@ public class Parser {
 
 	}
 
-	private boolean variable() { // <variable> -> id <indiceList> <variableNest>
+	private boolean variable(VariableCall variableCall, boolean fromFactor) { // <variable> -> id <indiceList> <variableNest>
 
 		boolean valid = skipErrors(union(FIRST_variable, FOLLOW_variable));
 
 		if (lookahead.belongsTo(FIRST_variable)) {
 
-			if (match("ID")
-					& indiceList()
-					& variableNest())
+            variableCall.setLine(lookahead.getLine());
+
+            Variable variable = new Variable(0);
+
+            boolean c1 = match("ID");
+
+            if (c1)
+                variable.setName(lastLexeme);
+
+            ArrayList<ArithmeticExpression> indiceList = new ArrayList<>();
+
+            boolean c2 = indiceList(indiceList);
+
+            if (c2) {
+                variableCall.getIndiceLists().add(indiceList);
+
+                for (ArithmeticExpression ignored : indiceList)
+                    variable.getDimensions().add(0);
+
+            }
+
+			if ((c1 && c2) & variableNest(variableCall, variable, fromFactor))
 				Outputter.derivationStrings.append("<variable> -> id <indiceList> <variableNest>").append("\n");
 
 			else
@@ -1209,16 +1404,22 @@ public class Parser {
 
 	}
 
-	private boolean indiceList() { // <indiceList> -> [ <arithExpr> ] <indiceList> | EPSILON
+	private boolean indiceList(ArrayList<ArithmeticExpression> indiceList) { // <indiceList> -> [ <arithExpr> ] <indiceList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_indiceList, FOLLOW_indiceList));
 
 		if (lookahead.belongsTo(FIRST_indiceList)) {
 
-			if (match("OBRACKET")
-					& arithExpr()
-					& match("CBRACKET")
-					& indiceList())
+            ArithmeticExpression arithmeticExpression = new ArithmeticExpression();
+
+            boolean c1 = match("OBRACKET")
+                    & arithExpr(arithmeticExpression)
+                    & match("CBRACKET");
+
+            if (c1)
+                indiceList.add(arithmeticExpression);
+
+			if (c1 & indiceList(indiceList))
 				Outputter.derivationStrings.append("<indiceList> -> [ <arithExpr> ] <indiceList>").append("\n");
 
 			else
@@ -1313,16 +1514,21 @@ public class Parser {
 
 	}
 
-	private boolean aParams() { // <aParams> -> <expr> <aParamsTailList> | EPSILON
+	private boolean aParams(FunctionCall functionCall) { // <aParams> -> <expr> <aParamsTailList> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_aParams, FOLLOW_aParams));
 
 		if (lookahead.belongsTo(FIRST_aParams)) {
 
-			if (expr()
-					& aParamsTailList())
-				Outputter.derivationStrings.append("<aParams> -> <expr> <aParamsTailList>").append("\n");
+            Expression expression = new Expression();
 
+            boolean c1 = expr(expression);
+
+            if (c1)
+                functionCall.getParameters().add(expression);
+
+			if (c1 & aParamsTailList(functionCall))
+                Outputter.derivationStrings.append("<aParams> -> <expr> <aParamsTailList>").append("\n");
 			else
 				valid = false;
 
@@ -1338,16 +1544,14 @@ public class Parser {
 
 	}
 
-	private boolean aParamsTailList() { // <aParamsTailList> -> , <expr> <aParamsTailList> | EPSILON
+	private boolean aParamsTailList(FunctionCall functionCall) { // <aParamsTailList> -> , <aParams> | EPSILON
 
 		boolean valid = skipErrors(union(FIRST_aParamsTailList, FOLLOW_aParamsTailList));
 
 		if (lookahead.belongsTo(FIRST_aParamsTailList)) {
 
-			if (match("COMMA")
-					& expr()
-					& aParamsTailList())
-				Outputter.derivationStrings.append("<aParamsTailList> -> , <expr> <aParamsTailList>").append("\n");
+			if (match("COMMA") & aParams(functionCall))
+				Outputter.derivationStrings.append("<aParamsTailList> -> , <aParams>").append("\n");
 
 			else
 				valid = false;

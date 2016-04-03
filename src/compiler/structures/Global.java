@@ -1,5 +1,6 @@
 package compiler.structures;
 
+import compiler.structures.expressions.FunctionCall;
 import ui.Outputter;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ public class Global {
     private static ArrayList<Class> classes = new ArrayList<>();
     private static Function program;
     private static ArrayList<Function> functions = new ArrayList<>();
+
+    private static ArrayList<FunctionCall> forwardFunctionCalls = new ArrayList<>();
 
     public static void insert(Class newClass) {
 
@@ -80,6 +83,10 @@ public class Global {
 
     }
 
+    public static ArrayList<FunctionCall> getForwardFunctionCalls() {
+        return forwardFunctionCalls;
+    }
+
     public static void clear() {
         classes = new ArrayList<>();
         program = null;
@@ -101,4 +108,19 @@ public class Global {
 
     }
 
+    public static void generateCode() {
+
+    }
+
+    public static void bindForwardFunctionCalls() {
+
+        forwardFunctionCalls.forEach(FunctionCall::bindFunction);
+
+    }
+
+    public static void checkTypes() {
+        classes.forEach(Class::checkTypes);
+        program.checkTypes();
+        functions.forEach(Function::checkTypes);
+    }
 }

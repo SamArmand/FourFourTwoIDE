@@ -1,10 +1,11 @@
 package compiler.structures;
 
+import compiler.structures.statements.Statement;
 import ui.Outputter;
 
 import java.util.ArrayList;
 
-public class Function {
+public class Function implements Codeable {
 
     private Class type;
     private Class parent;
@@ -109,6 +110,8 @@ public class Function {
 
     public Variable getVariable(Variable variable) {
 
+        //TODO check for subArray!!!!
+
         for (Variable v : variables)
             if (v.equals(variable))
                 return v;
@@ -124,7 +127,7 @@ public class Function {
 
         Variable v = getVariable(variable);
 
-        if (v == null)
+        if (v == null && parent != null)
             return parent.getVariable(variable);
 
         return v;
@@ -133,7 +136,33 @@ public class Function {
 
     public Function getFunctionCall(Function function) {
 
-        return parent.getFunctionCall(function);
+        Function f = null;
+
+        if (parent != null)
+            f = parent.getFunctionCall(function);
+
+        if (f == null)
+            f = Global.getFunction(function);
+
+        return f;
+
+    }
+
+    public String getSignature() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(name).append("(");
+
+        if (parameters.size() > 0)
+            stringBuilder.append(parameters.get(0).getType().getName());
+
+        for (int i = 1; i < parameters.size(); ++i)
+            stringBuilder.append(", ").append(parameters.get(i).getType().getName());
+
+
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
 
     }
 
@@ -169,6 +198,22 @@ public class Function {
 
     }
 
+    public ArrayList<Variable> getVariables() {
+        return variables;
+    }
 
+    @Override
+    public void generateCode() {
+
+    }
+
+    public ArrayList<Statement> getStatements() {
+        return statements;
+    }
+
+    @Override
+    public void checkTypes() {
+        statements.forEach(Statement::checkTypes);
+    }
 
 }
