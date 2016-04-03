@@ -43,7 +43,20 @@ public class FunctionCall implements Codeable {
         this.line = line;
     }
 
-    public void bindFunction() {
+    @Override
+    public void generateCode() {
+
+    }
+
+    @Override
+    public void checkTypes() {
+
+        parameters.forEach(Expression::checkTypes);
+
+        for (Expression parameter : parameters) {
+            if (parameter.getResolvedType() == null)
+                return;
+        }
 
         for (Expression expression : parameters) {
 
@@ -84,25 +97,6 @@ public class FunctionCall implements Codeable {
                         .append(" is defined for class ").append(scope.getName()).append("\n");
 
         }
-
-    }
-
-    @Override
-    public void generateCode() {
-
-    }
-
-    @Override
-    public void checkTypes() {
-
-        parameters.forEach(Expression::checkTypes);
-
-        for (Expression parameter : parameters) {
-            if (parameter.getResolvedType() == null)
-                return;
-        }
-
-        bindFunction();
 
     }
 

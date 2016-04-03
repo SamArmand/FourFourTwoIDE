@@ -189,7 +189,6 @@ public class Parser {
 		boolean success = prog() & match("EOF");
 
 		Global.print();
-        Global.bindForwardFunctionCalls();
 
         if (success)
             Global.checkTypes();
