@@ -4,7 +4,7 @@ import ui.Outputter;
 
 import java.util.ArrayList;
 
-public class Variable {
+public class Variable implements Codeable {
 
     private Class type;
     private String name;
@@ -15,6 +15,14 @@ public class Variable {
     public Variable(int line) {
         dimensions = new ArrayList<>();
         this.line = line;
+    }
+
+    public Variable(Variable variable) {
+        this.type = variable.type;
+        this.name = variable.name;
+        this.line = variable.line;
+        this.dimensions = variable.dimensions;
+        this.address = variable.address;
     }
 
     public void setType(String typeName) {
@@ -76,4 +84,15 @@ public class Variable {
                 "\n";
 
     }
+
+    @Override
+    public void generateCode() {
+
+    }
+
+    @Override
+    public void checkTypes() {
+
+    }
+
 }

@@ -4,7 +4,7 @@ import ui.Outputter;
 
 import java.util.ArrayList;
 
-public class Class {
+public class Class implements Codeable {
 
     private String name;
     private ArrayList<Variable> variables;
@@ -72,8 +72,18 @@ public class Class {
     public Variable getVariable(Variable variable) {
 
         for (Variable v : variables)
-            if (v.equals(variable))
-                return v;
+            if (v.equals(variable)) {
+
+                if (variable.getDimensions() == v.getDimensions())
+                    return v;
+
+                Variable subArray = new Variable(v);
+                for (Integer ignored : variable.getDimensions())
+                    subArray.getDimensions().remove(0);
+
+                return subArray;
+            }
+
 
         return null;
 
@@ -132,4 +142,19 @@ public class Class {
 
     }
 
+    public boolean isNumber() {
+
+        return (name.equals("int") || name.equals("float"));
+
+    }
+
+    @Override
+    public void generateCode() {
+
+    }
+
+    @Override
+    public void checkTypes() {
+        functions.forEach(Function::checkTypes);
+    }
 }
