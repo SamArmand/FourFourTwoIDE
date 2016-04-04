@@ -3,6 +3,7 @@ package compiler.structures;
 import ui.Outputter;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Variable implements Codeable {
 
@@ -21,12 +22,21 @@ public class Variable implements Codeable {
         this.type = variable.type;
         this.name = variable.name;
         this.line = variable.line;
-        this.dimensions = variable.dimensions;
+        this.dimensions = new ArrayList<>();
+
+        dimensions.addAll(variable.dimensions.stream().map(Integer::intValue).collect(Collectors.toList()));
+
         this.address = variable.address;
     }
 
     public void setType(String typeName) {
-        type = Global.getClassDefinition(typeName);
+
+        for (char c : typeName.toCharArray()) {
+            if (c == '[')
+                dimensions.add(0);
+        }
+
+        type = Global.getClassDefinition(typeName.substring(0, dimensions.size() > 0 ? typeName.indexOf("[") : typeName.length()));
 
         if (type == null)
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
@@ -57,7 +67,19 @@ public class Variable implements Codeable {
     }
 
     public String getName() {
+
         return name;
+    }
+
+    public String getNameAndDimensions() {
+
+        String nameAndDimensions = name;
+
+        for (Integer ignored : dimensions)
+            nameAndDimensions += "[]";
+
+        return nameAndDimensions;
+
     }
 
     public ArrayList<Integer> getDimensions() {
@@ -70,7 +92,7 @@ public class Variable implements Codeable {
 
     public boolean equals(Variable variable) {
         return (name.equals(variable.name)
-                && (dimensions.size() <= variable.dimensions.size()));
+                && (variable.dimensions.size() <= dimensions.size()));
     }
 
     public long getAddress() {

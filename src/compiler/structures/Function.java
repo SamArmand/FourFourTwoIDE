@@ -112,12 +112,18 @@ public class Function implements Codeable {
 
         //TODO check for subArray!!!!
 
-        for (Variable v : variables)
-            if (v.equals(variable))
-                return v;
-        for (Variable parameter : parameters)
-            if (parameter.equals(variable))
-                return parameter;
+        ArrayList<Variable> allVariables = new ArrayList<>();
+        allVariables.addAll(variables);
+        allVariables.addAll(parameters);
+
+        for (Variable v : allVariables) {
+            if (v.equals(variable)) {
+                Variable returnedVariable = new Variable(v);
+                for (Integer ignored : variable.getDimensions())
+                    returnedVariable.getDimensions().remove(0);
+                return returnedVariable;
+            }
+        }
 
         return null;
 

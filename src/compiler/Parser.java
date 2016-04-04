@@ -189,7 +189,6 @@ public class Parser {
 		boolean success = prog() & match("EOF");
 
 		Global.print();
-        Global.bindForwardFunctionCalls();
 
         if (success)
             Global.checkTypes();
@@ -596,8 +595,11 @@ public class Parser {
 
             boolean c1 = indiceList(indiceList);
 
-            if (c1)
+            if (c1) {
                 variableCall.getIndiceLists().add(indiceList);
+                for (ArithmeticExpression ignored : indiceList)
+                    variable.getDimensions().add(0);
+            }
 
             Expression expression = new Expression();
 
