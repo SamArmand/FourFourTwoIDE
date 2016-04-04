@@ -21,12 +21,7 @@ public class ArithmeticExpression extends Expression {
 
     public void setArithmeticExpression(ArithmeticExpression arithmeticExpression) {
 
-        if (arithmeticExpression.term == null)
-            return;
-
         this.arithmeticExpression = arithmeticExpression;
-
-
 
     }
 

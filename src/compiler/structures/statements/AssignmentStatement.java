@@ -43,8 +43,6 @@ public class AssignmentStatement extends Statement {
                         .append("Cannot assign value of type ").append(expression.getResolvedType().getName())
                         .append(" to a variable of type ").append(variableCall.getResolvedType().getName()).append("\n");
 
-
-
         }
 
     }

@@ -45,7 +45,7 @@ public class VariableCall implements Codeable {
 
             else {
                 Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("Variable ").append(variable.getName())
+                        .append("Variable ").append(variable.getNameAndDimensions())
                         .append(" is not in scope\n");
             }
 
@@ -62,7 +62,7 @@ public class VariableCall implements Codeable {
 
             else {
                 Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("No member variable ").append(variable.getName())
+                        .append("No member variable ").append(variable.getNameAndDimensions())
                         .append(" is defined for class ").append(scope.getName()).append("\n");
             }
 
@@ -78,7 +78,14 @@ public class VariableCall implements Codeable {
             return undefined;
         }
 
-        return variableNest.get(variableNest.size()-1).getType();
+
+        Class type = new Class (0);
+
+        type.setName(variableNest.get(variableNest.size()-1).getType().getName());
+
+
+        return type;
+
     }
 
     public void setLine(int line) {
