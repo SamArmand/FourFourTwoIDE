@@ -26,10 +26,6 @@ public class VariableCall implements Codeable {
         return variableNest;
     }
 
-    public void addIndiceList(ArrayList<ArithmeticExpression> indiceList) {
-        indiceLists.add(indiceList);
-    }
-
     public ArrayList<ArrayList<ArithmeticExpression>> getIndiceLists() {
         return indiceLists;
     }

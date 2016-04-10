@@ -110,8 +110,6 @@ public class Function implements Codeable {
 
     public Variable getVariable(Variable variable) {
 
-        //TODO check for subArray!!!!
-
         ArrayList<Variable> allVariables = new ArrayList<>();
         allVariables.addAll(variables);
         allVariables.addAll(parameters);
