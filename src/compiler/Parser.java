@@ -657,7 +657,18 @@ public class Parser {
 
 			boolean c1 = match("OBRACKET") & match("INTEGER");
 
-			variable.getDimensions().add(Integer.parseInt(lastLexeme));
+			try {
+
+				variable.getDimensions().add(Integer.parseInt(lastLexeme));
+
+			}
+			catch (NumberFormatException numberFormatException) {
+
+				Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", lookahead.getLine()))
+						.append("Array dimension must be an integer").append("\n");
+
+			}
+
 
 			if (c1 & match("CBRACKET")
 					& arraySizeList(variable))
