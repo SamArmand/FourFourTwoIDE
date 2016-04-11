@@ -24,31 +24,23 @@ public class Function implements Codeable {
 
     public void insertParameter(Variable parameter) {
 
-        if (exists(parameter)) {
+        if (exists(parameter))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", parameter.getLine()))
                     .append("Duplicate declaration of parameter ").append(parameter.getName()).append("\n");
-            return;
-        }
 
-        if (parameter.getType() == null)
-            return;
-
-        parameters.add(parameter);
+        if (parameter.getType() != null)
+            parameters.add(parameter);
 
     }
 
     public void insertVariable(Variable variable) {
 
-        if (exists(variable)) {
+        if (exists(variable))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
                     .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
-            return;
-        }
 
-        if (variable.getType() == null)
-            return;
-
-        variables.add(variable);
+        if (variable.getType() != null)
+            variables.add(variable);
 
     }
 
@@ -65,7 +57,6 @@ public class Function implements Codeable {
             }
 
             return true;
-
 
         }
 

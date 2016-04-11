@@ -15,28 +15,24 @@ public class Global {
 
     public static void insert(Class newClass) {
 
-        if (exists(newClass.getName())) {
+        if (exists(newClass.getName()))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", newClass.getLine()))
                     .append("Duplicate declaration of class ").append(newClass.getName()).append("\n");
-            return;
-        }
 
-        classes.add(newClass);
+        else
+            classes.add(newClass);
 
     }
 
     public static void insert(Function function) {
 
-        if (exists(function)) {
+        if (exists(function))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
-                    .append("Duplicate declaration of function ").append(function.getName()).append("\n");
-            return;
-        }
+                    .append("Duplicate declaration of function ").append(function.getSignature()).append("\n");
 
-        if (function.getType() == null)
-            return;
+        else if (function.getType() != null)
+            functions.add(function);
 
-        functions.add(function);
     }
 
     public static void setProgram(Function function) {

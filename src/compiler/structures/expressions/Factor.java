@@ -45,21 +45,17 @@ public class Factor implements Codeable {
 
         this.variableCall = variableCall;
 
-        resolvedType = variableCall.getResolvedType();
-
     }
 
     public void setFunctionCall(FunctionCall functionCall) {
 
         this.functionCall = functionCall;
 
-        resolvedType = functionCall.getResolvedType();
     }
 
     public void setArithmeticExpression(ArithmeticExpression arithmeticExpression) {
         this.arithmeticExpression = arithmeticExpression;
 
-        resolvedType = arithmeticExpression.getResolvedType();
     }
 
     public Class getResolvedType() {
@@ -91,14 +87,20 @@ public class Factor implements Codeable {
                         .append("Cannot apply unary operator ").append(unary)
                         .append(" to factor of type ").append(factor.resolvedType.getName()).append("\n");
 
+            return;
         }
 
+        //we check for function resolved type but not variable resolved type
+        //because function call can be a forward declaration for which we may not have immediately known
+        //the type by the time it was assigned to the factor.
         if (functionCall != null) {
 
             if (functionCall.getResolvedType() == null)
                 functionCall.checkTypes();
 
             resolvedType = functionCall.getResolvedType();
+
+            return;
 
         }
 

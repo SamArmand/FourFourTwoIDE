@@ -20,9 +20,6 @@ public class Expression implements Codeable {
 
     public void setOperator(String operator) {
         this.operator = operator;
-
-        resolvedType = new Class(0);
-        resolvedType.setName("boolean");
     }
 
     public void setRightOperand(ArithmeticExpression rightOperand) {
@@ -63,6 +60,10 @@ public class Expression implements Codeable {
 
         if (rightOperand == null)
             return;
+        else {
+            resolvedType = new Class(0);
+            resolvedType.setName("boolean");
+        }
 
         if (rightOperand.getResolvedType() == null)
             rightOperand.checkTypes();
@@ -70,11 +71,10 @@ public class Expression implements Codeable {
         if (rightOperand.getResolvedType() == null)
             return;
 
-        if (!(this.rightOperand.getResolvedType().isNumber() && leftOperand.getResolvedType().isNumber()))
+        if (!(rightOperand.getResolvedType().isNumber() && leftOperand.getResolvedType().isNumber()))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
                     .append("Cannot compare expression of type ").append(leftOperand.getResolvedType().getName())
-                    .append(" with  expression of type ").append(this.rightOperand.getResolvedType().getName()).append("\n");
-
+                    .append(" with expression of type ").append(rightOperand.getResolvedType().getName()).append("\n");
 
     }
 
