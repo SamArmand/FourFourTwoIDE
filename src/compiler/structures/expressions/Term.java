@@ -34,7 +34,7 @@ public class Term implements Codeable {
         this.line = line;
     }
 
-    public Class getResolvedType() {
+    Class getResolvedType() {
         return resolvedType;
     }
 

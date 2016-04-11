@@ -734,7 +734,7 @@ public class Parser {
 
 		if (lookahead.belongsTo(FIRST_statementPRIME_RHS1)) {
 
-			ReturnStatement returnStatement = new ReturnStatement(line);
+			ReturnStatement returnStatement = new ReturnStatement(line, currentFunction);
 
             Expression expression = new Expression();
 

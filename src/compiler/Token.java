@@ -3,14 +3,14 @@ package compiler;
 import java.util.Arrays;
 
 //Data structure for storing information about a token
-public class Token {
+class Token {
 
 	private String type;
 	private String lexeme;
 	private int line;
 	
 	//Constructor
-	public Token(String type, String lexeme, int line) {
+	Token(String type, String lexeme, int line) {
 		
 		this.type = type;
 		this.lexeme = lexeme;
@@ -22,7 +22,7 @@ public class Token {
 		return type;
 	}
 
-	public String getLexeme() {
+	String getLexeme() {
 		return lexeme;
 	}
 
@@ -38,13 +38,13 @@ public class Token {
 	}
 
 	//checks if token belongs to set
-	public boolean belongsTo(String[] set) {
+	boolean belongsTo(String[] set) {
 
 		return Arrays.asList(set).contains(type);
 
 	}
 
-	public static String toDescription(String expectedToken) {
+	static String toDescription(String expectedToken) {
 
 		switch (expectedToken) {
 

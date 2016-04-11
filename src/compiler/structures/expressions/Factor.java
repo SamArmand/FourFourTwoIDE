@@ -58,7 +58,7 @@ public class Factor implements Codeable {
 
     }
 
-    public Class getResolvedType() {
+    Class getResolvedType() {
         return resolvedType;
     }
 

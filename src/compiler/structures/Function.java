@@ -95,11 +95,11 @@ public class Function implements Codeable {
         return line;
     }
 
-    public void setParent(Class parent) {
+    void setParent(Class parent) {
         this.parent = parent;
     }
 
-    public Variable getVariable(Variable variable) {
+    private Variable getVariable(Variable variable) {
 
         ArrayList<Variable> allVariables = new ArrayList<>();
         allVariables.addAll(variables);
@@ -161,7 +161,7 @@ public class Function implements Codeable {
 
     }
 
-    public boolean exists(Variable variable) {
+    private boolean exists(Variable variable) {
 
         for (Variable v : variables)
             if (v.getName().equals(variable.getName()))
@@ -174,7 +174,7 @@ public class Function implements Codeable {
 
     }
 
-    public String print(String tabs) {
+    String print(String tabs) {
 
         StringBuilder stringBuilder = new StringBuilder();
 

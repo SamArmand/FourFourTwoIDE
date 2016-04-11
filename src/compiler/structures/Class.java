@@ -42,7 +42,7 @@ public class Class implements Codeable {
 
     }
 
-    public Function getFunction(Function function) {
+    private Function getFunction(Function function) {
 
         for (Function f : functions)
             if (f.equals(function))
@@ -95,7 +95,7 @@ public class Class implements Codeable {
         return line;
     }
 
-    public boolean exists(Variable variable) {
+    private boolean exists(Variable variable) {
 
         for (Variable v : variables)
             if (v.getName().equals(variable.getName()))
@@ -105,7 +105,7 @@ public class Class implements Codeable {
 
     }
 
-    public boolean exists(Function function) {
+    private boolean exists(Function function) {
 
         for (Function f : functions)
             if (f.equals(function))
@@ -120,7 +120,7 @@ public class Class implements Codeable {
     }
 
 
-    public String print() {
+    String print() {
 
         StringBuilder stringBuilder = new StringBuilder();
 

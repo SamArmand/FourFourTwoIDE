@@ -27,7 +27,7 @@ public class FunctionCall implements Codeable {
         function.setName(name);
     }
 
-    public Class getResolvedType() {
+    Class getResolvedType() {
         return function.getType();
     }
 
