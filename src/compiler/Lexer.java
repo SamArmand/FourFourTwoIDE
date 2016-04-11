@@ -45,7 +45,7 @@ public class Lexer {
 	}
 	
 	//This is a handwritten method for analyzing tokens.
-	public Token nextToken() {
+	Token nextToken() {
 
 		String lexeme = "";
 

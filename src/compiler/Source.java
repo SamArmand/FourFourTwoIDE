@@ -20,7 +20,7 @@ public class Source {
 
 	//Getters and Setters
 
-	public int getCurrentLineNumber() {
+	int getCurrentLineNumber() {
 
 		if (newLine)
 			return (currentLineNumber-1);
@@ -28,27 +28,27 @@ public class Source {
 
 	}
 
-	public int getLastOCOMMENTLine() {
+	int getLastOCOMMENTLine() {
 		return lastOCOMMENTLine;
 	}
 
-	public void setLastOCOMMENTLine(int lastOCOMMENTLine) {
+	void setLastOCOMMENTLine(int lastOCOMMENTLine) {
 		this.lastOCOMMENTLine = lastOCOMMENTLine;
 	}
 
-	public boolean isComment() {
+	boolean isComment() {
 		return comment;
 	}
 
-	public void setComment(boolean comment) {
+	void setComment(boolean comment) {
 		this.comment = comment;
 	}
 
-	public boolean isEndOfFile() {
+	boolean isEndOfFile() {
 		return endOfFile;
 	}
 
-	public boolean isNewLine() {
+	boolean isNewLine() {
 		return newLine;
 	}
 
@@ -64,7 +64,7 @@ public class Source {
 	}
 	
 	//Skip to next character
-	public char nextChar() {
+	char nextChar() {
 
 		int i = -1;
 
@@ -97,7 +97,7 @@ public class Source {
 	}
 	
 	//Backup to previous character.
-	public void backtrack() {
+	void backtrack() {
 
 		try {
 			code.reset();

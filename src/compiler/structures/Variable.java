@@ -99,7 +99,7 @@ public class Variable implements Codeable {
         return address;
     }
 
-    public String print(String varType, String tabs) {
+    String print(String varType, String tabs) {
 
         return tabs + varType + ": " +
                 name + " TYPE: " + getType().getName() +

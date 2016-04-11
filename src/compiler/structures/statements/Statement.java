@@ -6,7 +6,7 @@ public class Statement implements Codeable {
 
     private int line;
 
-    public Statement(int line) {
+    Statement(int line) {
         this.line = line;
     }
 

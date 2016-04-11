@@ -49,7 +49,7 @@ public class Global {
 
     }
 
-    public static boolean exists(String typeName) {
+    private static boolean exists(String typeName) {
 
         for (Class c : classes)
             if (c.getName().equals(typeName))
@@ -59,7 +59,7 @@ public class Global {
 
     }
 
-    public static boolean exists(Function function) {
+    private static boolean exists(Function function) {
 
         for (Function f : functions)
             if (f.equals(function))
@@ -69,7 +69,7 @@ public class Global {
 
     }
 
-    public static Function getFunction(Function function) {
+    static Function getFunction(Function function) {
 
         for (Function f : functions)
             if (f.equals(function))

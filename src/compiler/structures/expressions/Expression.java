@@ -36,7 +36,7 @@ public class Expression implements Codeable {
         return line;
     }
 
-    public void setResolvedType(Class resolvedType) {
+    void setResolvedType(Class resolvedType) {
         this.resolvedType = resolvedType;
     }
 
