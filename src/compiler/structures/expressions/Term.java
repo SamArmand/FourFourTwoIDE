@@ -46,8 +46,10 @@ public class Term implements Codeable {
     @Override
     public void checkTypes() {
 
+        leftOperand.checkTypes();
+
         if (leftOperand.getResolvedType() == null)
-            leftOperand.checkTypes();
+            return;
 
         resolvedType = leftOperand.getResolvedType();
 
@@ -59,7 +61,7 @@ public class Term implements Codeable {
         if (rightOperand.resolvedType == null)
             return;
 
-        if (!rightOperand.resolvedType.isNumber())
+        if (!(rightOperand.getResolvedType().isNumber() && leftOperand.getResolvedType().isNumber()))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
                     .append("Cannot evaluate arithmetic expression between types ").append(leftOperand.getResolvedType().getName())
                     .append(" and ").append(rightOperand.resolvedType.getName()).append("\n");

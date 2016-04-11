@@ -9,9 +9,7 @@ public class ArithmeticExpression extends Expression {
     private ArithmeticExpression arithmeticExpression;
 
     public void setTerm(Term term) {
-
         this.term = term;
-
     }
 
     @Override
@@ -49,7 +47,7 @@ public class ArithmeticExpression extends Expression {
         if (arithmeticExpression.getResolvedType() == null)
             return;
 
-        if (!arithmeticExpression.getResolvedType().isNumber())
+        if (!(term.getResolvedType().isNumber() && arithmeticExpression.getResolvedType().isNumber()))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", getLine()))
                     .append("Cannot evaluate arithmetic expression between types ").append(term.getResolvedType().getName())
                     .append(" and ").append(arithmeticExpression.getResolvedType().getName()).append("\n");

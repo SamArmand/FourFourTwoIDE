@@ -29,7 +29,11 @@ public class Controller {
     public void compile() {
 
         //save input to a file
-        save(editor.getText());
+        try (PrintWriter file = new PrintWriter(new FileOutputStream("source.txt"))) {
+            file.print(editor.getText());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         //define input stream
         BufferedReader code;
@@ -59,7 +63,6 @@ public class Controller {
 
         catch(FileNotFoundException e)
         {
-            errorsOutput.appendText("Error opening files. Compilation aborted.\r\n");
             Outputter.errorStrings.append("Error opening files. Compilation aborted.\r\n");
             return;
         }
@@ -92,16 +95,6 @@ public class Controller {
         tokensOutput.setText(Outputter.tokenStrings.toString());
         derivationOutput.setText(Outputter.derivationStrings.toString());
         symbolTablesOutput.setText(Outputter.symbolTablesStrings.toString());
-
-    }
-
-    private void save(String sourceCode) {
-
-        try (PrintWriter file = new PrintWriter(new FileOutputStream("source.txt"))) {
-            file.print(sourceCode);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
     }
 
