@@ -73,7 +73,7 @@ public class FunctionCall implements Codeable {
             Function calledFunction = currentScope.getFunctionCall(function);
 
             if (calledFunction != null)
-                this.function = calledFunction;
+                function = calledFunction;
 
             else
                 Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
@@ -86,10 +86,13 @@ public class FunctionCall implements Codeable {
 
             Class scope = variableNest.get(variableNest.size()-1).getType();
 
+            if (scope == null)
+                return;
+
             Function calledFunction = scope.getFunctionCall(function);
 
             if (calledFunction != null)
-                this.function = calledFunction;
+                function = calledFunction;
 
             else
                 Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))

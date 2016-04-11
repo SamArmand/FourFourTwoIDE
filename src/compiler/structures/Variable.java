@@ -49,14 +49,14 @@ public class Variable implements Codeable {
         if (dimensions.size() == 0)
             return type;
 
-        String dimensionString = "";
+        String actualType = type.getName();
 
         for (int i = 0; i < dimensions.size(); ++i)
-            dimensionString += "[]";
+            actualType += "[]";
 
         Class variableType = new Class(0);
 
-        variableType.setName(type.getName()+dimensionString);
+        variableType.setName(actualType);
 
         return variableType;
 

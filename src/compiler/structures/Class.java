@@ -19,33 +19,27 @@ public class Class implements Codeable {
 
     public void insert(Variable variable) {
 
-        if (exists(variable)) {
+        if (exists(variable))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", variable.getLine()))
                     .append("Duplicate declaration of variable ").append(variable.getName()).append("\n");
-            return;
-        }
 
-        if (variable.getType() == null)
-            return;
-
-        variables.add(variable);
+        if (variable.getType() != null)
+            variables.add(variable);
 
     }
 
     public void insert(Function function) {
 
-        if (exists(function)) {
+        if (exists(function))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
                     .append("Duplicate declaration of function ").append(function.getName())
                     .append(" with same parameters\n");
-            return;
+
+        if (function.getType() == null) {
+            function.setParent(this);
+            functions.add(function);
         }
 
-        if (function.getType() == null)
-            return;
-
-        function.setParent(this);
-        functions.add(function);
     }
 
     public Function getFunction(Function function) {
