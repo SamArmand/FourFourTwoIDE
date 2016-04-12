@@ -1,14 +1,13 @@
 package ui;
 
+import compiler.Lexer;
+import compiler.Parser;
+import compiler.Source;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 import java.io.*;
-
-import compiler.Source;
-import compiler.Lexer;
-import compiler.Parser;
 
 public class Controller {
 
@@ -24,6 +23,8 @@ public class Controller {
     TextArea derivationOutput;
     @FXML
     TextArea symbolTablesOutput;
+    @FXML
+    TextArea moonCodeOutput;
 
     //handler for compileButton click action
     public void compile() {
@@ -43,12 +44,14 @@ public class Controller {
         PrintWriter errors;
         PrintWriter derivation;
         PrintWriter symbolTables;
+        PrintStream moonCode;
 
         //create StringBuilders for output
         Outputter.errorStrings = new StringBuilder();
         Outputter.tokenStrings = new StringBuilder();
         Outputter.derivationStrings = new StringBuilder();
         Outputter.symbolTablesStrings = new StringBuilder();
+        Outputter.moonCodeStrings = new StringBuilder();
 
         //Set up streams
         try
@@ -60,6 +63,7 @@ public class Controller {
             errors = new PrintWriter(new FileOutputStream("errors.txt"));
             derivation = new PrintWriter(new FileOutputStream("derivation.txt"));
             symbolTables = new PrintWriter(new FileOutputStream("symbol_tables.txt"));
+            moonCode = new PrintStream(new File("moon_code.m"));
 
         }
 
@@ -81,11 +85,13 @@ public class Controller {
         errors.print(Outputter.errorStrings.toString());
         derivation.print(Outputter.derivationStrings.toString());
         symbolTables.print(Outputter.symbolTablesStrings.toString());
+        moonCode.print(Outputter.symbolTablesStrings.toString());
 
         tokens.close();
         errors.close();
         derivation.close();
         symbolTables.close();
+        moonCode.close();
 
         try {
             code.close();
@@ -97,6 +103,7 @@ public class Controller {
         tokensOutput.setText(Outputter.tokenStrings.toString());
         derivationOutput.setText(Outputter.derivationStrings.toString());
         symbolTablesOutput.setText(Outputter.symbolTablesStrings.toString());
+        moonCodeOutput.setText(Outputter.moonCodeStrings.toString());
 
     }
 

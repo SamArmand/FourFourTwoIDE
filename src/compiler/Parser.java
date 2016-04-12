@@ -193,11 +193,12 @@ public class Parser {
         if (success)
             Global.checkTypes();
 
-		if (success && (Outputter.errorStrings.length() == 0))
+		if (success && (Outputter.errorStrings.length() == 0)) {
 			Outputter.errorStrings.append("Compiled successfully");
+			Global.generateCode();
+		}
 		else
 			Outputter.errorStrings.append("Compilation unsuccessful");
-
 
 	}
 
