@@ -6,8 +6,11 @@ import java.util.ArrayList;
 
 public class Global {
 
+ // the classes
     private static ArrayList<Class> classes = new ArrayList<>();
+ // the program
     private static Function program;
+ // Global free functions
     private static ArrayList<Function> functions = new ArrayList<>();
 
     public static void insert(Class newClass) {

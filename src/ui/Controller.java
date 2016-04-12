@@ -56,7 +56,9 @@ public class Controller {
         //Set up streams
         try
         {
+            // reading the input file into the complier
             code = new BufferedReader(new FileReader("source.txt"));
+            // writing into output files
             tokens = new PrintWriter(new FileOutputStream("tokens.txt"));
             errors = new PrintWriter(new FileOutputStream("errors.txt"));
             derivation = new PrintWriter(new FileOutputStream("derivation.txt"));

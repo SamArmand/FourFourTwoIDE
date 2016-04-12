@@ -154,8 +154,10 @@ public class Lexer {
 		else if (c == '/') {
 
 			c = source.nextChar();
-			if (c == '/'){
 
+// Comment processing starts here
+			if (c == '/'){
+// Inline comment
 				token = new Token("COMMENT", "//", source.getCurrentLineNumber());
 
 				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
@@ -165,7 +167,7 @@ public class Lexer {
 			}
 
 			else if(c == '*'){
-
+// Block comment
 				source.setLastOCOMMENTLine(source.getCurrentLineNumber());
 
 				source.setComment(true);
@@ -208,20 +210,20 @@ public class Lexer {
 			}
 
 		}
-
+// Number processing starts here
 		else if (c == '0') {
 
 			lexeme += c;
 			c = source.nextChar();
 
 			if (c != '.') {
-
+// Just integer zero
 				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
 
-			//it is a '.'
+			//if it is a '.'
 			else {
 
 				//tokenString is "0."
@@ -269,7 +271,7 @@ public class Lexer {
 
 		}
 
-		//Will only get here if it's nonzero
+//Will only get here if it's nonzero
 		else if (isDigit(c)) {
 
 			lexeme += c;
@@ -282,7 +284,7 @@ public class Lexer {
 
 			}
 
-			//checking if fraction
+//checking if fraction
 			if (c == '.') {
 
 				lexeme += c;

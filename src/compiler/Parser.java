@@ -268,7 +268,7 @@ public class Parser {
 	}
 
 	//Grammar Rules
-
+//program
 	private boolean prog() { // <prog> -> <classDeclList> program { <funcMemberList> } ; <funcDefList>
 
 		// Define built-in types
