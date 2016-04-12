@@ -13,12 +13,14 @@ public class Variable implements Codeable {
     private ArrayList<Integer> dimensions;
     private long address;
 
+    private int size;
+
     public Variable(int line) {
         dimensions = new ArrayList<>();
         this.line = line;
     }
 
-    public Variable(Variable variable) {
+    Variable(Variable variable) {
         this.type = variable.type;
         this.name = variable.name;
         this.line = variable.line;
@@ -107,14 +109,28 @@ public class Variable implements Codeable {
 
     }
 
+    //codegen stuff
+
     @Override
     public void generateCode() {
+
+        Outputter.moonCodeStrings.append(name).append("\tres\t").append(getSize()).append("\n");
 
     }
 
     @Override
     public void checkTypes() {
 
+    }
+
+    public int getSize() {
+
+        int size = type.getSize();
+
+        for (Integer dimension: dimensions)
+            size *= dimension;
+
+        return size;
     }
 
 }

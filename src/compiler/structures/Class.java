@@ -32,10 +32,10 @@ public class Class implements Codeable {
 
         if (exists(function))
             Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", function.getLine()))
-                    .append("Duplicate declaration of function ").append(function.getName())
+                    .append("Duplicate declaration of function ").append(function.getSignature())
                     .append(" with same parameters\n");
 
-        if (function.getType() == null) {
+        if (function.getType() != null) {
             function.setParent(this);
             functions.add(function);
         }
@@ -142,6 +142,10 @@ public class Class implements Codeable {
 
     }
 
+
+    //codegen stuff
+
+
     @Override
     public void generateCode() {
 
@@ -151,4 +155,20 @@ public class Class implements Codeable {
     public void checkTypes() {
         functions.forEach(Function::checkTypes);
     }
+
+    public int getSize() {
+        int size = 0;
+
+        for (Variable variable: variables)
+            size += variable.getSize();
+
+        if (name.equals("int"))
+            size = 1;
+        else if (name.equals("float"))
+            size = 2;
+
+        return size;
+
+    }
+
 }

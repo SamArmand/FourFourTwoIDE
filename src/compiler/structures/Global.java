@@ -97,13 +97,19 @@ public class Global {
 
     }
 
-    public static void generateCode() {
-
-    }
-
     public static void checkTypes() {
         classes.forEach(Class::checkTypes);
         program.checkTypes();
         functions.forEach(Function::checkTypes);
     }
+
+
+    //codegen
+
+    public static void generateCode() {
+        classes.forEach(Class::generateCode);
+        functions.forEach(Function::generateCode);
+        program.generateCode();
+    }
+
 }

@@ -46,8 +46,7 @@ public class Function implements Codeable {
 
     public boolean equals(Function function) {
 
-        if (name.equals(function.getName())
-                && parameters.size() == function.getParameters().size()) {
+        if (name.equals(function.getName()) && parameters.size() == function.getParameters().size()) {
 
             for (int i = 0; i < parameters.size(); ++i) {
 
@@ -197,13 +196,20 @@ public class Function implements Codeable {
         return variables;
     }
 
+    public ArrayList<Statement> getStatements() {
+        return statements;
+    }
+
     @Override
     public void generateCode() {
 
-    }
+        if (name == null || name.equals("") || name.equals("program")) {
 
-    public ArrayList<Statement> getStatements() {
-        return statements;
+            Outputter.moonCodeStrings.append("\tentry\n");
+            variables.forEach(Variable::generateCode);
+
+        }
+
     }
 
     @Override
