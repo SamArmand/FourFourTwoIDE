@@ -36,7 +36,7 @@ public class Class implements Codeable {
                     .append(" with same parameters\n");
 
         if (function.getType() != null) {
-            function.setParent(this);
+            //function.setParent(this);
             functions.add(function);
         }
 
