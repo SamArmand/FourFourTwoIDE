@@ -28,6 +28,7 @@
 
 ## Text output files
 *.txt
+*.m
 
 ## Plugin-specific files:
 
