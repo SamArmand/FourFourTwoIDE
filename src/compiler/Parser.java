@@ -1465,13 +1465,13 @@ public class Parser {
 			parameter.setName(lastLexeme);
 			parameter.setType(type);
 
-			if ((c1 && c2)
-					& arraySizeList(parameter)
-					& fParamsTailList(function)) {
-				Outputter.derivationStrings.append("<fParams> -> <type> id <arraySizeList> <fParamsTailList>").append("\n");
+			boolean c3 = arraySizeList(parameter);
 
+			if (c3)
 				function.insertParameter(parameter);
-			}
+
+			if ((c1 && c2 && c3) & fParamsTailList(function))
+				Outputter.derivationStrings.append("<fParams> -> <type> id <arraySizeList> <fParamsTailList>").append("\n");
 			else
 				valid = false;
 
@@ -1503,15 +1503,13 @@ public class Parser {
 			parameter.setName(lastLexeme);
 			parameter.setType(type);
 
-			if ((c1 && c2 && c3)
-					& arraySizeList(parameter)
-					& fParamsTailList(function)) {
+			boolean c4 = arraySizeList(parameter);
 
-				Outputter.derivationStrings.append("<fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList>").append("\n");
-
+			if (c4)
 				function.insertParameter(parameter);
 
-			}
+			if ((c1 && c2 && c3 && c4) & fParamsTailList(function))
+				Outputter.derivationStrings.append("<fParamsTailList> -> , <type> id <arraySizeList> <fParamsTailList>").append("\n");
 
 			else
 				valid = false;
