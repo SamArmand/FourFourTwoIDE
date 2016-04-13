@@ -94,7 +94,7 @@ public class Function implements Codeable {
         return line;
     }
 
-    void setParent(Class parent) {
+    public void setParent(Class parent) {
         this.parent = parent;
     }
 

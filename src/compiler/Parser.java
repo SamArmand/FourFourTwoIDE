@@ -381,6 +381,7 @@ public class Parser {
 			function.setType(type);
 
             currentFunction = function;
+			function.setParent(newClass);
 
 			boolean c1 = match("OPAREN")
 					& fParams(function)
@@ -458,6 +459,9 @@ public class Parser {
 			function.setType(type);
 
             currentFunction = function;
+
+			if (newClass != null)
+				function.setParent(newClass);
 
 			boolean c3 = match("OPAREN")
 			    & fParams(function)
