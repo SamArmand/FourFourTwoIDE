@@ -44,6 +44,7 @@ public class Factor implements Codeable {
     public void setVariableCall(VariableCall variableCall) {
 
         this.variableCall = variableCall;
+        resolvedType = variableCall.getResolvedType();
 
     }
 
