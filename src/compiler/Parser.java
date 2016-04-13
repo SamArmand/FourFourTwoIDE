@@ -324,6 +324,7 @@ public class Parser {
 
 			boolean c1 = match("CLASS") & match("ID");
 			newClass.setName(lastLexeme);
+
 			boolean c2 = c1 & match("OBRACE")
                     & classMemberDeclList(newClass)
                     & match("CBRACE");
@@ -380,7 +381,9 @@ public class Parser {
 			function.setName(name);
 			function.setType(type);
 
+			//used for variable calls, to know which function i'm currently parsing in
             currentFunction = function;
+
 			function.setParent(newClass);
 
 			boolean c1 = match("OPAREN")
@@ -421,6 +424,7 @@ public class Parser {
 
 			// We must save it this way because we don't know what kind of member it is yet.
 			String type = lastLexeme;
+
 			boolean c2 = match("ID");
 
 			// We must save it this way because we don't know what kind of member it is yet.
@@ -1463,6 +1467,9 @@ public class Parser {
 
 			Variable parameter = new Variable(lookahead.getLine());
 
+			//even though the grammar gets the type first
+			//I need to assign the name to the variable before assigning the type
+			//so that if the type does not exist, the error message can properly display the name of the variable
 			boolean c1 = type();
 			String type = lastLexeme;
 			boolean c2 = match("ID");

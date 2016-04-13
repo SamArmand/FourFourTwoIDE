@@ -1,4 +1,4 @@
-package compiler;
+package compiler.structures.memory;
 
 //not using this
 //was going to but was unsure how to do it
