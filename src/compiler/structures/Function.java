@@ -200,6 +200,8 @@ public class Function implements Codeable {
         return statements;
     }
 
+    //codegen
+
     @Override
     public void generateCode() {
 
@@ -207,6 +209,31 @@ public class Function implements Codeable {
 
             Outputter.moonCodeStrings.append("\tentry\n");
             variables.forEach(Variable::generateCode);
+
+            statements.forEach(Statement::generateCode);
+
+        }
+
+        else {
+
+            Outputter.moonCodeStrings.append(name).append("res\tdw\t0\n");
+
+            for (int i = 0; i < parameters.size(); ++i) {
+
+                String functionMoonAlias = "fnp" + (i+1);
+
+                Outputter.moonCodeStrings.append(functionMoonAlias).append("\tdw\t0\n");
+                if (i == 0)
+                    Outputter.moonCodeStrings.append(name);
+                Outputter.moonCodeStrings.append("\tsw\t").append(functionMoonAlias)
+                        .append("(0),r").append(i+1).append("\n");
+            }
+
+            statements.forEach(Statement::generateCode);
+
+            Outputter.moonCodeStrings.append("\tlw\tr1,tn(r0)\n");
+            Outputter.moonCodeStrings.append("\tsw\tfnres(r0),r1\n");
+            Outputter.moonCodeStrings.append("\tjr\tr15\n");
 
         }
 
