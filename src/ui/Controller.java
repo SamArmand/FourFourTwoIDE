@@ -85,7 +85,7 @@ public class Controller {
         errors.print(Outputter.errorStrings.toString());
         derivation.print(Outputter.derivationStrings.toString());
         symbolTables.print(Outputter.symbolTablesStrings.toString());
-        moonCode.print(Outputter.symbolTablesStrings.toString());
+        moonCode.print(Outputter.moonCodeStrings.toString());
 
         tokens.close();
         errors.close();
