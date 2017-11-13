@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class VariableCall implements Codeable {
 
     private ArrayList<Variable> variableNest;
-    private ArrayList<ArrayList<ArithmeticExpression>> indiceLists;
+    private ArrayList<ArrayList<ArithmeticExpression>> indexLists;
     private Function currentScope;
 
     private int line;
 
     public VariableCall(Function currentScope) {
         variableNest = new ArrayList<>();
-        indiceLists = new ArrayList<>();
+        indexLists = new ArrayList<>();
         this.currentScope = currentScope;
     }
 
@@ -26,8 +26,8 @@ public class VariableCall implements Codeable {
         return variableNest;
     }
 
-    public ArrayList<ArrayList<ArithmeticExpression>> getIndiceLists() {
-        return indiceLists;
+    public ArrayList<ArrayList<ArithmeticExpression>> getIndexLists() {
+        return indexLists;
     }
 
     public void addVariable(Variable variable) {
@@ -40,9 +40,7 @@ public class VariableCall implements Codeable {
                 variableNest.add(calledVariable);
 
             else {
-                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("Variable ").append(variable.getNameAndDimensions())
-                        .append(" is not in scope\n");
+                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line)).append("Variable ").append(variable.getNameAndDimensions()).append(" is not in scope\n");
             }
 
         }
@@ -94,11 +92,8 @@ public class VariableCall implements Codeable {
     @Override
     public void checkTypes() {
 
-        for (ArrayList<ArithmeticExpression> indiceList : indiceLists) {
-
+        for (ArrayList<ArithmeticExpression> indiceList : indexLists)
             indiceList.forEach(ArithmeticExpression::checkTypes);
-
-        }
 
     }
 

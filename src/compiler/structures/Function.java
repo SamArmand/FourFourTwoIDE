@@ -48,12 +48,9 @@ public class Function implements Codeable {
 
         if (name.equals(function.getName()) && parameters.size() == function.getParameters().size()) {
 
-            for (int i = 0; i < parameters.size(); ++i) {
-
+            for (int i = 0; i < parameters.size(); ++i)
                 if (!parameters.get(i).getType().equals(function.parameters.get(i).getType()))
                     return false;
-
-            }
 
             return true;
 
@@ -152,7 +149,6 @@ public class Function implements Codeable {
 
         for (int i = 1; i < parameters.size(); ++i)
             stringBuilder.append(", ").append(parameters.get(i).getType().getName());
-
 
         stringBuilder.append(")");
 

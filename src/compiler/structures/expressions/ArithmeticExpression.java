@@ -48,9 +48,7 @@ public class ArithmeticExpression extends Expression {
             return;
 
         if (!(term.getResolvedType().isNumber() && arithmeticExpression.getResolvedType().isNumber()))
-            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", getLine()))
-                    .append("Cannot evaluate arithmetic expression between types ").append(term.getResolvedType().getName())
-                    .append(" and ").append(arithmeticExpression.getResolvedType().getName()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", getLine())).append("Cannot evaluate arithmetic expression between types ").append(term.getResolvedType().getName()).append(" and ").append(arithmeticExpression.getResolvedType().getName()).append("\n");
 
         if (getResolvedType().getName().equals("int")
                 && arithmeticExpression.getResolvedType().getName().equals("float"))

@@ -76,9 +76,7 @@ public class FunctionCall implements Codeable {
                 function = calledFunction;
 
             else
-                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("Function ").append(function.getSignature())
-                        .append(" is not in scope\n");
+                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line)).append("Function ").append(function.getSignature()).append(" is not in scope\n");
 
         }
 
@@ -95,9 +93,7 @@ public class FunctionCall implements Codeable {
                 function = calledFunction;
 
             else
-                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("No member function ").append(function.getSignature())
-                        .append(" is defined for class ").append(scope.getName()).append("\n");
+                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line)).append("No member function ").append(function.getSignature()).append(" is defined for class ").append(scope.getName()).append("\n");
 
         }
 

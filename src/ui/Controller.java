@@ -56,7 +56,7 @@ public class Controller {
         //Set up streams
         try
         {
-            // reading the input file into the complier
+            // reading the input file into the compiler
             code = new BufferedReader(new FileReader("source.txt"));
             // writing into output files
             tokens = new PrintWriter(new FileOutputStream("tokens.txt"));
@@ -75,11 +75,8 @@ public class Controller {
 
         //Streams are set up at this point
 
-        Source source = new Source(code); //Object for tracking progress and backtracking through source code. See Source.java for more info.
-        Lexer lexer = new Lexer(source);
-        Parser parser = new Parser(lexer);
-
-        parser.parse();
+        //Object for tracking progress and backtracking through source code. See Source.java for more info.
+        new Parser(new Lexer(new Source(code))).parse();
 
         tokens.print(Outputter.tokenStrings.toString());
         errors.print(Outputter.errorStrings.toString());

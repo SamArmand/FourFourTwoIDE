@@ -62,9 +62,7 @@ public class Term implements Codeable {
             return;
 
         if (!(rightOperand.getResolvedType().isNumber() && leftOperand.getResolvedType().isNumber()))
-            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                    .append("Cannot evaluate arithmetic expression between types ").append(leftOperand.getResolvedType().getName())
-                    .append(" and ").append(rightOperand.resolvedType.getName()).append("\n");
+            Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line)).append("Cannot evaluate arithmetic expression between types ").append(leftOperand.getResolvedType().getName()).append(" and ").append(rightOperand.resolvedType.getName()).append("\n");
 
         if (resolvedType.getName().equals("int")
                 && rightOperand.resolvedType.getName().equals("float"))

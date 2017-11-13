@@ -605,7 +605,7 @@ public class Parser {
             boolean c1 = indiceList(indiceList);
 
             if (c1) {
-                variableCall.getIndiceLists().add(indiceList);
+                variableCall.getIndexLists().add(indiceList);
                 for (ArithmeticExpression ignored : indiceList)
                     variable.getDimensions().add(0);
             }
@@ -1404,7 +1404,7 @@ public class Parser {
             boolean c2 = indiceList(indiceList);
 
             if (c2) {
-                variableCall.getIndiceLists().add(indiceList);
+                variableCall.getIndexLists().add(indiceList);
 
                 for (ArithmeticExpression ignored : indiceList)
                     variable.getDimensions().add(0);

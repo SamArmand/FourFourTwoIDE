@@ -47,7 +47,7 @@ public class Lexer {
 	//This is a handwritten method for analyzing tokens.
 	Token nextToken() {
 
-		String lexeme = "";
+		StringBuilder lexeme = new StringBuilder();
 
 		Token token = null;
 		
@@ -130,21 +130,21 @@ public class Lexer {
 
 		else if (isLetter(c)) {
 
-			lexeme += c;
+			lexeme.append(c);
 
 			c = source.nextChar();
 
 			while (isAlphanumeric(c)) {
 
-				lexeme = lexeme + c;
+				lexeme.append(c);
 				c = source.nextChar();
 
 			}
 
-			if (isReservedWord(lexeme))
-				token = new Token(lexeme.toUpperCase(), lexeme, source.getCurrentLineNumber());
+			if (isReservedWord(lexeme.toString()))
+				token = new Token(lexeme.toString().toUpperCase(), lexeme.toString(), source.getCurrentLineNumber());
 
-			else token = new Token("ID", lexeme, source.getCurrentLineNumber());
+			else token = new Token("ID", lexeme.toString(), source.getCurrentLineNumber());
 
 			source.backtrack();
 
@@ -213,12 +213,12 @@ public class Lexer {
 // Number processing starts here
 		else if (c == '0') {
 
-			lexeme += c;
+			lexeme.append(c);
 			c = source.nextChar();
 
 			if (c != '.') {
 // Just integer zero
-				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
+				token = new Token("INTEGER", lexeme.toString(), source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -227,32 +227,32 @@ public class Lexer {
 			else {
 
 				//tokenString is "0."
-				lexeme += c;
+				lexeme.append(c);
 				c = source.nextChar();
 
 				if (isDigit(c)) {
 
 					while (isDigit(c)) {
 
-						lexeme += c;
+						lexeme.append(c);
 						c = source.nextChar();
 
 					}
 
 					//no trailing 0s
 					//check the last character in tokenString
-					if (lexeme.charAt(lexeme.length()-1) == '0' && !lexeme.equals("0.0")) {
+					if (lexeme.charAt(lexeme.length()-1) == '0' && !lexeme.toString().equals("0.0")) {
 
 						Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", source.getCurrentLineNumber()))
 								.append("Unknown token: ").append(lexeme).append("\n");
 						source.backtrack();
-						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+						token = new Token("ERROR", lexeme.toString(), source.getCurrentLineNumber());
 
 					}
 
 					else {
 
-						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
+						token = new Token("FRACTION", lexeme.toString(), source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -274,12 +274,12 @@ public class Lexer {
 //Will only get here if it's nonzero
 		else if (isDigit(c)) {
 
-			lexeme += c;
+			lexeme.append(c);
 			c = source.nextChar();
 
 			while (isDigit(c)) {
 
-				lexeme += c;
+				lexeme.append(c);
 				c = source.nextChar();
 
 			}
@@ -287,14 +287,14 @@ public class Lexer {
 //checking if fraction
 			if (c == '.') {
 
-				lexeme += c;
+				lexeme.append(c);
 				c = source.nextChar();
 
 				if (isDigit(c)) {
 
 					while (isDigit(c)) {
 
-						lexeme += c;
+						lexeme.append(c);
 						c = source.nextChar();
 
 					}
@@ -305,14 +305,14 @@ public class Lexer {
 						Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", source.getCurrentLineNumber()))
 								.append("Unknown token: ").append(lexeme).append("\n");
 						source.backtrack();
-						token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+						token = new Token("ERROR", lexeme.toString(), source.getCurrentLineNumber());
 
 					}
 
 					//valid float
 					else {
 
-						token = new Token("FRACTION", lexeme, source.getCurrentLineNumber());
+						token = new Token("FRACTION", lexeme.toString(), source.getCurrentLineNumber());
 						source.backtrack();
 
 					}
@@ -325,7 +325,7 @@ public class Lexer {
 					Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", source.getCurrentLineNumber()))
 							.append("Unknown token: ").append(lexeme).append("\n");
 					source.backtrack();
-					token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+					token = new Token("ERROR", lexeme.toString(), source.getCurrentLineNumber());
 
 				}
 
@@ -334,7 +334,7 @@ public class Lexer {
 			//Valid integer
 			else {
 
-				token = new Token("INTEGER", lexeme, source.getCurrentLineNumber());
+				token = new Token("INTEGER", lexeme.toString(), source.getCurrentLineNumber());
 				source.backtrack();
 
 			}
@@ -343,11 +343,11 @@ public class Lexer {
 
 		else {
 
-			lexeme = "" + c;
+			lexeme = new StringBuilder("" + c);
 
 			Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", source.getCurrentLineNumber()))
 					.append("Unknown token: ").append(lexeme).append("\n");
-			token = new Token("ERROR", lexeme, source.getCurrentLineNumber());
+			token = new Token("ERROR", lexeme.toString(), source.getCurrentLineNumber());
 
 		}
 

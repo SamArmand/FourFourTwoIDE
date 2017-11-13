@@ -80,40 +80,29 @@ public class Factor implements Codeable {
             if (factor.getResolvedType() == null)
                 factor.checkTypes();
 
-            if (factor.getResolvedType() == null)
-                return;
-
-            if ((unary.equals("+") || unary.equals("-")) && !factor.resolvedType.isNumber())
-                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line))
-                        .append("Cannot apply unary operator ").append(unary)
-                        .append(" to factor of type ").append(factor.resolvedType.getName()).append("\n");
-
-            return;
+            if (factor.getResolvedType() != null && ((unary.equals("+") || unary.equals("-")) && !factor.resolvedType.isNumber()))
+                Outputter.errorStrings.append(String.format("Error | Line: %-5s | ", line)).append("Cannot apply unary operator ").append(unary).append(" to factor of type ").append(factor.resolvedType.getName()).append("\n");
         }
 
         //we check for function resolved type but not variable resolved type
         //because function call can be a forward declaration for which we may not have immediately known
         //the type by the time it was assigned to the factor.
-        if (functionCall != null) {
+        else if (functionCall != null) {
 
             if (functionCall.getResolvedType() == null)
                 functionCall.checkTypes();
 
             resolvedType = functionCall.getResolvedType();
 
-            return;
-
         }
 
-        if (arithmeticExpression != null) {
+        else if (arithmeticExpression != null) {
 
             arithmeticExpression.checkTypes();
 
             resolvedType = arithmeticExpression.getResolvedType();
 
         }
-
-
 
     }
 

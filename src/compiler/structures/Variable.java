@@ -51,14 +51,14 @@ public class Variable implements Codeable {
         if (dimensions.size() == 0)
             return type;
 
-        String actualType = type.getName();
+        StringBuilder actualType = new StringBuilder(type.getName());
 
         for (int i = 0; i < dimensions.size(); ++i)
-            actualType += "[]";
+            actualType.append("[]");
 
         Class variableType = new Class(0);
 
-        variableType.setName(actualType);
+        variableType.setName(actualType.toString());
 
         return variableType;
 
@@ -75,12 +75,12 @@ public class Variable implements Codeable {
 
     public String getNameAndDimensions() {
 
-        String nameAndDimensions = name;
+        StringBuilder nameAndDimensions = new StringBuilder(name);
 
         for (Integer ignored : dimensions)
-            nameAndDimensions += "[]";
+            nameAndDimensions.append("[]");
 
-        return nameAndDimensions;
+        return nameAndDimensions.toString();
 
     }
 
@@ -123,7 +123,7 @@ public class Variable implements Codeable {
 
     }
 
-    public int getSize() {
+    int getSize() {
 
         int size = type.getSize();
 

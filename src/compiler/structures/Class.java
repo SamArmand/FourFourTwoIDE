@@ -156,7 +156,7 @@ public class Class implements Codeable {
         functions.forEach(Function::checkTypes);
     }
 
-    public int getSize() {
+    int getSize() {
         int size = 0;
 
         for (Variable variable: variables)

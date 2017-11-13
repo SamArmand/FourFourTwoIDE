@@ -95,8 +95,6 @@ class Token {
 			default:
 				return expectedToken.toLowerCase();
 
-
-
 		}
 
 	}
