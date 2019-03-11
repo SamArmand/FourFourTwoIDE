@@ -3,7 +3,6 @@ package compiler.structures;
 import ui.Outputter;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Variable implements Codeable {
 
@@ -26,7 +25,7 @@ public class Variable implements Codeable {
         this.line = variable.line;
         this.dimensions = new ArrayList<>();
 
-        dimensions.addAll(variable.dimensions.stream().map(Integer::intValue).collect(Collectors.toList()));
+        dimensions.addAll(new ArrayList<>(variable.dimensions));
 
         this.address = variable.address;
     }
@@ -51,14 +50,9 @@ public class Variable implements Codeable {
         if (dimensions.size() == 0)
             return type;
 
-        StringBuilder actualType = new StringBuilder(type.getName());
-
-        for (int i = 0; i < dimensions.size(); ++i)
-            actualType.append("[]");
-
         Class variableType = new Class(0);
 
-        variableType.setName(actualType.toString());
+        variableType.setName(type.getName() + "[]".repeat(dimensions.size()));
 
         return variableType;
 

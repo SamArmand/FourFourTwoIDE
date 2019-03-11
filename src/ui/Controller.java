@@ -10,7 +10,6 @@ import javafx.scene.control.TextArea;
 import java.io.*;
 
 public class Controller {
-
     @FXML
     Button compileButton;
     @FXML
@@ -28,7 +27,6 @@ public class Controller {
 
     //handler for compileButton click action
     public void compile() {
-
         //save input to a file
         try (PrintWriter file = new PrintWriter(new FileOutputStream("source.txt"))) {
             file.print(editor.getText());
@@ -64,7 +62,6 @@ public class Controller {
             derivation = new PrintWriter(new FileOutputStream("derivation.txt"));
             symbolTables = new PrintWriter(new FileOutputStream("symbol_tables.txt"));
             moonCode = new PrintStream(new File("moon_code.m"));
-
         }
 
         catch(FileNotFoundException e)
@@ -101,7 +98,5 @@ public class Controller {
         derivationOutput.setText(Outputter.derivationStrings.toString());
         symbolTablesOutput.setText(Outputter.symbolTablesStrings.toString());
         moonCodeOutput.setText(Outputter.moonCodeStrings.toString());
-
     }
-
 }

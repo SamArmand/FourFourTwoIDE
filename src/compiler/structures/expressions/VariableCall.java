@@ -72,7 +72,7 @@ public class VariableCall implements Codeable {
             return undefined;
         }
 
-        Class type = new Class (0);
+        Class type = new Class(0);
 
         type.setName(variableNest.get(variableNest.size()-1).getType().getName());
 
